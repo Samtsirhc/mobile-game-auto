@@ -8,8 +8,9 @@ from emulator import Emulator
 from tools.logger import creat_my_logger
 from tools.time_tool import *
 
-logger = get_logger(log_file_name = LOG_NAME)
+logger = get_logger()
 logger.setLevel(logging.DEBUG)
+
 
 def 登录PCR(emulator: Emulator):
     logger.info('开始登录PCR')
@@ -25,6 +26,8 @@ def 登录PCR(emulator: Emulator):
         time.sleep(1)
         emulator.find_and_click('下载', path)
         emulator.click((650, 620))
+        if emulator.find_img('请选择角色', path):
+            兰德索尔杯(emulator)
         if emulator.find_img('商店', path):
             break
     while True:
@@ -35,6 +38,16 @@ def 登录PCR(emulator: Emulator):
             logger.info(dir_name)
             break
 
+def 兰德索尔杯(emulator: Emulator):
+    dir_name = sys._getframe().f_code.co_name
+    path = f'{PCR_IMG_PATH + dir_name}\\'
+    for _ in range(3):
+        time.sleep(1)
+        emulator.click((266, 400))
+    while True:
+        if emulator.find_and_click('比赛开始', path):
+            return
+    
 
 def 去冒险(emulator: Emulator):
     dir_name = sys._getframe().f_code.co_name
@@ -166,7 +179,6 @@ def 地下城(emulator: Emulator):
         if emulator.find_img('返回', path):
             break
     step = 1
-    auto = False
     team = 1
     while True:
         if step == 1:
@@ -202,7 +214,9 @@ def 地下城(emulator: Emulator):
                 logger.info(dir_name)
                 break
             if emulator.find_img('返回', path):
-                step = 1
+                time.sleep(3)
+                if emulator.find_img('返回', path):
+                     step = 1 
 
 
 def 战斗加速(emulator: Emulator):
@@ -247,9 +261,10 @@ def 持续战斗(emulator: Emulator):
         emulator.find_and_click(['妈2','妈','进行挑战','战斗开始','下一步','关闭','取消'], path)
 if __name__ == "__main__":
     emulator = Emulator()
-    登录PCR(emulator)
-    地下城(emulator)
-    MANA冒险(emulator)
-    经验值冒险(emulator)
-    # 持续战斗(emulator)
+    兰德索尔杯(emulator)
+    # 登录PCR(emulator)
+    # 地下城(emulator)
+    # MANA冒险(emulator)
+    # 经验值冒险(emulator)
+    # # 持续战斗(emulator)
     pass

@@ -1,5 +1,8 @@
 import logging
 import time
+from logging.handlers import HTTPHandler
+import requests
+import string
 
 def creat_my_logger(logger_name = "MyLogger", log_path = "", log_file_name = ""):
     # 记录器，在这里设置一个最低级的level，那么在处理器中再设置高级的就能起效，反之会无效
@@ -36,9 +39,10 @@ def creat_my_logger(logger_name = "MyLogger", log_path = "", log_file_name = "")
     return logger
 
 class Logger():
-    def __init__(self,logger_name = "MyLogger", log_path = "", log_file_name = ""):
+    def __init__(self,logger_name = "MyLogger", log_path = "", log_file_name = "", cq_config =''):
         self._logger = logging.getLogger(logger_name)
         self._logger.setLevel(logging.INFO)
+        self.cq_config = cq_config
         if len(self._logger.handlers) > 0:
             return
         self.get_format()
@@ -52,7 +56,7 @@ class Logger():
         _consoleHandler.setLevel(level)
         _consoleHandler.setFormatter(self.fmt)
         self.add_handler(_consoleHandler)
-    
+
     def add_file_handler(self, level = logging.INFO, log_path = "", log_file_name = ""):
         _time = time.strftime("%Y-%m-%d", time.localtime())
         if log_file_name == "":
@@ -75,11 +79,32 @@ class Logger():
         self._logger.addFilter(flt)
 
     def get_logger(self):
-        return self._logger
+        return self
+    
+    def debug(self, msg):
+        self._logger.debug(msg)
+
+    def info(self, msg):
+        self._logger.info(msg)
+        try:
+            requests.get(self.cq_config.replace('MSG', msg))
+        except:
+            print('your qbot is off-line')
+    
+    def error(self, msg):
+        self._logger.error(msg)
+        try:
+            requests.get(self.cq_config.replace('MSG', msg))
+        except:
+            print('your qbot is off-line')
+    
+    def setLevel(self, level):
+        self._logger.setLevel(level)
 
 if __name__ == "__main__":
+    # send_private_msg?user_id=QQ_NUMBER&message=MSG?
     tmp = Logger()
     tmp = tmp.get_logger()
     tmp.setLevel(logging.DEBUG)
-    tmp.debug("a")
+    tmp.info(1)
     pass

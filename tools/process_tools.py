@@ -19,7 +19,7 @@ def run_sth(FileName,RunType = 1,FilePath = ""):
             else:
                 print("找不到目标：" + FileName)
     if RunType == 1:
-        FilePath = r"C:\Users\lcyba\Desktop\\" + FileName 
+        FilePath = FileName 
         os.system("start " + FilePath)     #不加start会阻塞
         print ("已经运行：" + FileName)
 
