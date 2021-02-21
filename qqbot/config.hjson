@@ -83,7 +83,7 @@
         // 可以添加多个反向WS推送
         {
             // 是否启用该推送
-            enabled: true
+            enabled: false
             // 反向WS Universal 地址
             // 注意 设置了此项地址后下面两项将会被忽略
             // 留空请使用 ""

@@ -47,19 +47,14 @@ def 登录方舟(emulator: Emulator):
     dir_name = sys._getframe().f_code.co_name
     path = f'{ARKNIGHTS_IMG_PATH + dir_name}\\'
     emulator.run_app(ARKNIGHTS_APP_NAME)
-    _timer = 0
+    time.sleep(30)
+    emulator.run_app(ARKNIGHTS_APP_NAME)
     while True:
-        _timer += 1
         time.sleep(1)
         emulator.find_and_click(f'下载资源确认', path)
         emulator.find_and_click(f'start', path)
         if emulator.find_img(f'鹰角图标', path):
             break
-        if _timer > 100:
-            emulator.kill_app(ARKNIGHTS_APP_NAME)
-            time.sleep(3)
-            emulator.run_app(ARKNIGHTS_APP_NAME)
-            _timer = 0
     while True:
         time.sleep(1)
         emulator.find_and_click(f'账号管理', path)
@@ -125,10 +120,18 @@ def 基建换班(emulator: Emulator):
     switch_step = 0
     while True:
         # 找宿舍
-        if dorm_order < 4 and switch_state == 0:
+        if dorm_order < 3 and switch_state == 0:
             emulator.swipe((1216, 650, 1215, 158))
             time.sleep(1)
             emulator.find_and_click(f'宿舍', path, (236, 51))
+            if check.在换班(emulator):
+                switch_state = 1
+                dorm_order += 1
+                pass
+        if dorm_order == 3 and switch_state == 0:
+            emulator.swipe((1216, 650, 1215, 158))
+            time.sleep(1)
+            emulator.find_and_click(f'B4宿舍', path, (236, 101))
             if check.在换班(emulator):
                 switch_state = 1
                 dorm_order += 1
@@ -140,13 +143,17 @@ def 基建换班(emulator: Emulator):
                 emulator.find_and_click(f'清空选择', path)
                 switch_step += 1
             if switch_step == 3:
-                emulator.find_and_click(f'心情上', path)
-                if emulator.find_img(f'心情下', path):
-                    switch_step += 1
+                for _ in range(5):
+                    time.sleep(0.1)
+                    emulator.click((1053, 47))
+                switch_step += 1
+                time.sleep(1)
             if switch_step == 4:
-                emulator.find_and_click(f'心情下', path)
-                if emulator.find_img(f'心情上', path):
+                if emulator.find_img('心情上', path):
                     switch_step += 1
+                else:
+                    emulator.click((1053, 47))
+                    time.sleep(0.5)
             if switch_step == 5:
                 for wife_x in range(5):
                     for wife_y in range(2):
@@ -195,6 +202,7 @@ def 基建换班(emulator: Emulator):
 def 基建收菜(emulator: Emulator):
     dir_name = sys._getframe().f_code.co_name
     path = f'{ARKNIGHTS_IMG_PATH + dir_name}\\'
+    进入基建(emulator)
     while True:
         emulator.find_and_click(f'白色铃铛', path)
         if emulator.find_img(f'蓝色铃铛', path):
@@ -204,6 +212,21 @@ def 基建收菜(emulator: Emulator):
                 time.sleep(0.5)
             emulator.find_and_click(f'蓝色铃铛', path)
             break
+    while True:
+        if emulator.find_img('制造站', path):
+            break
+        else:
+            emulator.click((364,320))
+    _tmp = 0
+    while True:
+        emulator.find_and_click(['制造中', '最多', '勾'], path)
+        if emulator.find_and_click('最多', path):
+            _tmp += 1
+        if _tmp > 4:
+            break
+    for _ in range(5):
+        emulator.click((60,40))
+        time.sleep(0.5)
     logger.info(dir_name)
     pass
 
@@ -211,6 +234,7 @@ def 基建收菜(emulator: Emulator):
 def 使用无人机(emulator: Emulator):
     dir_name = sys._getframe().f_code.co_name
     path = f'{ARKNIGHTS_IMG_PATH + dir_name}\\'
+    进入基建(emulator)
     while True:
         emulator.find_and_click(['贸易站1', '贸易站2', '贸易站3'], path)
         if emulator.find_img(f'获取中', path):
@@ -252,6 +276,7 @@ def 刷经验(emulator: Emulator):
         emulator.find_and_click(f'物资筹备', path)
         emulator.find_and_click(f'战术演习', path)
         emulator.find_and_click(f'LS-5', path)
+    logger.info(dir_name)
     pass
 
 
@@ -323,7 +348,17 @@ def 信用点(emulator: Emulator):
     logger.info(dir_name)
     pass
 
-
+def 刷土(emulator: Emulator):
+    dir_name = sys._getframe().f_code.co_name
+    path = f'{ARKNIGHTS_IMG_PATH + dir_name}\\'
+    去首页(emulator)
+    _tmp = 0
+    while True:
+        emulator.find_and_click(['仓库', '土', '养成材料', '跳转'], path)
+        if emulator.find_img('演习',path):
+            break
+    logger.info(dir_name)
+    pass
 def 收日常任务(emulator: Emulator):
     dir_name = sys._getframe().f_code.co_name
     path = f'{ARKNIGHTS_IMG_PATH + dir_name}\\'
@@ -341,4 +376,9 @@ def 收日常任务(emulator: Emulator):
 if __name__ == "__main__":
     emulator = Emulator()
     logger.setLevel(logging.DEBUG)
-    基建换班(emulator)
+    刷土(emulator)
+    循环挑战(emulator)
+    去首页(emulator)
+    信用点(emulator)
+    去首页(emulator)    # 信用搞完了回首页
+    收日常任务(emulator)

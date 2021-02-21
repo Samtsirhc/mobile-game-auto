@@ -19,7 +19,7 @@ def 登录PCR(emulator: Emulator):
     emulator.run_app(PCR_APP_NAME)
     while True:
         emulator.find_and_click('我的', path, (-230, 10))
-        if emulator.find_and_click('加速', path):
+        if emulator.find_and_click('加速', path, (578,37)):
             time.sleep(10)
             break
     while True:
@@ -259,12 +259,35 @@ def 持续战斗(emulator: Emulator):
     while True:
         time.sleep(3)
         emulator.find_and_click(['妈2','妈','进行挑战','战斗开始','下一步','关闭','取消'], path)
+
+
+def 点赞(emulator: Emulator):
+    dir_name = sys._getframe().f_code.co_name
+    path = f'{PCR_IMG_PATH + dir_name}\\'
+    if check_job(dir_name):
+        logger.info(dir_name)
+        return True
+    去主页(emulator)
+    _tmp = 0
+    while True:
+        emulator.find_and_click(['战队', '白底OK', '成员情报'], path)
+        if emulator.find_and_click('赞', path):
+            _tmp += 1
+        if _tmp > 4:
+            break
+    logger.info(dir_name)
+
+def 求装备(emulator: Emulator):
+    dir_name = sys._getframe().f_code.co_name
+    path = f'{PCR_IMG_PATH + dir_name}\\'
+    去主页(emulator)
+    while True:
+        emulator.find_and_click(['请求结果', 'OK', '战队', '白底OK', '装备请求', '请求'], path)
+        if emulator.find_img('请求状况', path):
+            break
+    logger.info(dir_name)
+
 if __name__ == "__main__":
     emulator = Emulator()
-    兰德索尔杯(emulator)
-    # 登录PCR(emulator)
-    # 地下城(emulator)
-    # MANA冒险(emulator)
-    # 经验值冒险(emulator)
-    # # 持续战斗(emulator)
+    求装备(emulator)
     pass

@@ -8,7 +8,7 @@ def common_step():
     close_process("Nox.exe")
     time.sleep(5)  
     run_sth(EMULATOR_PATH)
-    time.sleep(60)
+    time.sleep(30)
 
 def PCR日常():
     common_step()
@@ -17,6 +17,8 @@ def PCR日常():
     地下城(emulator)
     MANA冒险(emulator)
     经验值冒险(emulator)
+    点赞(emulator)
+    求装备(emulator)
     close_process("Nox.exe")
 
 def 方舟日常():
@@ -29,8 +31,9 @@ def 方舟日常():
     基建收菜(emulator)
     使用无人机(emulator)
     去战斗(emulator)
+    刷土(emulator)
     # 刷经验(emulator)
-    画中人(emulator)
+    # 画中人(emulator)
     循环挑战(emulator)
     去首页(emulator)
     信用点(emulator)

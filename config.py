@@ -2,7 +2,7 @@ from tools.logger import creat_my_logger, Logger
 from tools.time_tool import *
 import requests
 
-EMULATOR_PATH = r"C:\Users\lcy\Desktop\夜神模拟器.lnk"
+EMULATOR_PATH = r"C:\Users\lcyba\Desktop\夜神模拟器.lnk"
 PCR_IMG_PATH = ".\\imgs\\pcr\\"
 PCR_APP_NAME = "com.netease.uu"
 ARKNIGHTS_IMG_PATH = ".\\imgs\\arknights\\"
