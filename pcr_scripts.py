@@ -17,10 +17,10 @@ def 登录PCR(emulator: Emulator):
     dir_name = sys._getframe().f_code.co_name
     path = f'{PCR_IMG_PATH + dir_name}\\'
     emulator.run_app(PCR_APP_NAME)
+    tmp = 0
     while True:
         emulator.find_and_click('我的', path, (-230, 10))
         if emulator.find_and_click('加速', path, (578,37)):
-            time.sleep(10)
             break
     while True:
         time.sleep(1)
@@ -270,8 +270,8 @@ def 点赞(emulator: Emulator):
     去主页(emulator)
     _tmp = 0
     while True:
-        emulator.find_and_click(['战队', '白底OK', '成员情报'], path)
-        if emulator.find_and_click('赞', path):
+        emulator.find_and_click(['战队', '白底OK', 'OK', '成员情报'], path)
+        if emulator.find_and_click(['赞','无战队'], path):
             _tmp += 1
         if _tmp > 4:
             break
@@ -283,7 +283,7 @@ def 求装备(emulator: Emulator):
     去主页(emulator)
     while True:
         emulator.find_and_click(['请求结果', 'OK', '战队', '白底OK', '装备请求', '请求'], path)
-        if emulator.find_img('请求状况', path):
+        if emulator.find_img(['请求状况','无战队'], path):
             break
     logger.info(dir_name)
 

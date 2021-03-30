@@ -279,6 +279,15 @@ def 刷经验(emulator: Emulator):
     logger.info(dir_name)
     pass
 
+def 源石尘(emulator: Emulator):
+    dir_name = sys._getframe().f_code.co_name
+    path = f'{ARKNIGHTS_IMG_PATH + dir_name}\\'
+    while True:
+        if emulator.find_img(f'关卡已选择', path):
+            break
+        emulator.find_and_click(["源石尘行动","行动记录","OD-6"], path)
+    logger.info(dir_name)
+    pass
 
 def 循环挑战(emulator: Emulator):
     dir_name = sys._getframe().f_code.co_name
@@ -351,14 +360,20 @@ def 信用点(emulator: Emulator):
 def 刷土(emulator: Emulator):
     dir_name = sys._getframe().f_code.co_name
     path = f'{ARKNIGHTS_IMG_PATH + dir_name}\\'
-    去首页(emulator)
-    _tmp = 0
-    while True:
-        emulator.find_and_click(['仓库', '土', '养成材料', '跳转'], path)
-        if emulator.find_img('演习',path):
+    去战斗(emulator)
+    tmp = 0
+    while tmp == 0:
+        emulator.swipe((100,300,300,300))
+        time.sleep(1)
+        if emulator.find_and_click('黑暗时代下',path):
+            tmp += 1
+    
+    while tmp == 1:
+        emulator.find_and_click('1-7',path)
+        if emulator.find_img(f'关卡已选择', path):
             break
-    logger.info(dir_name)
     pass
+
 def 收日常任务(emulator: Emulator):
     dir_name = sys._getframe().f_code.co_name
     path = f'{ARKNIGHTS_IMG_PATH + dir_name}\\'
@@ -377,8 +392,3 @@ if __name__ == "__main__":
     emulator = Emulator()
     logger.setLevel(logging.DEBUG)
     刷土(emulator)
-    循环挑战(emulator)
-    去首页(emulator)
-    信用点(emulator)
-    去首页(emulator)    # 信用搞完了回首页
-    收日常任务(emulator)

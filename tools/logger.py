@@ -57,7 +57,7 @@ class Logger():
         _consoleHandler.setFormatter(self.fmt)
         self.add_handler(_consoleHandler)
 
-    def add_file_handler(self, level = logging.INFO, log_path = "", log_file_name = ""):
+    def add_file_handler(self, level = logging.DEBUG, log_path = "", log_file_name = ""):
         _time = time.strftime("%Y-%m-%d", time.localtime())
         if log_file_name == "":
             pass

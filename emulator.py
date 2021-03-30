@@ -24,6 +24,7 @@ class Emulator:
 
     def run_app(self, app_name):
         try:
+            self.kill_app(app_name)
             self.emulator.app_start(app_name)
             # logger.info("a")
             logger.debug(f'{app_name} start')
@@ -60,12 +61,17 @@ class Emulator:
             self.emulator.click(
                 (coordinate[0] + offset[0]),
                 (coordinate[1] + offset[1]))
+            return True
+        return False
 
     def find_and_click(self, img, path, offset=(0, 0)):
+        tmp = False
         if type(img) == list:
             screen_shot = self.emulator.screenshot(format="opencv")
             for i in img:
-                self.click(self.find_img(i,path,1,screen_shot))
+                if self.click(self.find_img(i,path,1,screen_shot)):
+                    tmp = True
+            return tmp
         else:
             time.sleep(0.3)
             self.img_name = img

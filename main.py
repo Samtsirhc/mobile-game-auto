@@ -31,6 +31,7 @@ def 方舟日常():
     基建收菜(emulator)
     使用无人机(emulator)
     去战斗(emulator)
+    # 源石尘(emulator)
     刷土(emulator)
     # 刷经验(emulator)
     # 画中人(emulator)
