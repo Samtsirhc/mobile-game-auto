@@ -1,13 +1,16 @@
 from tools.logger import creat_my_logger, Logger
 from tools.time_tool import *
+from tools.path_tool import *
 import requests
+import string
 
-EMULATOR_PATH = r"C:\Users\lcyba\Desktop\夜神模拟器.lnk"
-PCR_IMG_PATH = ".\\imgs\\pcr\\"
+ABS_PATH = get_path()
+EMULATOR_PATH = "C:\\Users\\lcyba\\Desktop\\夜神模拟器.lnk"
+PCR_IMG_PATH = ABS_PATH + "\\imgs\\pcr\\"
 PCR_APP_NAME = "com.netease.uu"
-ARKNIGHTS_IMG_PATH = ".\\imgs\\arknights\\"
+ARKNIGHTS_IMG_PATH = ABS_PATH + "\\imgs\\arknights\\"
 ARKNIGHTS_APP_NAME = "com.hypergryph.arknights"
-LOG_PATH = ".\\logs\\"
+LOG_PATH = ABS_PATH + "\\logs\\"
 LOG_NAME = ''
 CQHTTP_CONFIG = 'http://127.0.0.1:5700/send_private_msg?user_id=812266890&message=MSG'
 
