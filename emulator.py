@@ -1,26 +1,38 @@
 import os
+import string
 import sys
 import time
-import string
+from threading import Thread
+
 import uiautomator2 as u2
 
-from tools.image_tools import match_image
-from config import get_logger
+from config import *
+from tools.image_tools import *
+from tools.time_tool import *
 
 logger = get_logger()
-
 class Emulator:
-    def __init__(self, auto_task=False, auto_policy=True,
-                 auto_goods=False, speedup=True):
-        try:
-            self.emulator = u2.connect()    # python -m uiautomator2 init
-            self.window_size = self.emulator.window_size()
-            self.screen_shot = self.emulator.screenshot(format="opencv")
-        except Exception as e:
-            logger.error(e)
+    def __init__(self, img_path):
+        self.emulator = u2.connect()    # python -m uiautomator2 init
+        self.window_size = self.emulator.window_size()
+        self.img_path = img_path
+        self.current_dir = ''
+        self.load_imgs()
 
     def kill_app(self, app_name):
         self.emulator.app_stop(app_name)
+        logger.debug(f'{app_name} dead')
+
+    def load_imgs(self):
+        self.imgs = {}
+        self.img_dirs = get_files(self.img_path, 1)
+        for i in self.img_dirs:
+            _img_sub_dir = f'{self.img_path}{i}//'
+            self.imgs[i] = {}
+            for j in get_files(_img_sub_dir, 2):
+                _tmp = j.replace('.jpg', '')
+                self.imgs[i][_tmp] = load_img(f'{self.img_path}{i}//{_tmp}')
+
 
     def run_app(self, app_name):
         try:
@@ -31,31 +43,29 @@ class Emulator:
         except Exception as e:
             logger.error(e)
         # "com.hypergryph.arknights"
-
-    def find_img(self, img,path: str, return_type=0,screen_shot = ''):
-        if type(screen_shot) == str:
-            self.screen_shot = self.emulator.screenshot(format="opencv")
-
-        else:
-            self.screen_shot = screen_shot
+    
+    def find_img(self, img):
+        self.screen_shot = self.emulator.screenshot(format="opencv")
+        time.sleep(0.5)
         if type(img) == list:
             for i in img:
-                self.img_coordinate = match_image(path + i, self.screen_shot)
+                _img = self.imgs[self.current_dir][i]
+                self.img_name = i
+                self.img_coordinate = match_image(_img, self.screen_shot)
+                logger.debug(f'{i} {self.img_coordinate}')
                 if self.img_coordinate[0] > 0:
                     return True
             return False
         else:
-            self.img_coordinate = match_image(path + img, self.screen_shot)
+            # print(self.current_dir);print(img)
+            _img = self.imgs[self.current_dir][img]
+            self.img_coordinate = match_image(_img, self.screen_shot)
             logger.debug(f'{img} {self.img_coordinate}')
             if self.img_coordinate[0] > 0:
-                self.find_result = True
+                return True
             else:
-                self.find_result = False
-            if return_type == 0:
-                return self.find_result
-            else:
-                return self.img_coordinate
-
+                return False
+        
     def click(self, coordinate, offset=(0, 0)):
         if coordinate[0] > 0 and coordinate[1] > 0:
             self.emulator.click(
@@ -63,35 +73,18 @@ class Emulator:
                 (coordinate[1] + offset[1]))
             return True
         return False
-
-    def find_and_click(self, img, path, offset=(0, 0)):
-        tmp = False
+    
+    def find_and_click(self, img, offset=(0,0)):
         if type(img) == list:
-            screen_shot = self.emulator.screenshot(format="opencv")
-            for i in img:
-                if self.click(self.find_img(i,path,1,screen_shot)):
-                    tmp = True
-            return tmp
+            if self.find_img(img):
+                if type(offset) == tuple:
+                    self.click(self.img_coordinate)
+                else:
+                    self.click(self.img_coordinate, offset[img.index(self.img_name)])
         else:
-            time.sleep(0.3)
-            self.img_name = img
-            self.click(self.find_img(img, path,1), offset)
-            if self.img_coordinate[0] > 0:
-                return True
-            else:
-                return False
-        # return self.img_coordinate
+            if self.find_img(img):
+                self.click(self.img_coordinate, offset)
 
-    # click image when the mark is exist
-    # def click_with_img(self, img, mark, offset=(0, 0)):
-    #     if self.find_img(mark):
-    #         self.find_and_click(img, offset)
-
-    # def find_with_mark(self, img, mark):
-    #     if self.find_img(mark) and self.find_img(img):
-    #         return True
-    #     else:
-    #         return False
 
     def input_text(self, text):
         self.emulator.send_keys(text)
@@ -101,7 +94,7 @@ class Emulator:
         xyxy=(x1,y1,x2,y2),swipe from x1y1 to x2y2
         """
         self.emulator.swipe(xyxy[0], xyxy[1], xyxy[2], xyxy[3])
+        
+if  __name__ == "__main__":
 
-if __name__ == "__main__":
-    if type(['a','b']) == list:
-        print(1)
+    pass
