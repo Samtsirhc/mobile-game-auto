@@ -14,7 +14,6 @@ logger = get_logger()
 class Emulator:
     def __init__(self, img_path):
         self.emulator = u2.connect()    # python -m uiautomator2 init
-        self.window_size = self.emulator.window_size()
         self.img_path = img_path
         self.current_dir = ''
         self.load_imgs()
@@ -40,7 +39,9 @@ class Emulator:
             self.imgs[i] = {}
             for j in get_files(_img_sub_dir, 2):
                 _tmp = j.replace('.jpg', '')
-                self.imgs[i][_tmp] = load_img(f'{self.img_path}{i}//{_tmp}')
+                self.imgs[i][_tmp] = {}
+                self.imgs[i][_tmp]['img'] = load_img(f'{self.img_path}{i}//{_tmp}')
+                self.imgs[i][_tmp]['coordinate'] = (-1, -1)
 
     def run_app(self, app_name):
         try:
@@ -61,25 +62,26 @@ class Emulator:
 
     def find_img(self, img):
         self.screen_shot = self.emulator.screenshot(format="opencv")
-        time.sleep(0.5)
+        _tmp = False
         if type(img) == list:
             for i in img:
-                _img = self.imgs[self.current_dir][i]
-                self.img_name = i
-                self.img_coordinate = match_image(_img, self.screen_shot)
-                logger.debug(f'{i} {self.img_coordinate}')
-                if self.img_coordinate[0] > 0:
-                    return True
-            return False
+                _img = self.imgs[self.current_dir][i]['img']
+                _xy = match_image(_img, self.screen_shot)
+                self.imgs[self.current_dir][i]['coordinate'] = _xy
+                logger.debug(f'{i} {_xy}')
+                if self.imgs[self.current_dir][i]['coordinate'][0] > 0:
+                    _tmp = True
+            _tmp = False
         else:
-            # print(self.current_dir);print(img)
-            _img = self.imgs[self.current_dir][img]
-            self.img_coordinate = match_image(_img, self.screen_shot)
-            logger.debug(f'{img} {self.img_coordinate}')
-            if self.img_coordinate[0] > 0:
-                return True
+            _img = self.imgs[self.current_dir][img]['img']
+            _xy = match_image(_img, self.screen_shot)
+            self.imgs[self.current_dir][img]['coordinate'] = _xy
+            logger.debug(f'{img} {_xy}') # 草你妈为什么用dict会报错？？？？
+            if self.imgs[self.current_dir][img]['coordinate'][0] > 0:
+                _tmp = True
             else:
-                return False
+                _tmp = False
+        return _tmp
         
     def click(self, coordinate, offset=(0, 0)):
         if coordinate[0] > 0 and coordinate[1] > 0:
@@ -90,18 +92,22 @@ class Emulator:
         return False
     
     def find_and_click(self, img, offset=(0,0)):
+        _tmp = False
         if type(img) == list:
-            if self.find_img(img):
-                if type(offset) == tuple:
-                    self.click(self.img_coordinate)
-                else:
-                    self.click(self.img_coordinate, offset[img.index(self.img_name)])
-                return True
+            self.find_img(img)
+            if type(offset) == list:
+                pass
+            else:
+                offset = [(0,0)] * len(img)
+            for i in img:
+                if self.imgs[self.current_dir][i]['coordinate'][0] > 0:
+                    self.click(self.imgs[self.current_dir][i]['coordinate'], offset[img.index(i)])
+                    _tmp = True
         else:
             if self.find_img(img):
-                self.click(self.img_coordinate, offset)
-                return True
-        return False
+                self.click(self.imgs[self.current_dir][img]['coordinate'], offset)
+                _tmp = True
+        return _tmp
 
     def input_text(self, text):
         self.emulator.send_keys(text)
@@ -113,6 +119,5 @@ class Emulator:
         self.emulator.swipe(xyxy[0], xyxy[1], xyxy[2], xyxy[3])
         
 if  __name__ == "__main__":
-    e = Emulator(ARKNIGHTS_IMG_PATH)
-    print(e.check_app(ARKNIGHTS_APP_NAME))
+
     pass
