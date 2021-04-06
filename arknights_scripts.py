@@ -8,14 +8,14 @@ import psutil
 from config import *
 from emulator import Emulator
 
-logger = get_logger()
 
+logger = get_logger()
+emulator = Emulator(ARKNIGHTS_IMG_PATH)
 # dir_name = sys._getframe().f_code.co_name
 # path = f'{ARKNIGHTS_IMG_PATH + dir_name}\\'
 
-def 登录方舟(emulator: Emulator):
-    dir_name = sys._getframe().f_code.co_name
-    emulator.current_dir = dir_name
+@emulator.dir_decorator
+def 登录方舟():
     emulator.run_app(ARKNIGHTS_APP_NAME)
     time.sleep(10)
     while not emulator.find_img(f'鹰角图标'):
@@ -31,26 +31,21 @@ def 登录方舟(emulator: Emulator):
             else:
                 emulator.find_and_click(f'确认密码')
                 break
-    tmp = 0
-    while tmp < 2 :
+    _tmp = 0
+    while _tmp < 2 :
         emulator.find_and_click(['登录','活动X','月卡收货'],[(0,0),(0,0),(0,200)])
         if emulator.find_img(f'在主页'):
-            tmp += 1
-    logger.info(dir_name)
-    pass
+            _tmp += 1
 
-def 进入基建(emulator: Emulator):
-    dir_name = sys._getframe().f_code.co_name
-    emulator.current_dir = dir_name
+@emulator.dir_decorator
+def 进入基建():
     while not emulator.find_img('在基建'):
         emulator.find_and_click(['基建','导航小房子','导航基建'])
         time.sleep(1)
     pass
 
-
-def 基建换班(emulator: Emulator):
-    dir_name = sys._getframe().f_code.co_name
-    emulator.current_dir = dir_name
+@emulator.dir_decorator
+def 基建换班():
     while True:
         emulator.find_and_click(f'进驻总览')
         if emulator.find_img(f'在进驻总览'):
@@ -61,7 +56,7 @@ def 基建换班(emulator: Emulator):
     while True:
         # 找宿舍
         if dorm_order < 3 and switch_state == 0:
-            emulator.swipe((1216, 650, 1215, 158))
+            emulator.swipe((1216, 650, 1215, 300))
             time.sleep(1)
             emulator.find_and_click(f'宿舍', (236, 51))
             if emulator.find_img(f'在换班'):
@@ -134,14 +129,11 @@ def 基建换班(emulator: Emulator):
                 if emulator.find_img(f'在进驻总览'):
                     emulator.swipe((1216, 158, 1215, 550))
                     time.sleep(1)
-    logger.info(dir_name)
     pass
 
-
-def 基建收菜(emulator: Emulator):
-    进入基建(emulator)
-    dir_name = sys._getframe().f_code.co_name
-    emulator.current_dir = dir_name
+@emulator.dir_decorator
+def 基建收菜():
+    进入基建()
     while True:
         emulator.find_and_click(f'白色铃铛')
         if emulator.find_img(f'蓝色铃铛'):
@@ -165,14 +157,11 @@ def 基建收菜(emulator: Emulator):
     for _ in range(5):
         emulator.click((60,40))
         time.sleep(0.5)
-    logger.info(dir_name)
     pass 
 
-
-def 使用无人机(emulator: Emulator):
-    dir_name = sys._getframe().f_code.co_name
-    emulator.current_dir = dir_name
-    进入基建(emulator)
+@emulator.dir_decorator
+def 使用无人机():
+    进入基建()
     while True:
         emulator.find_and_click(['贸易站1', '贸易站2', '贸易站3'])
         if emulator.find_img(f'获取中'):
@@ -190,12 +179,9 @@ def 使用无人机(emulator: Emulator):
             emulator.click((959, 338))
             emulator.click((959, 338))
             emulator.find_and_click('确定')
-    logger.info(dir_name)
 
-
-def 去战斗(emulator: Emulator):
-    dir_name = sys._getframe().f_code.co_name
-    emulator.current_dir = dir_name
+@emulator.dir_decorator
+def 去战斗():
     while True:
         if emulator.find_img(f'在战斗页面'):
             break
@@ -203,22 +189,18 @@ def 去战斗(emulator: Emulator):
         time.sleep(1)
     pass
 
-
-def 选择关卡(emulator: Emulator):
-    dir_name = sys._getframe().f_code.co_name
-    emulator.current_dir = dir_name
+@emulator.dir_decorator
+def 选择关卡():
     while True:
         if emulator.find_img(f'关卡已选择'):
             break
         emulator.find_and_click(['物资筹备','战术演习','LS-5'])
         # emulator.find_and_click(["源石尘行动","行动记录","OD-6"])
         # emulator.find_and_click(['画中人','入画','WR-3'])
-    logger.info(dir_name)
     pass
 
-def 循环挑战(emulator: Emulator):
-    dir_name = sys._getframe().f_code.co_name
-    emulator.current_dir = dir_name
+@emulator.dir_decorator
+def 循环挑战():
     while not emulator.find_img(f'体力刷完了'):
         if emulator.find_img(f'战斗中'):
             time.sleep(30)
@@ -226,23 +208,18 @@ def 循环挑战(emulator: Emulator):
     for _ in range(3):
         time.sleep(1)
         emulator.find_and_click(f'体力刷完了')
-    logger.info(dir_name)
     pass
 
-
-def 去首页(emulator: Emulator):
-    dir_name = sys._getframe().f_code.co_name
-    emulator.current_dir = dir_name
+@emulator.dir_decorator
+def 去首页():
     while not emulator.find_img(f'在首页'):
         emulator.find_and_click(f'导航小房子')
         time.sleep(1)
         emulator.find_and_click(f'导航小房子', (-146, 156))
     pass
 
-
-def 信用点(emulator: Emulator):
-    dir_name = sys._getframe().f_code.co_name
-    emulator.current_dir = dir_name
+@emulator.dir_decorator
+def 信用点():
     credit_step = 0
     while credit_step == 0:
         if emulator.find_and_click(f'采购中心'):
@@ -274,13 +251,11 @@ def 信用点(emulator: Emulator):
                 if not emulator.find_and_click(f'购买物品'):
                     emulator.click((1122, 109))
                     getting = False
-    logger.info(dir_name)
     pass
 
-def 刷土(emulator: Emulator):
-    dir_name = sys._getframe().f_code.co_name
-    emulator.current_dir = dir_name
-    去战斗(emulator)
+@emulator.dir_decorator
+def 刷土():
+    去战斗()
     tmp = 0
     while tmp == 0:
         emulator.swipe((100,300,300,300))
@@ -294,9 +269,8 @@ def 刷土(emulator: Emulator):
             break
     pass
 
-def 收日常任务(emulator: Emulator):
-    dir_name = sys._getframe().f_code.co_name
-    emulator.current_dir = dir_name
+@emulator.dir_decorator
+def 收日常任务():
     task_step = 0
     while task_step == 0:
         if emulator.find_and_click(f'任务'):
@@ -305,10 +279,7 @@ def 收日常任务(emulator: Emulator):
         for _ in range(90):
             emulator.click((1122, 140))
             time.sleep(0.5)
-    logger.info(dir_name)
-
 
 if __name__ == "__main__":
-    emulator = Emulator(ARKNIGHTS_IMG_PATH)
     logger.setLevel(logging.DEBUG)
-    基建收菜(emulator)
+    登录方舟()

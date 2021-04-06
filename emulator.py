@@ -19,6 +19,15 @@ class Emulator:
         self.current_dir = ''
         self.load_imgs()
 
+    def dir_decorator(self, func):
+        def dec():
+            _tmp_dir_name = self.current_dir
+            self.current_dir = func.__name__
+            func()
+            logger.info(func.__name__)
+            self.current_dir =_tmp_dir_name
+        return dec
+
     def kill_app(self, app_name):
         self.emulator.app_stop(app_name)
         logger.debug(f'{app_name} dead')
@@ -32,7 +41,6 @@ class Emulator:
             for j in get_files(_img_sub_dir, 2):
                 _tmp = j.replace('.jpg', '')
                 self.imgs[i][_tmp] = load_img(f'{self.img_path}{i}//{_tmp}')
-
 
     def run_app(self, app_name):
         try:
