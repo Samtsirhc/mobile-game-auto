@@ -43,7 +43,14 @@ class Emulator:
         except Exception as e:
             logger.error(e)
         # "com.hypergryph.arknights"
-    
+
+    def check_app(self, app_name):
+        _dict = self.emulator.app_current()
+        if _dict['package'] == app_name:
+            return True
+        else:
+            return False
+
     def find_img(self, img):
         self.screen_shot = self.emulator.screenshot(format="opencv")
         time.sleep(0.5)
@@ -81,10 +88,12 @@ class Emulator:
                     self.click(self.img_coordinate)
                 else:
                     self.click(self.img_coordinate, offset[img.index(self.img_name)])
+                return True
         else:
             if self.find_img(img):
                 self.click(self.img_coordinate, offset)
-
+                return True
+        return False
 
     def input_text(self, text):
         self.emulator.send_keys(text)
@@ -96,5 +105,6 @@ class Emulator:
         self.emulator.swipe(xyxy[0], xyxy[1], xyxy[2], xyxy[3])
         
 if  __name__ == "__main__":
-
+    e = Emulator(ARKNIGHTS_IMG_PATH)
+    print(e.check_app(ARKNIGHTS_APP_NAME))
     pass

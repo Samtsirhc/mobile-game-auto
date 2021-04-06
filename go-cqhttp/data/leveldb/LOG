@@ -615,3 +615,10 @@
 09:59:10.859408 version@stat F·[3 1] S·620KiB[30KiB 590KiB] Sc·[0.75 0.01]
 09:59:10.879355 db@janitor F·6 G·0
 09:59:10.879355 db@open done T·39.8942ms
+=============== Apr 4, 2021 (CST) ===============
+16:32:04.957200 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+16:32:04.958176 version@stat F·[3 1] S·620KiB[30KiB 590KiB] Sc·[0.75 0.01]
+16:32:04.958176 db@open opening
+16:32:04.959152 version@stat F·[3 1] S·620KiB[30KiB 590KiB] Sc·[0.75 0.01]
+16:32:04.964032 db@janitor F·6 G·0
+16:32:04.964032 db@open done T·5.856ms

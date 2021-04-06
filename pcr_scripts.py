@@ -17,18 +17,14 @@ def 登录PCR(emulator: Emulator):
     dir_name = sys._getframe().f_code.co_name
     emulator.current_dir = dir_name
     emulator.run_app(PCR_APP_NAME)
-    while True:
-        emulator.find_and_click('我的', (-230, 10))
-        if emulator.find_and_click('加速', (578,37)):
-            break
-    while True:
+    while not emulator.check_app('tw.sonet.princessconnect'):
+        emulator.find_and_click(['我的','加速'], [(-230, 10), (578,37)])
+    while not emulator.find_img('商店'):
         time.sleep(1)
         emulator.find_and_click('下载')
         emulator.click((650, 620))
         if emulator.find_img('请选择角色'):
             兰德索尔杯(emulator)
-        if emulator.find_img('商店'):
-            break
     while True:
         time.sleep(1)
         emulator.click((650, 620))
@@ -167,6 +163,8 @@ def 地下城(emulator: Emulator):
         logger.info(dir_name)
         return True
     去冒险(emulator)
+    dir_name = sys._getframe().f_code.co_name
+    emulator.current_dir = dir_name
     times = 3
     while True:
         emulator.find_and_click(['地下城', '蓝OK'])
@@ -253,5 +251,10 @@ def 求装备(emulator: Emulator):
 
 if __name__ == "__main__":
     emulator = Emulator(PCR_IMG_PATH)
+    登录PCR(emulator)
+    地下城(emulator)
+    MANA冒险(emulator)
+    经验值冒险(emulator)
+    点赞(emulator)
     求装备(emulator)
     pass
