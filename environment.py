@@ -1,16 +1,24 @@
 import os
 import sys
 
-modules = ['uiautomator2', 'psutil', 'cv2']
-packages = ['uiautomator2', 'psutil', 'opencv-python']
+PKGS = [{'module': 'uiautomator2', 'package': 'uiautomator2', 'version':'2.12.1'},
+        {'module': 'psutil', 'package': 'psutil', 'version':'5.8.0'},
+        {'module': 'cv2', 'package': 'opencv-python', 'version':'4.2.0.34'},
+        {'module': 'adbutils', 'package': 'adbutils', 'version':'0.10.0'},
+        {'module': 'websocket', 'package': 'websocket_client', 'version':'0.58.0'}]
 
+def check_environment(pkgs):
+    print('checking...')
+    for i in pkgs:
+        try:
+            exec(f'import {i["module"]}')
+            print(f'{i["module"]}')
+        except:
+            os.system(f'pip install {i["package"]}=={i["version"]}')
+            check_environment(pkgs)
+            break
+    else:
+        print('Environment Done!')
 
-for i in range(len(packages)):
-    try:
-        exec(f'import {modules[i]}')
-    except:
-        os.system(f'pip install {packages[i]}')
-else:
-    print('环境已准备好')
-
+check_environment(PKGS)
 os.system('pause')

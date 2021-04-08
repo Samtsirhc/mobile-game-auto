@@ -102,30 +102,6 @@ def 基建换班():
         if emulator.find_img('制造站'):
             state = 1
 
-        if stone == 0:
-            if emulator.find_img('源石'):
-                stone = 1
-                state = 1
-        while stone < 10 and stone > 0:
-            if stone == 1:
-                emulator.find_and_click('源石')
-                if emulator.find_img('固源岩'):
-                    stone += 1
-            if stone == 2:
-                for _ in range(5):
-                    emulator.click((962, 206))
-                    time.sleep(0.1)
-                for _ in range(5):
-                    emulator.click((950, 579))
-                    time.sleep(0.1)
-                stone += 1
-            if stone == 3:
-                if emulator.find_img('源石'):
-                    stone += 10
-                else: 
-                    emulator.find_and_click('固源岩', (-288, -263))
-                    time.sleep(3)
-
         clear_count = 0
         while state == 1:
             emulator.find_and_click('进驻信息')
@@ -155,11 +131,39 @@ def 基建换班():
                 factory_order += 1
                 state = 0
 
+    while factory_order == 4 and MINING:
+        if emulator.find_img('进驻总览'):
+            emulator.click((70, 310))
+            time.sleep(1)
+        if stone == 0:
+            if emulator.find_img('源石'):
+                stone = 1
+        while stone < 10 and stone > 0:
+            if stone == 1:
+                emulator.find_and_click('源石')
+                if emulator.find_img('固源岩'):
+                    stone += 1
+            if stone == 2:
+                for _ in range(5):
+                    emulator.click((962, 206))
+                    time.sleep(0.1)
+                for _ in range(5):
+                    emulator.click((950, 579))
+                    time.sleep(0.1)
+                stone += 1
+            if stone == 3:
+                if emulator.find_img(f'进驻总览'):
+                    stone += 10
+                    factory_order += 1
+                else: 
+                    emulator.click((44,44))
+                    time.sleep(3)
+
     # 贸易站
     trade_order = 1
-    while factory_order < 4:
+    while trade_order < 4:
         if emulator.find_img('进驻总览'):
-            emulator.click((10 + 200 * (factory_order - 1), 310))
+            emulator.click((10 + 200 * (trade_order - 1), 410))
             time.sleep(1)
         if emulator.find_img('贸易站'):
             state = 1
@@ -195,9 +199,9 @@ def 基建换班():
 
     # 发电站
     elect_order = 1
-    while factory_order < 4:
+    while elect_order < 4:
         if emulator.find_img('进驻总览'):
-            emulator.click((70 + 200 * (factory_order - 1), 310))
+            emulator.click((70 + 200 * (elect_order - 1), 510))
             time.sleep(1)
         if emulator.find_img('发电站'):
             state = 1
@@ -242,21 +246,6 @@ def 基建收菜():
                 time.sleep(0.5)
             emulator.find_and_click('蓝色铃铛')
             break
-    while True:
-        if emulator.find_img('制造站'):
-            break
-        else:
-            emulator.click((364, 320))
-    _tmp = 0
-    while True:
-        emulator.find_and_click(['制造中', '最多', '勾'])
-        if emulator.find_and_click('最多'):
-            _tmp += 1
-        if _tmp > 4:
-            break
-    for _ in range(5):
-        emulator.click((60, 40))
-        time.sleep(0.5)
     pass
 
 
@@ -284,11 +273,11 @@ def 使用无人机():
 
 @emulator.dir_decorator
 def 去战斗():
-    while True:
-        if emulator.find_img(f'在战斗页面'):
-            break
-        emulator.find_and_click(['作战', '导航小房子'])
-        time.sleep(1)
+    while not emulator.find_img('在战斗页面'):
+        if emulator.find_img('在导航'):
+            emulator.find_and_click('作战')
+        else:
+            emulator.find_and_click('导航小房子')
     pass
 
 
@@ -393,12 +382,12 @@ def 收日常任务():
 
 if __name__ == "__main__":
     logger.setLevel(logging.DEBUG)
-
-    # 登录方舟()
+    登录方舟()
+    基建收菜()
     基建换班()
-    # 基建收菜()
-    # 使用无人机()
-    # 选择关卡()
-    # 循环挑战()
-    # 信用点()
-    # 收日常任务()
+    使用无人机()
+    去战斗()
+    选择关卡()
+    循环挑战()
+    信用点()
+    收日常任务()
