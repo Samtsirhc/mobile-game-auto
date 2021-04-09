@@ -10,8 +10,6 @@ from emulator import Emulator
 
 logger = get_logger()
 emulator = Emulator(ARKNIGHTS_IMG_PATH)
-# dir_name = sys._getframe().f_code.co_name
-# path = f'{ARKNIGHTS_IMG_PATH + dir_name}\\'
 
 
 @emulator.dir_decorator
@@ -155,8 +153,8 @@ def 基建换班():
                 if emulator.find_img(f'进驻总览'):
                     stone += 10
                     factory_order += 1
-                else: 
-                    emulator.click((44,44))
+                else:
+                    emulator.click((44, 44))
                     time.sleep(3)
 
     # 贸易站
@@ -234,6 +232,7 @@ def 基建换班():
             if emulator.find_img(f'进驻总览'):
                 elect_order += 1
                 state = 0
+
 
 @emulator.dir_decorator
 def 基建收菜():
@@ -354,17 +353,31 @@ def 信用点():
 @emulator.dir_decorator
 def 刷土():
     去战斗()
-    tmp = 0
-    while tmp == 0:
-        emulator.swipe((100, 300, 500, 300))
-        time.sleep(1)
-        if emulator.find_and_click('黑暗时代下'):
-            tmp += 1
+    state = 0
+    while state == 0:
+        if emulator.find_img('左箭头'):
+            state += 1
+        emulator.find_and_click(['主线','苦难摇篮','怒号光明'])
 
-    while tmp == 1:
-        emulator.find_and_click('1-7')
-        if emulator.find_img(f'关卡已选择'):
-            break
+    while state == 1:
+        if not emulator.find_and_click('左箭头'):
+            state += 1
+    
+    while state == 2:
+        if not emulator.find_img('在第一章'):
+            emulator.find_and_click('右箭头01')
+            time.sleep(1.5)
+        else:
+            state += 1
+    
+    while state == 3:
+        if not emulator.find_and_click('1-7'):
+            emulator.swipe((800,360,400,360))
+            time.sleep(1.5)
+        else:
+            if emulator.find_img('关卡已选择'):
+                state += 1
+            
     pass
 
 
@@ -383,11 +396,11 @@ def 收日常任务():
 if __name__ == "__main__":
     logger.setLevel(logging.DEBUG)
     登录方舟()
-    基建收菜()
-    基建换班()
-    使用无人机()
-    去战斗()
-    选择关卡()
-    循环挑战()
-    信用点()
-    收日常任务()
+    # 基建收菜()
+    # 基建换班()
+    # 使用无人机()
+    # 选择关卡()
+    刷土()
+    # 循环挑战()
+    # 信用点()
+    # 收日常任务()
