@@ -5,13 +5,14 @@ import time
 from threading import Thread
 from cv2 import cv2
 import numpy as np
-import adbutils
-import websocket
+# import adbutils
+# import websocket
 import uiautomator2 as u2
 
 from config import *
 from tools.image_tools import *
 from tools.time_tool import *
+from tools.process_tools import *
 
 logger = get_logger()
 
@@ -19,10 +20,23 @@ logger = get_logger()
 class Emulator:
     def __init__(self, img_path):
         # self.init_shot()
-        self.emulator = u2.connect()    # python -m uiautomator2 init
+        if check_process("Nox.exe"):
+            pass
+        else:
+            run_sth(EMULATOR_PATH)
+            time.sleep(30)
         self.img_path = img_path
         self.current_dir = ''
         self.load_imgs()
+        self.try_init()
+
+
+    def try_init(self):
+        try:
+            self.emulator = u2.connect()    # python -m uiautomator2 init
+        except:
+            time.sleep(10)
+            self.try_init()
 
     def dir_decorator(self, func):
         _no_log = ['进入基建']
@@ -133,14 +147,14 @@ class Emulator:
         """
         self.emulator.swipe(xyxy[0], xyxy[1], xyxy[2], xyxy[3])
 
-    def init_shot(self):
-        self.d = adbutils.adb.device()
-        self.lport = self.d.forward_port(7912)
-        self.ws = websocket.WebSocket()
-        self.ws.connect("ws://localhost:{}/minicap".format(self.lport))
-        for _ in range(3):
-            self.take_shot()
-        logger.debug('shot manager done')
+    # def init_shot(self):
+    #     self.d = adbutils.adb.device()
+    #     self.lport = self.d.forward_port(7912)
+    #     self.ws = websocket.WebSocket()
+    #     self.ws.connect("ws://localhost:{}/minicap".format(self.lport))
+    #     for _ in range(3):
+    #         self.take_shot()
+    #     logger.debug('shot manager done')
 
 if __name__ == "__main__":
     pass

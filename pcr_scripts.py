@@ -10,9 +10,10 @@ from tools.time_tool import *
 
 logger = get_logger()
 logger.setLevel(logging.DEBUG)
+emulator = Emulator(PCR_IMG_PATH)
 
-
-def 登录PCR(emulator: Emulator):
+@emulator.dir_decorator
+def 登录PCR():
     logger.info('开始登录PCR')
     dir_name = sys._getframe().f_code.co_name
     emulator.current_dir = dir_name
@@ -24,7 +25,7 @@ def 登录PCR(emulator: Emulator):
         emulator.find_and_click('下载')
         emulator.click((650, 620))
         if emulator.find_img('请选择角色'):
-            兰德索尔杯(emulator)
+            兰德索尔杯()
     while True:
         time.sleep(1)
         emulator.click((650, 620))
@@ -33,7 +34,7 @@ def 登录PCR(emulator: Emulator):
             logger.info(dir_name)
             break
 
-def 兰德索尔杯(emulator: Emulator):
+def 兰德索尔杯():
     dir_name = sys._getframe().f_code.co_name
     emulator.current_dir = dir_name
     for _ in range(3):
@@ -44,7 +45,7 @@ def 兰德索尔杯(emulator: Emulator):
             return
     
 
-def 去冒险(emulator: Emulator):
+def 去冒险():
     dir_name = sys._getframe().f_code.co_name
     emulator.current_dir = dir_name
     while True:
@@ -56,7 +57,7 @@ def 去冒险(emulator: Emulator):
             break
 
 
-def 去主页(emulator: Emulator):
+def 去主页():
     dir_name = sys._getframe().f_code.co_name
     emulator.current_dir = dir_name
     while True:
@@ -67,7 +68,7 @@ def 去主页(emulator: Emulator):
             break
 
 
-def 扫荡(emulator: Emulator):
+def 扫荡():
     dir_name = sys._getframe().f_code.co_name
     emulator.current_dir = dir_name
     while True:
@@ -91,13 +92,13 @@ def 扫荡(emulator: Emulator):
             break
 
 
-def MANA冒险(emulator: Emulator):
+def MANA冒险():
     dir_name = sys._getframe().f_code.co_name
     emulator.current_dir = dir_name
     if check_job(dir_name):
         logger.info(dir_name)
         return True
-    去冒险(emulator)
+    去冒险()
     while True:
         emulator.find_and_click('探索')
         emulator.find_and_click('MANA冒险')
@@ -106,17 +107,17 @@ def MANA冒险(emulator: Emulator):
             time.sleep(2)
             if emulator.find_img('在扫荡页面'):
                 break
-    扫荡(emulator)
+    扫荡()
     logger.info(dir_name)
 
 
-def 经验值冒险(emulator: Emulator):
+def 经验值冒险():
     dir_name = sys._getframe().f_code.co_name
     emulator.current_dir = dir_name
     if check_job(dir_name):
         logger.info(dir_name)
         return True
-    去冒险(emulator)
+    去冒险()
     while True:
         emulator.find_and_click('探索')
         emulator.find_and_click('经验值冒险')
@@ -125,23 +126,23 @@ def 经验值冒险(emulator: Emulator):
             time.sleep(2)
             if emulator.find_img('在扫荡页面'):
                 break
-    扫荡(emulator)
+    扫荡()
     logger.info(dir_name)
 
-def 进入商店(emulator: Emulator):
+def 进入商店():
     dir_name = sys._getframe().f_code.co_name
     emulator.current_dir = dir_name
-    去主页(emulator)
+    去主页()
     while True:
         emulator.find_and_click('商店')
         if emulator.find_img('在商店'):
             break
 
 
-def 买经验(emulator: Emulator):
+def 买经验():
     dir_name = sys._getframe().f_code.co_name
     emulator.current_dir = dir_name
-    进入商店(emulator)
+    进入商店()
     if emulator.find_img('经验买完了'):
         return
     buy_times = 4
@@ -156,13 +157,13 @@ def 买经验(emulator: Emulator):
             return
 
 
-def 地下城(emulator: Emulator):
+def 地下城():
     dir_name = sys._getframe().f_code.co_name
     emulator.current_dir = dir_name
     if check_job(dir_name):
         logger.info(dir_name)
         return True
-    去冒险(emulator)
+    去冒险()
     dir_name = sys._getframe().f_code.co_name
     emulator.current_dir = dir_name
     times = 3
@@ -215,7 +216,7 @@ def 地下城(emulator: Emulator):
                 if emulator.find_img('返回'):
                      step = 1 
 
-def 持续战斗(emulator: Emulator):
+def 持续战斗():
     dir_name = sys._getframe().f_code.co_name
     emulator.current_dir = dir_name
     while True:
@@ -223,13 +224,13 @@ def 持续战斗(emulator: Emulator):
         emulator.find_and_click(['妈2','妈','进行挑战','战斗开始','下一步','关闭','取消'])
 
 
-def 点赞(emulator: Emulator):
+def 点赞():
     dir_name = sys._getframe().f_code.co_name
     emulator.current_dir = dir_name
     if check_job(dir_name):
         logger.info(dir_name)
         return True
-    去主页(emulator)
+    去主页()
     _tmp = 0
     while True:
         emulator.find_and_click(['战队', '白底OK', 'OK', '成员情报'])
@@ -239,10 +240,10 @@ def 点赞(emulator: Emulator):
             break
     logger.info(dir_name)
 
-def 求装备(emulator: Emulator):
+def 求装备():
     dir_name = sys._getframe().f_code.co_name
     emulator.current_dir = dir_name
-    去主页(emulator)
+    去主页()
     while True:
         emulator.find_and_click(['请求结果', 'OK', '战队', '白底OK', '装备请求', '请求'])
         if emulator.find_img(['请求状况','无战队']):
@@ -250,11 +251,10 @@ def 求装备(emulator: Emulator):
     logger.info(dir_name)
 
 if __name__ == "__main__":
-    emulator = Emulator(PCR_IMG_PATH)
-    登录PCR(emulator)
-    地下城(emulator)
-    MANA冒险(emulator)
-    经验值冒险(emulator)
-    点赞(emulator)
-    求装备(emulator)
+    登录PCR()
+    地下城()
+    MANA冒险()
+    经验值冒险()
+    点赞()
+    求装备()
     pass
