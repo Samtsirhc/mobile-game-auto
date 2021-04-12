@@ -648,3 +648,13 @@
 10:23:50.020736 table@remove removed @158
 10:23:50.021241 table@remove removed @155
 10:23:50.022237 table@remove removed @154
+=============== Apr 12, 2021 (CST) ===============
+10:19:30.521209 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+10:19:30.713802 version@stat F·[0 1] S·608KiB[0B 608KiB] Sc·[0.00 0.01]
+10:19:30.713802 db@open opening
+10:19:30.753898 journal@recovery F·1
+10:19:30.865343 journal@recovery recovering @169
+10:19:31.332629 memdb@flush created L0@172 N·43 S·13KiB "\x02\xe4\xe3\n,v2982":"\xfb*;U,v2998"
+10:19:31.372710 version@stat F·[1 1] S·621KiB[13KiB 608KiB] Sc·[0.25 0.01]
+10:19:31.759896 db@janitor F·4 G·0
+10:19:31.759896 db@open done T·1.0460938s
