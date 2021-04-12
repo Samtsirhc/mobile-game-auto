@@ -20,26 +20,22 @@ logger = get_logger()
 class Emulator:
     def __init__(self, img_path):
         # self.init_shot()
-        if check_process("Nox.exe"):
-            pass
-        else:
-            run_sth(EMULATOR_PATH)
-            time.sleep(30)
         self.img_path = img_path
         self.current_dir = ''
         self.load_imgs()
-        self.try_init()
 
 
-    def try_init(self):
-        try:
-            self.emulator = u2.connect()    # python -m uiautomator2 init
-        except:
-            time.sleep(10)
-            self.try_init()
+    def connect(self):
+        if check_process("Nox.exe"):
+            pass
+        else:
+            logger.info('启动模拟器')
+            run_sth(EMULATOR_PATH)
+            time.sleep(30)
+        self.emulator = u2.connect()    # python -m uiautomator2 init
 
     def dir_decorator(self, func):
-        _no_log = ['进入基建']
+        _no_log = ['进入基建', '去战斗']
 
         def dec():
             _tmp_dir_name = self.current_dir

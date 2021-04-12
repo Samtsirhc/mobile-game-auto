@@ -10,7 +10,7 @@ from emulator import Emulator
 
 logger = get_logger()
 emulator = Emulator(ARKNIGHTS_IMG_PATH)
-
+week = ArknightsWeekly()
 
 @emulator.dir_decorator
 def 登录方舟():
@@ -278,7 +278,7 @@ def 去战斗():
         if emulator.find_img('在导航'):
             emulator.find_and_click('作战')
         else:
-            emulator.find_and_click('导航小房子')
+            emulator.find_and_click(['导航小房子', '首页作战'])
     pass
 
 
@@ -385,6 +385,7 @@ def 刷土():
 
 @emulator.dir_decorator
 def 收日常任务():
+    去首页()
     task_step = 0
     while task_step == 0:
         if emulator.find_and_click(f'任务'):
@@ -395,13 +396,51 @@ def 收日常任务():
             time.sleep(0.5)
 
 
+@emulator.dir_decorator
+def 剿灭():
+    def 检查():
+        _res = False
+        while True:
+            emulator.find_and_click('每周报酬')
+            if emulator.find_img('长期剿灭委托'):
+                if emulator.find_img('完成剿灭'):
+                    week.finish_job('剿灭')
+                    _res = True
+                else:
+                    _res = False
+                break
+        while not emulator.find_img('剿灭已选择'):
+            emulator.find_and_click(['废弃矿区','长期剿灭委托'], [(0,0),(-50, 100)])
+            time.sleep(1)
+        return _res
+    if week.check_job('剿灭'):
+        return True
+
+
+    去战斗()
+    while not emulator.find_img('剿灭已选择'):
+        emulator.find_and_click(['剿灭作战', '乌萨斯', '废弃矿区'])
+        time.sleep(1)
+    if 检查():
+        return True
+    while not emulator.find_img(f'体力刷完了'):
+        if emulator.find_img(f'战斗中'):
+            time.sleep(60)
+        emulator.find_and_click(['未代理', '已代理','开始行动','战斗完成1','废弃矿区'], [(50, 20), (50, 70), (0, 0),(0, -200),(0,0)])
+        if emulator.find_and_click('战斗完成2', (0, -200)):
+            if 检查():
+                break
+
+
+
 if __name__ == "__main__":
     logger.setLevel(logging.DEBUG)
-
-    # 登录方舟()
-    # 基建收菜()
-    # 基建换班()
+    emulator.connect()
+    登录方舟()
+    基建收菜()
+    基建换班()
     使用无人机()
+    剿灭()
     刷土()
     循环挑战()
     信用点()

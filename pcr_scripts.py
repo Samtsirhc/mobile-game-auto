@@ -251,6 +251,7 @@ def 求装备():
 
 if __name__ == "__main__":
     logger.setLevel(logging.DEBUG)
+    emulator.connect()
     登录PCR()
     地下城()
     MANA冒险()

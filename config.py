@@ -3,6 +3,8 @@ from tools.time_tool import *
 from tools.path_tool import *
 import requests
 import string
+import json
+import os
 
 
 # basic settings
@@ -21,6 +23,44 @@ CQHTTP_CONFIG = 'http://127.0.0.1:5700/send_private_msg?user_id=812266890&messag
 
 # settings
 MINING = True # 是否搓玉
+
+# globle var
+CURRENT_DIR = ''
+
+class ArknightsWeekly():
+    def __init__(self):
+        self.week = get_week()
+        self.basic_log = {'剿灭':False, '周任务': False}
+        self.basic_log = json.dumps(self.basic_log)
+        self.log_path = f'{LOG_PATH}{self.week}.json'
+        self.chekc_log()
+
+        pass
+
+    def chekc_log(self):
+        if os.path.isfile(self.log_path):
+            with open(self.log_path, 'rb') as f:
+                self.log = json.load(f)
+                print(self.log)
+            pass
+        else:
+            with open(self.log_path, 'w', encoding = 'utf-8') as f:
+                f.write(self.basic_log)
+    
+    def finish_job(self, job_name):
+        with open(self.log_path, 'rb') as f:
+            self.log = json.load(f)
+            self.log[job_name] = True
+        with open(self.log_path, 'w', encoding = 'utf-8') as f:
+            f.write(json.dumps(self.log))
+    
+    def check_job(self, job_name):
+        return self.log[job_name]
+
+
+
+
+
 
 def get_logger():
     logger = Logger(log_path=LOG_PATH, log_file_name = LOG_NAME, cq_config = CQHTTP_CONFIG)
@@ -42,5 +82,4 @@ def check_job(checker):
             return False
 
 if __name__ == '__main__' :
-    l = get_logger()
-    l.info('4564')
+    a = ArknightsWeekly()
