@@ -7,7 +7,7 @@ import string
 
 # basic settings
 ABS_PATH = get_path()
-EMULATOR_PATH = "C:\\Users\\lcyba\\Desktop\\夜神模拟器.lnk"
+EMULATOR_PATH = "C:\\Users\\licy03\\Desktop\\夜神模拟器.lnk"
 
 PCR_IMG_PATH = ABS_PATH + "\\imgs\\pcr\\"
 PCR_APP_NAME = "com.netease.uu"

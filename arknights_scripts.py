@@ -261,13 +261,15 @@ def 使用无人机():
             break
 
     while True:
+        time.sleep(1)
         if emulator.find_img(f'无人机用完了'):
             break
-        emulator.find_and_click(['可交付', '无人机协助'])
-        if emulator.find_img(f'确定'):
-            emulator.click((959, 338))
-            emulator.click((959, 338))
-            emulator.find_and_click('确定')
+        else:
+            emulator.find_and_click(['可交付', '无人机协助'])
+            if emulator.find_img(f'确定'):
+                emulator.click((959, 338))
+                emulator.click((959, 338))
+                emulator.click((956, 588))
 
 
 @emulator.dir_decorator
@@ -394,11 +396,11 @@ def 收日常任务():
 
 
 if __name__ == "__main__":
-    # logger.setLevel(logging.DEBUG)
+    logger.setLevel(logging.DEBUG)
 
-    登录方舟()
-    基建收菜()
-    基建换班()
+    # 登录方舟()
+    # 基建收菜()
+    # 基建换班()
     使用无人机()
     刷土()
     循环挑战()

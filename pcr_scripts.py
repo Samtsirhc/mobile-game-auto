@@ -9,7 +9,6 @@ from tools.logger import creat_my_logger
 from tools.time_tool import *
 
 logger = get_logger()
-logger.setLevel(logging.DEBUG)
 emulator = Emulator(PCR_IMG_PATH)
 
 @emulator.dir_decorator
@@ -251,6 +250,7 @@ def 求装备():
     logger.info(dir_name)
 
 if __name__ == "__main__":
+    logger.setLevel(logging.DEBUG)
     登录PCR()
     地下城()
     MANA冒险()
