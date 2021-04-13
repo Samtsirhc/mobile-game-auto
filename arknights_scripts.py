@@ -5,6 +5,7 @@ import time
 
 import psutil
 
+from orc import *
 from config import *
 from emulator import Emulator
 
@@ -394,7 +395,110 @@ def 收日常任务():
         for _ in range(90):
             emulator.click((1122, 140))
             time.sleep(0.5)
+    task_step = 0
+    while task_step == 0:
+        if emulator.find_and_click(f'周常任务'):
+            task_step += 1
+    if task_step == 1:
+        for _ in range(90):
+            emulator.click((1122, 140))
+            time.sleep(0.5)
 
+
+@emulator.dir_decorator
+def 公开招募():
+    abs_tags = ['高级资深干员','资深干员', '控场','位移', '特种', '快速复活', '支援', '削弱']
+    去首页()
+    while True:
+        if not emulator.find_img('在公招'):
+            emulator.find_and_click(['公招', '聘用'])
+            emulator.click((1232,46))
+        else:
+            if emulator.find_with('聘用', '在公招') == 1:
+                break   # 没有可以收取的
+    count = 1
+    xys = [(327,287),(954,294),(325,576),(963,579)]
+    poss = [(400,375),(600,375),(750,375),(410,460),(600,460)]
+    for i in range(count):
+        tags = []
+        pos = -1
+        while True:
+            if emulator.find_img('在公招'):
+                emulator.click(xys[i])
+                time.sleep(1)
+            if emulator.find_img('正在招募'):
+                tags = 识别招募()
+                break
+        for j in abs_tags:
+            if pos != -1:
+                break
+            for i in range(len(tags)):
+                if j == tags[i]:
+                    pos = i
+                    break
+        emulator.click(poss[pos])
+        for _ in range(11):
+            time.sleep(0.1)
+            emulator.click((454,152))
+        emulator.find_and_click('蓝底白勾')
+
+@emulator.dir_decorator
+def 循环招募():
+    abs_tags = ['高级资深干员','资深干员', '控场','位移', '特种干员', '快速复活', '支援', '削弱']
+    xys = [(327,287),(954,294),(325,576),(963,579)]
+    poss = [(400,375),(600,375),(750,375),(410,460),(600,460)]
+    while True:
+        tags = []
+        pos = -1
+        while True:
+            if emulator.find_img('在公招'):
+                emulator.click(xys[0])
+                time.sleep(1)
+            if emulator.find_img('正在招募'):
+                tags = 识别招募()
+                break
+        for j in abs_tags:
+            if pos != -1:
+                break
+            for i in range(len(tags)):
+                if j == tags[i]:
+                    pos = i
+                    logger.info(tags[i])
+                    break
+        emulator.click(poss[pos])
+        for _ in range(9):
+            time.sleep(0.1)
+            emulator.click((454,152))
+        
+        step = 0
+        while step == 0:
+            if emulator.find_and_click('蓝底白勾'):
+                step += 1
+        while step == 1:
+            if emulator.find_and_click('立即招募'):
+                step += 1
+        while step == 2:
+            if emulator.find_and_click('红底白勾'):
+                step += 1
+        while step == 3:
+            if emulator.find_and_click('聘用'):
+                step += 1      
+        while step == 4:     
+            emulator.click((1232,46))
+            if emulator.find_with(['聘用','立即招募'], '在公招') == 1:
+                break   # 没有可以收取的
+        
+
+def 识别招募():
+    _xys = [(384,369,507,400),(551,369,674,400),(718,369,841,400),(384,440,507,474),(551,440,674,474)]
+    imgs = emulator.take_img(_xys)
+    _res = []
+    for i in range(len(imgs)):
+        imgs[i].save(f'{i}.jpg')
+        f = open(f'{i}.jpg', 'rb')
+        _res.append(my_orc(f.read()))
+    logger.info(_res)
+    return _res
 
 @emulator.dir_decorator
 def 剿灭():
@@ -430,18 +534,23 @@ def 剿灭():
         if emulator.find_and_click('战斗完成2', (0, -200)):
             if 检查():
                 break
+    for _ in range(3):
+        time.sleep(1)
+        emulator.find_and_click(f'体力刷完了')
 
 
 
 if __name__ == "__main__":
-    logger.setLevel(logging.DEBUG)
+    # logger.setLevel(logging.DEBUG)
     emulator.connect()
-    登录方舟()
-    基建收菜()
-    基建换班()
-    使用无人机()
-    剿灭()
-    刷土()
-    循环挑战()
-    信用点()
-    收日常任务()
+    循环招募()
+    # 登录方舟()
+    # 基建收菜()
+    # 基建换班()
+    # 使用无人机()
+    # 剿灭()
+    # 刷土()
+    # 循环挑战()
+    # 信用点()
+    # # 公开招募()
+    # 收日常任务()

@@ -3,16 +3,19 @@ import string
 import sys
 import time
 from threading import Thread
-from cv2 import cv2
+import io
 import numpy as np
 # import adbutils
 # import websocket
 import uiautomator2 as u2
+from cv2 import cv2
+from PIL import Image
 
+from orc import *
 from config import *
 from tools.image_tools import *
-from tools.time_tool import *
 from tools.process_tools import *
+from tools.time_tool import *
 
 logger = get_logger()
 
@@ -92,6 +95,15 @@ class Emulator:
         self.screen_shot = self.emulator.screenshot(format = 'opencv')
 
 
+    def take_img(self, xys):
+        '''
+        截图并且返回图片，目前专用于方舟公招
+        ''' 
+        _img = self.emulator.screenshot()
+        _imgs = [_img.crop(i) for i in xys]
+        return _imgs
+
+
     def find_img(self, img):
         self.take_shot()
         _tmp = False
@@ -105,6 +117,34 @@ class Emulator:
             if _xy[0] > 0:
                 _tmp = True
         return _tmp
+    
+
+    def find_with(self, img, bg):
+        '''
+        返回值：
+        0. 没有bg
+        1. 有bg没有img
+        2. 有bg有img
+        '''
+        self.take_shot()
+        _tmp = 0
+        _img = self.imgs[self.current_dir][bg]['img']
+        _xy = match_image(_img, self.screen_shot)
+        self.imgs[self.current_dir][bg]['coordinate'] = _xy
+        logger.debug(f'{bg} {_xy}')
+        if _xy[0] > 0:
+            _tmp = 1
+            if type(img) != list:
+                img = [img]
+            for i in img:
+                _img = self.imgs[self.current_dir][i]['img']
+                _xy = match_image(_img, self.screen_shot)
+                self.imgs[self.current_dir][i]['coordinate'] = _xy
+                logger.debug(f'{i} {_xy}')
+                if _xy[0] > 0:
+                    _tmp = 2
+        return _tmp
+
 
     def click(self, coordinate, offset=(0, 0)):
         if coordinate[0] > 0 and coordinate[1] > 0:
@@ -153,4 +193,7 @@ class Emulator:
     #     logger.debug('shot manager done')
 
 if __name__ == "__main__":
+    e = Emulator(ARKNIGHTS_IMG_PATH)
+    e.connect()
+
     pass
