@@ -4,7 +4,6 @@ import sys
 import time
 
 import psutil
-
 from orc import *
 from config import *
 from emulator import Emulator
@@ -496,7 +495,10 @@ def 识别招募():
     for i in range(len(imgs)):
         imgs[i].save(f'{i}.jpg')
         f = open(f'{i}.jpg', 'rb')
-        _res.append(my_orc(f.read()))
+        _tmp = f.read()
+        _res.append(my_orc(_tmp))
+        f.close()
+        os.remove(f'{i}.jpg')
     logger.info(_res)
     return _res
 
@@ -543,14 +545,14 @@ def 剿灭():
 if __name__ == "__main__":
     # logger.setLevel(logging.DEBUG)
     emulator.connect()
-    循环招募()
-    # 登录方舟()
-    # 基建收菜()
-    # 基建换班()
-    # 使用无人机()
-    # 剿灭()
-    # 刷土()
-    # 循环挑战()
-    # 信用点()
-    # # 公开招募()
-    # 收日常任务()
+    # 循环招募()
+    登录方舟()
+    基建收菜()
+    基建换班()
+    使用无人机()
+    剿灭()
+    刷土()
+    循环挑战()
+    信用点()
+    公开招募()
+    收日常任务()
