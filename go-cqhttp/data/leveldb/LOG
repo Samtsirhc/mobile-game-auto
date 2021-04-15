@@ -658,3 +658,7 @@
 10:19:31.372710 version@stat F·[1 1] S·621KiB[13KiB 608KiB] Sc·[0.25 0.01]
 10:19:31.759896 db@janitor F·4 G·0
 10:19:31.759896 db@open done T·1.0460938s
+=============== Apr 14, 2021 (CST) ===============
+10:00:57.030853 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+10:00:57.035733 CURRENT: missing target file: MANIFEST-000174
+10:00:57.039637 CURRENT.bak: missing target file: MANIFEST-000170
