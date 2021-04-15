@@ -659,6 +659,12 @@
 10:19:31.759896 db@janitor F·4 G·0
 10:19:31.759896 db@open done T·1.0460938s
 =============== Apr 14, 2021 (CST) ===============
-10:00:57.030853 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
-10:00:57.035733 CURRENT: missing target file: MANIFEST-000174
-10:00:57.039637 CURRENT.bak: missing target file: MANIFEST-000170
+15:19:57.378975 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+15:19:57.404013 version@stat F·[1 1] S·621KiB[13KiB 608KiB] Sc·[0.25 0.01]
+15:19:57.404013 db@open opening
+15:19:57.404993 journal@recovery F·1
+15:19:57.405997 journal@recovery recovering @173
+15:19:57.493058 memdb@flush created L0@175 N·33 S·10KiB "\x02\xe4\xe3\n,v3035":"\xed\xb40\xf9,v3031"
+15:19:57.494059 version@stat F·[2 1] S·632KiB[24KiB 608KiB] Sc·[0.50 0.01]
+15:19:57.603158 db@janitor F·5 G·0
+15:19:57.603158 db@open done T·199.1405ms

@@ -10,7 +10,8 @@ from emulator import Emulator
 
 logger = get_logger()
 emulator = Emulator(ARKNIGHTS_IMG_PATH)
-week = ArknightsWeekly()
+log_list = ['剿灭', '周任务']
+weekly = Periodic(log_list, 'Arknights', 7)
 
 @emulator.dir_decorator
 def 登录方舟():
@@ -503,6 +504,7 @@ def 识别招募():
     return _res
 
 @emulator.dir_decorator
+@weekly.periodic_manager
 def 剿灭():
     def 检查():
         _res = False
@@ -510,7 +512,7 @@ def 剿灭():
             emulator.find_and_click('每周报酬')
             if emulator.find_img('长期剿灭委托'):
                 if emulator.find_img('完成剿灭'):
-                    week.finish_job('剿灭')
+                    weekly.finish('剿灭')
                     _res = True
                 else:
                     _res = False
@@ -519,7 +521,7 @@ def 剿灭():
             emulator.find_and_click(['废弃矿区','长期剿灭委托'], [(0,0),(-50, 100)])
             time.sleep(1)
         return _res
-    if week.check_job('剿灭'):
+    if weekly.check('剿灭'):
         return True
 
 
