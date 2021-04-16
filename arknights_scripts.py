@@ -13,6 +13,7 @@ emulator = Emulator(ARKNIGHTS_IMG_PATH)
 log_list = ['剿灭', '周任务']
 weekly = Periodic(log_list, 'Arknights', 7)
 
+
 @emulator.dir_decorator
 def 登录方舟():
     emulator.run_app(ARKNIGHTS_APP_NAME)
@@ -276,7 +277,7 @@ def 使用无人机():
 @emulator.dir_decorator
 def 去战斗():
     去首页()
-    _tmp = [f'在战斗页面{i}' for i in range(1,5)]
+    _tmp = [f'在战斗页面{i}' for i in range(1, 5)]
     while not emulator.find_img(_tmp):
         emulator.find_and_click('首页作战')
     pass
@@ -291,7 +292,7 @@ def 选择关卡():
         # emulator.find_and_click(['物资筹备', '战术演习', 'LS-5'])
         # emulator.find_and_click(["源石尘行动","行动记录","OD-6"])
         # emulator.find_and_click(['画中人','入画','WR-3'])
-        emulator.find_and_click(["遗尘漫步","漫漫独行","WD-4"])
+        emulator.find_and_click(["遗尘漫步", "漫漫独行", "WD-4"])
     pass
 
 
@@ -361,27 +362,16 @@ def 刷土():
     while state == 0:
         if emulator.find_img('左箭头'):
             state += 1
-        emulator.find_and_click(['主线','苦难摇篮','怒号光明'])
-
+        emulator.find_and_click(['主线', '异卵同生', '觉醒'], [
+                                (0, 0), (-200, 0), (0, 0)])
     while state == 1:
-        if not emulator.find_and_click('左箭头'):
-            state += 1
-    
-    while state == 2:
-        if not emulator.find_img('在第一章'):
-            emulator.find_and_click('右箭头01')
-            time.sleep(1.5)
-        else:
-            state += 1
-    
-    while state == 3:
+        time.sleep(1.5)
         if not emulator.find_and_click('1-7'):
-            emulator.swipe((800,360,400,360))
-            time.sleep(1.5)
+            emulator.swipe((800, 360, 400, 360))
         else:
             if emulator.find_img('关卡已选择'):
                 state += 1
-            
+
     pass
 
 
@@ -408,25 +398,26 @@ def 收日常任务():
 
 @emulator.dir_decorator
 def 公开招募():
-    abs_tags = ['高级资深干员','资深干员', '控场','位移', '特种干员', '快速复活', '支援', '削弱']
+    abs_tags = ['高级资深干员', '资深干员', '控场', '位移', '特种干员', '快速复活', '支援', '削弱']
     去首页()
     while True:
         if not emulator.find_img('在公招'):
             emulator.find_and_click(['公招', '聘用'])
-            emulator.click((1232,46))
+            emulator.click((1232, 46))
         else:
             if emulator.find_with('聘用', '在公招') == 1:
                 break   # 没有可以收取的
     count = 4
-    poss = [(400,375),(600,375),(750,375),(410,460),(600,460)]  # 5个tag的位置
+    poss = [(400, 375), (600, 375), (750, 375),
+            (410, 460), (600, 460)]  # 5个tag的位置
 
     while True:
-        if emulator.find_with([f'招募{i}' for i in range(1,5)], '在公招') == 1:
+        if emulator.find_with([f'招募{i}' for i in range(1, 5)], '在公招') == 1:
             break
         tags = []
         pos = -1
         while True:
-            emulator.find_and_click([f'招募{i}' for i in range(1,5)])
+            emulator.find_and_click([f'招募{i}' for i in range(1, 5)])
             if emulator.find_img('正在招募'):
                 tags = 识别招募()
                 break
@@ -438,19 +429,20 @@ def 公开招募():
                     pos = i
                     break
         emulator.click(poss[pos])
-        emulator.click((454,292))
-        emulator.click((454,292))
+        emulator.click((454, 292))
+        emulator.click((454, 292))
         step = 0
         while step == 0:
             emulator.find_and_click('蓝底白勾')
             if emulator.find_img('在公招'):
                 break   # 没有可以收取的
 
+
 @emulator.dir_decorator
 def 循环招募():
-    abs_tags = ['高级资深干员','资深干员', '控场','位移', '特种干员', '快速复活', '支援', '削弱']
-    xys = [(327,287),(954,294),(325,576),(963,579)]
-    poss = [(400,375),(600,375),(750,375),(410,460),(600,460)]
+    abs_tags = ['高级资深干员', '资深干员', '控场', '位移', '特种干员', '快速复活', '支援', '削弱']
+    xys = [(327, 287), (954, 294), (325, 576), (963, 579)]
+    poss = [(400, 375), (600, 375), (750, 375), (410, 460), (600, 460)]
     while True:
         tags = []
         pos = -1
@@ -470,9 +462,9 @@ def 循环招募():
                     logger.info(tags[i])
                     break
         emulator.click(poss[pos])
-        emulator.click((454,292))
-        emulator.click((454,292))
-        
+        emulator.click((454, 292))
+        emulator.click((454, 292))
+
         step = 0
         while step == 0:
             if emulator.find_and_click('蓝底白勾'):
@@ -485,16 +477,16 @@ def 循环招募():
                 step += 1
         while step == 3:
             if emulator.find_and_click('聘用'):
-                step += 1      
-        while step == 4:     
-            emulator.click((1232,46))
-            if emulator.find_with(['聘用','立即招募'], '在公招') == 1:
+                step += 1
+        while step == 4:
+            emulator.click((1232, 46))
+            if emulator.find_with(['聘用', '立即招募'], '在公招') == 1:
                 break   # 没有可以收取的
-        
 
 
 def 识别招募():
-    _xys = [(384,369,507,400),(551,369,674,400),(718,369,841,400),(384,440,507,474),(551,440,674,474)]
+    _xys = [(384, 369, 507, 400), (551, 369, 674, 400), (718, 369,
+                                                         841, 400), (384, 440, 507, 474), (551, 440, 674, 474)]
     imgs = emulator.take_img(_xys)
     _res = []
     for i in range(len(imgs)):
@@ -507,10 +499,12 @@ def 识别招募():
     logger.info(_res)
     return _res
 
+
 @emulator.dir_decorator
 def 剿灭():
     if weekly.check('剿灭'):
         return True
+
     def 检查():
         _res = False
         while True:
@@ -523,23 +517,21 @@ def 剿灭():
                     _res = False
                 break
         while not emulator.find_img('剿灭已选择'):
-            emulator.find_and_click(['废弃矿区','长期剿灭委托'], [(0,0),(-50, 100)])
+            emulator.find_and_click(['废弃矿区', '长期剿灭委托'], [(0, 0), (-50, 100)])
             time.sleep(1)
         return _res
-    if weekly.check('剿灭'):
-        return True
-
 
     去战斗()
     while not emulator.find_img('剿灭已选择'):
-        emulator.find_and_click(['剿灭作战', '乌萨斯', '废弃矿区'])
+        emulator.find_and_click(['剿灭作战', '乌萨斯'])
         time.sleep(1)
     if 检查():
         return True
     while not emulator.find_img(f'体力刷完了'):
         if emulator.find_img(f'战斗中'):
             time.sleep(60)
-        emulator.find_and_click(['未代理', '已代理','开始行动','战斗完成1','废弃矿区'], [(50, 20), (50, 70), (0, 0),(0, -200),(0,0)])
+        emulator.find_and_click(['未代理', '已代理', '开始行动', '战斗完成1', '废弃矿区'], [
+                                (50, 20), (50, 70), (0, 0), (0, -200), (0, 0)])
         if emulator.find_and_click('战斗完成2', (0, -200)):
             if 检查():
                 break
@@ -548,18 +540,20 @@ def 剿灭():
         emulator.find_and_click(f'体力刷完了')
 
 
-
 if __name__ == "__main__":
     logger.setLevel(logging.DEBUG)
     emulator.connect()
-    登录方舟()
-    基建收菜()
-    基建换班()
-    使用无人机()
-    # 剿灭()
-    # 刷土()
-    选择关卡()
-    循环挑战()
-    信用点()
-    公开招募()
-    收日常任务()
+    # # 登录方舟()
+    # # 基建收菜()
+    # # 基建换班()
+    # # 使用无人机()
+    # # 剿灭()
+    # # 刷土()
+    # 选择关卡()
+    # 循环挑战()
+    # 信用点()
+    # 公开招募()
+    # 收日常任务()
+    while True:
+        time.sleep(0.3)
+        emulator.click((1100,184))

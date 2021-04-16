@@ -114,10 +114,22 @@ class Emulator:
             _xy = match_image(_img, self.screen_shot)
             self.imgs[self.current_dir][i]['coordinate'] = _xy
             logger.debug(f'{i} {_xy}')
-            if _xy[0] > 0:
+            if self.check_img_xy(i):
                 _tmp = True
         return _tmp
     
+    def check_img_xy(self, img):
+        try:
+            if self.imgs[self.current_dir][img]['coordinate'][0] > 0:
+                return True
+            else:
+                return False
+        except KeyError:
+            if self.imgs['common'][img]['coordinate'][0] > 0:
+                return True
+            else:
+                return False
+
 
     def find_with(self, img, bg):
         '''
@@ -126,23 +138,18 @@ class Emulator:
         1. 有bg没有img
         2. 有bg有img
         '''
-        self.take_shot()
         _tmp = 0
-        _img = self.imgs[self.current_dir][bg]['img']
-        _xy = match_image(_img, self.screen_shot)
-        self.imgs[self.current_dir][bg]['coordinate'] = _xy
-        logger.debug(f'{bg} {_xy}')
-        if _xy[0] > 0:
+        if type(img) != list:
+            img = [img]
+        img.append(bg)
+        self.find_img(img)
+        if self.check_img_xy(img[-1]):
             _tmp = 1
-            if type(img) != list:
-                img = [img]
-            for i in img:
-                _img = self.imgs[self.current_dir][i]['img']
-                _xy = match_image(_img, self.screen_shot)
-                self.imgs[self.current_dir][i]['coordinate'] = _xy
-                logger.debug(f'{i} {_xy}')
-                if _xy[0] > 0:
+            for i in range(len(img)-1):
+                if self.check_img_xy(img[i]):
                     _tmp = 2
+        else:
+            pass
         return _tmp
 
 
