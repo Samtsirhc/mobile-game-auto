@@ -77,7 +77,6 @@ def my_orc(img):
 
     # 解析返回结果
     text = re(image_url, img)
-    time.sleep(1)
     return text
 
 

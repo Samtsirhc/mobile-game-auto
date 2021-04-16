@@ -275,22 +275,23 @@ def 使用无人机():
 
 @emulator.dir_decorator
 def 去战斗():
-    while not emulator.find_img('在战斗页面'):
-        if emulator.find_img('在导航'):
-            emulator.find_and_click('作战')
-        else:
-            emulator.find_and_click(['导航小房子', '首页作战'])
+    去首页()
+    _tmp = [f'在战斗页面{i}' for i in range(1,5)]
+    while not emulator.find_img(_tmp):
+        emulator.find_and_click('首页作战')
     pass
 
 
 @emulator.dir_decorator
 def 选择关卡():
+    去战斗()
     while True:
         if emulator.find_img(f'关卡已选择'):
             break
-        emulator.find_and_click(['物资筹备', '战术演习', 'LS-5'])
+        # emulator.find_and_click(['物资筹备', '战术演习', 'LS-5'])
         # emulator.find_and_click(["源石尘行动","行动记录","OD-6"])
         # emulator.find_and_click(['画中人','入画','WR-3'])
+        emulator.find_and_click(["遗尘漫步","漫漫独行","WD-4"])
     pass
 
 
@@ -407,7 +408,7 @@ def 收日常任务():
 
 @emulator.dir_decorator
 def 公开招募():
-    abs_tags = ['高级资深干员','资深干员', '控场','位移', '特种', '快速复活', '支援', '削弱']
+    abs_tags = ['高级资深干员','资深干员', '控场','位移', '特种干员', '快速复活', '支援', '削弱']
     去首页()
     while True:
         if not emulator.find_img('在公招'):
@@ -416,16 +417,16 @@ def 公开招募():
         else:
             if emulator.find_with('聘用', '在公招') == 1:
                 break   # 没有可以收取的
-    count = 1
-    xys = [(327,287),(954,294),(325,576),(963,579)]
-    poss = [(400,375),(600,375),(750,375),(410,460),(600,460)]
-    for i in range(count):
+    count = 4
+    poss = [(400,375),(600,375),(750,375),(410,460),(600,460)]  # 5个tag的位置
+
+    while True:
+        if emulator.find_with([f'招募{i}' for i in range(1,5)], '在公招') == 1:
+            break
         tags = []
         pos = -1
         while True:
-            if emulator.find_img('在公招'):
-                emulator.click(xys[i])
-                time.sleep(1)
+            emulator.find_and_click([f'招募{i}' for i in range(1,5)])
             if emulator.find_img('正在招募'):
                 tags = 识别招募()
                 break
@@ -437,10 +438,13 @@ def 公开招募():
                     pos = i
                     break
         emulator.click(poss[pos])
-        for _ in range(11):
-            time.sleep(0.1)
-            emulator.click((454,152))
-        emulator.find_and_click('蓝底白勾')
+        emulator.click((454,292))
+        emulator.click((454,292))
+        step = 0
+        while step == 0:
+            emulator.find_and_click('蓝底白勾')
+            if emulator.find_img('在公招'):
+                break   # 没有可以收取的
 
 @emulator.dir_decorator
 def 循环招募():
@@ -466,9 +470,8 @@ def 循环招募():
                     logger.info(tags[i])
                     break
         emulator.click(poss[pos])
-        for _ in range(9):
-            time.sleep(0.1)
-            emulator.click((454,152))
+        emulator.click((454,292))
+        emulator.click((454,292))
         
         step = 0
         while step == 0:
@@ -489,6 +492,7 @@ def 循环招募():
                 break   # 没有可以收取的
         
 
+
 def 识别招募():
     _xys = [(384,369,507,400),(551,369,674,400),(718,369,841,400),(384,440,507,474),(551,440,674,474)]
     imgs = emulator.take_img(_xys)
@@ -504,8 +508,9 @@ def 识别招募():
     return _res
 
 @emulator.dir_decorator
-@weekly.periodic_manager
 def 剿灭():
+    if weekly.check('剿灭'):
+        return True
     def 检查():
         _res = False
         while True:
@@ -545,16 +550,16 @@ def 剿灭():
 
 
 if __name__ == "__main__":
-    # logger.setLevel(logging.DEBUG)
+    logger.setLevel(logging.DEBUG)
     emulator.connect()
-    # 循环招募()
     登录方舟()
     基建收菜()
     基建换班()
     使用无人机()
-    剿灭()
-    刷土()
+    # 剿灭()
+    # 刷土()
+    选择关卡()
     循环挑战()
     信用点()
-    # 公开招募()
+    公开招募()
     收日常任务()
