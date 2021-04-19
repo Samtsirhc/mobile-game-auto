@@ -232,27 +232,66 @@ def 求装备():
             break
 
 @emulator.dir_decorator
-def JJC():
+def JJC():  # 未完成
     if daily.check('JJC'):
         return None
     去冒险()
-    state = 0
-    while state == 0:
-        if emulator.find_img('在竞技场'):
-            state += 1
-            break
-        emulator.find_and_click('战斗竞技场')
-    while state == 1:
-        if not emulator.find_img('冷却完成'):
-            time.sleep(10)
-        else:
-            emulator.find_and_click(['在竞技场','战斗开始'], [(10,10),(10,10)])
-        if emulator.find_img('下一步'):
-            state += 1
-    while state == 2:
-        emulator.find_and_click('下一步')
-        if emulator.find_img('在竞技场'):
-            break
+    for _ in range(5):
+        state = 0
+        while state == 0:
+            if emulator.find_img('在竞技场'):
+                state += 1
+                break
+            emulator.find_and_click('战斗竞技场')
+        while state == 1:
+            if not emulator.find_img('冷却完成'):
+                time.sleep(15)
+            else:
+                emulator.find_and_click('更新清单')
+                state += 1
+                time.sleep(5)
+        while state == 2:
+            if not emulator.find_img('在竞技场'):
+                state += 1
+                time.sleep(3)
+            else:
+                emulator.click((1188,186))
+        while state == 3:
+            emulator.find_and_click(['战斗开始', '下一步'])
+            if emulator.find_img('在竞技场'):
+                state += 1
+    daily.finish('JJC')
+
+@emulator.dir_decorator
+def PJJC():
+    if daily.check('PJJC'):
+        return None
+    去冒险()
+    for _ in range(5):
+        state = 0
+        while state == 0:
+            if emulator.find_img('在竞技场'):
+                state += 1
+                break
+            emulator.find_and_click('公主竞技场')
+        while state == 1:
+            if not emulator.find_img('冷却完成'):
+                time.sleep(15)
+            else:
+                emulator.find_and_click('更新清单')
+                state += 1
+                time.sleep(5)
+        while state == 2:
+            if not emulator.find_img('在竞技场'):
+                state += 1
+                time.sleep(3)
+            else:
+                emulator.click((1188,186))
+        while state == 3:
+            emulator.find_and_click(['队伍2','队伍3','战斗开始', '下一步'])
+            if emulator.find_img('在竞技场'):
+                state += 1
+    daily.finish('PJJC')
 
 
 
@@ -266,4 +305,6 @@ if __name__ == "__main__":
     经验值冒险()
     点赞()
     求装备()
-    pass
+    PJJC()
+    JJC()
+    
