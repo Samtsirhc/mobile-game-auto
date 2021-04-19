@@ -260,7 +260,7 @@ def JJC():
 if __name__ == "__main__":
     logger.setLevel(logging.DEBUG)
     emulator.connect()
-    # 登录PCR()
+    登录PCR()
     地下城()
     MANA冒险()
     经验值冒险()
