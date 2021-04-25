@@ -242,7 +242,7 @@ def JJC():  # 未完成
             if emulator.find_img('在竞技场'):
                 state += 1
                 break
-            emulator.find_and_click('战斗竞技场')
+            emulator.find_and_click(['战斗竞技场','防御结果'],[(0,0),(-209,-22)])
         while state == 1:
             if not emulator.find_img('冷却完成'):
                 time.sleep(15)
@@ -272,8 +272,7 @@ def PJJC():
         while state == 0:
             if emulator.find_img('在竞技场'):
                 state += 1
-                break
-            emulator.find_and_click('公主竞技场')
+            emulator.find_and_click(['公主竞技场','防御结果'],[(0,0),(-209,-22)])
         while state == 1:
             if not emulator.find_img('冷却完成'):
                 time.sleep(15)
@@ -304,7 +303,7 @@ if __name__ == "__main__":
     MANA冒险()
     经验值冒险()
     点赞()
-    求装备()
+    # 求装备()
     PJJC()
     JJC()
     

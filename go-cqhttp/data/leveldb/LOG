@@ -22,3 +22,71 @@
 09:32:09.696253 version@stat F·[] S·0B[] Sc·[]
 09:32:09.701132 db@janitor F·2 G·0
 09:32:09.701132 db@open done T·7.8096ms
+=============== Apr 20, 2021 (CST) ===============
+17:04:15.164181 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+17:04:15.173969 version@stat F·[] S·0B[] Sc·[]
+17:04:15.173969 db@open opening
+17:04:15.173969 journal@recovery F·1
+17:04:15.177844 journal@recovery recovering @4
+17:04:15.185653 memdb@flush created L0@6 N·66 S·21KiB "\x01(\x06M,v48":"\xf8\xe6\xde\x12,v39"
+17:04:15.186629 version@stat F·[1] S·21KiB[21KiB] Sc·[0.25]
+17:04:15.192485 db@janitor F·3 G·0
+17:04:15.192485 db@open done T·18.5155ms
+=============== Apr 21, 2021 (CST) ===============
+08:01:00.456130 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+08:01:00.465889 version@stat F·[1] S·21KiB[21KiB] Sc·[0.25]
+08:01:00.465889 db@open opening
+08:01:00.465889 journal@recovery F·1
+08:01:00.467842 journal@recovery recovering @7
+08:01:00.474674 memdb@flush created L0@9 N·25 S·8KiB "\x00\xealz,v69":"\xec\xea\x82&,v85"
+08:01:00.475650 version@stat F·[2] S·29KiB[29KiB] Sc·[0.50]
+08:01:00.482482 db@janitor F·4 G·0
+08:01:00.483458 db@open done T·17.5689ms
+=============== Apr 22, 2021 (CST) ===============
+08:00:58.374729 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+08:00:58.392297 version@stat F·[2] S·29KiB[29KiB] Sc·[0.50]
+08:00:58.393273 db@open opening
+08:00:58.393273 journal@recovery F·1
+08:00:58.394249 journal@recovery recovering @10
+08:00:58.401080 memdb@flush created L0@12 N·80 S·27KiB "\x02\xe4\xe3\n,v104":"\xfd\x8f\xf8\xc4,v166"
+08:00:58.402057 version@stat F·[3] S·57KiB[57KiB] Sc·[0.75]
+08:00:58.407913 db@janitor F·5 G·0
+08:00:58.408889 db@open done T·15.6154ms
+=============== Apr 23, 2021 (CST) ===============
+08:01:02.289657 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+08:01:02.297465 version@stat F·[3] S·57KiB[57KiB] Sc·[0.75]
+08:01:02.297465 db@open opening
+08:01:02.297465 journal@recovery F·1
+08:01:02.299385 journal@recovery recovering @13
+08:01:02.307193 memdb@flush created L0@15 N·99 S·31KiB "\x02\xe4\xe3\n,v185":"\xfb*;U,v201"
+08:01:02.308169 version@stat F·[4] S·89KiB[89KiB] Sc·[1.00]
+08:01:02.313049 db@janitor F·6 G·0
+08:01:02.314025 db@open done T·16.5602ms
+08:01:02.314025 table@compaction L0·4 -> L1·0 S·89KiB Q·274
+08:01:02.321833 table@build created L1@18 N·192 S·62KiB "\x00\xealz,v69":"\xfd\x8f\xf8\xc4,v166"
+08:01:02.321833 version@stat F·[0 1] S·62KiB[0B 62KiB] Sc·[0.00 0.00]
+08:01:02.322809 table@compaction committed F-3 S-27KiB Ke·0 D·78 T·8.7839ms
+08:01:02.323786 table@remove removed @15
+08:01:02.323786 table@remove removed @12
+08:01:02.323786 table@remove removed @9
+08:01:02.323786 table@remove removed @6
+=============== Apr 24, 2021 (CST) ===============
+08:00:58.584454 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+08:00:58.593204 version@stat F·[0 1] S·62KiB[0B 62KiB] Sc·[0.00 0.00]
+08:00:58.593204 db@open opening
+08:00:58.594180 journal@recovery F·1
+08:00:58.595156 journal@recovery recovering @16
+08:00:58.602967 memdb@flush created L0@19 N·70 S·20KiB "\x02Ⱦ\xe6,v305":"\xfck\xa2\xa0,v289"
+08:00:58.603940 version@stat F·[1 1] S·82KiB[20KiB 62KiB] Sc·[0.25 0.00]
+08:00:58.607844 db@janitor F·4 G·0
+08:00:58.607844 db@open done T·14.6399ms
+=============== Apr 25, 2021 (CST) ===============
+08:01:01.294379 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+08:01:01.304139 version@stat F·[1 1] S·82KiB[20KiB 62KiB] Sc·[0.25 0.00]
+08:01:01.304139 db@open opening
+08:01:01.304139 journal@recovery F·1
+08:01:01.306092 journal@recovery recovering @20
+08:01:01.313899 memdb@flush created L0@22 N·281 S·79KiB "\x01Lj\x88,v575":"\xff\xefv\xce,v567"
+08:01:01.314875 version@stat F·[2 1] S·162KiB[100KiB 62KiB] Sc·[0.50 0.00]
+08:01:01.319756 db@janitor F·5 G·0
+08:01:01.319756 db@open done T·15.6165ms

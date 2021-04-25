@@ -527,17 +527,19 @@ def 剿灭():
         time.sleep(1)
     if 检查():
         return True
-    while not emulator.find_img(f'体力刷完了'):
+    while True:
+        if emulator.find_img(f'体力刷完了'):
+            for _ in range(3):
+                time.sleep(1)
+                emulator.find_and_click(f'体力刷完了')
+            break
         if emulator.find_img(f'战斗中'):
             time.sleep(60)
-        emulator.find_and_click(['未代理', '已代理', '开始行动', '战斗完成1', '废弃矿区'], [
-                                (50, 20), (50, 70), (0, 0), (0, -200), (0, 0)])
-        if emulator.find_and_click('战斗完成2', (0, -200)):
-            if 检查():
-                break
-    for _ in range(3):
-        time.sleep(1)
-        emulator.find_and_click(f'体力刷完了')
+        if 检查():
+            break
+        emulator.find_and_click(['未代理', '已代理', '开始行动', '战斗完成1', '战斗完成2'], [
+                        (50, 20), (50, 70), (0, 0), (0, -200), (0, -200)])
+
 
 
 if __name__ == "__main__":
