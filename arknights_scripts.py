@@ -93,11 +93,13 @@ def 基建换班():
                 state = 0
 
     # 制造站
+    factory_count = 4
     factory_order = 1
     stone = 0
-    while factory_order < 4:
+    factory_pose = [(270,310),(470,310),(670,310),(210,410)]
+    while factory_order < factory_count + 1:
         if emulator.find_img('进驻总览'):
-            emulator.click((70 + 200 * (factory_order - 1), 310))
+            emulator.click(factory_pose[factory_order - 1])
             time.sleep(1)
         if emulator.find_img('制造站'):
             state = 1
@@ -131,11 +133,13 @@ def 基建换班():
                 factory_order += 1
                 state = 0
 
-    while factory_order == 4 and MINING:
+    while factory_order == factory_count + 1:
         if emulator.find_img('进驻总览'):
             emulator.click((70, 310))
             time.sleep(1)
         if stone == 0:
+            if emulator.find_img('赤金'):
+                break
             if emulator.find_img('源石'):
                 stone = 1
         while stone < 10 and stone > 0:
@@ -160,10 +164,12 @@ def 基建换班():
                     time.sleep(3)
 
     # 贸易站
+    trade_count = 2
     trade_order = 1
-    while trade_order < 4:
+    trade_pose = [(410,410),(610,410)]
+    while trade_order < trade_count + 1:
         if emulator.find_img('进驻总览'):
-            emulator.click((10 + 200 * (trade_order - 1), 410))
+            emulator.click(trade_pose[trade_order - 1])
             time.sleep(1)
         if emulator.find_img('贸易站'):
             state = 1
@@ -292,7 +298,8 @@ def 选择关卡():
         # emulator.find_and_click(['物资筹备', '战术演习', 'LS-5'])
         # emulator.find_and_click(["源石尘行动","行动记录","OD-6"])
         # emulator.find_and_click(['画中人','入画','WR-3'])
-        emulator.find_and_click(["遗尘漫步", "漫漫独行", "WD-4"])
+        # emulator.find_and_click(["遗尘漫步", "漫漫独行", "WD-4"])
+        emulator.find_and_click(["覆潮之下", "荒败盐风", "SV-6"])
     pass
 
 
@@ -517,41 +524,58 @@ def 剿灭():
                     _res = False
                 break
         while not emulator.find_img('剿灭已选择'):
-            emulator.find_and_click(['废弃矿区', '长期剿灭委托'], [(0, 0), (-50, 100)])
+            emulator.find_and_click(['潮没海滨', '长期剿灭委托'], [(0, 0), (-50, 100)])
             time.sleep(1)
         return _res
 
     去战斗()
     while not emulator.find_img('剿灭已选择'):
-        emulator.find_and_click(['剿灭作战', '乌萨斯'])
+        emulator.find_and_click(['剿灭作战', '汐斯塔'])
         time.sleep(1)
     if 检查():
         return True
-    while True:
-        if emulator.find_img(f'体力刷完了'):
-            for _ in range(3):
-                time.sleep(1)
-                emulator.find_and_click(f'体力刷完了')
-            break
-        if emulator.find_img(f'战斗中'):
-            time.sleep(60)
+    
+    _tmp = True
+    while _tmp:
+        state = 0
         if 检查():
             break
-        emulator.find_and_click(['未代理', '已代理', '开始行动', '战斗完成1', '战斗完成2'], [
-                        (50, 20), (50, 70), (0, 0), (0, -200), (0, -200)])
+        while state == 0:
+            emulator.find_and_click('未代理', (50, 20))
+            if emulator.find_img('已代理'):
+                state += 1
+        while state == 1:
+            if emulator.find_img(f'体力刷完了'):
+                for _ in range(3):
+                    time.sleep(1)
+                    emulator.find_and_click(f'体力刷完了')
+                    _tmp = False
+                    state = 0
+                break
+            if emulator.find_img(f'战斗中'):
+                time.sleep(300)
+                state += 1
+            emulator.find_and_click(['未代理', '已代理', '开始行动'], [(50, 20), (50, 70), (0, 0)])
+        while state == 2:
+            time.sleep(3)
+            emulator.find_and_click(['战斗完成1', '战斗完成2', '战斗完成3'], [(0, -200), (0, -200), (0, -200)])
+            if emulator.find_img('已代理'):
+                state = 0
+
+        
 
 
 
 if __name__ == "__main__":
-    logger.setLevel(logging.DEBUG)
+    # logger.setLevel(logging.DEBUG)
     emulator.connect()
     登录方舟()
     基建收菜()
     基建换班()
-    使用无人机()
+    # 使用无人机()
     剿灭()
-    # 刷土()
-    选择关卡()
+    刷土()
+    # 选择关卡()
     循环挑战()
     信用点()
     公开招募()

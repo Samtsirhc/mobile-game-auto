@@ -21,10 +21,12 @@ def 登录PCR():
         emulator.find_and_click(['我的', '加速'], [(-230, 10), (578, 37)])
     while not emulator.find_img('商店'):
         time.sleep(1)
-        emulator.find_and_click('下载')
+        emulator.find_and_click(['下载','关闭','生日快乐'])
         emulator.click((650, 620))
         if emulator.find_img('请选择角色'):
             兰德索尔杯()
+        if emulator.find_img('签筒'):
+            emulator.swipe((540,500,540,250))
     while True:
         time.sleep(1)
         emulator.click((650, 620))
@@ -242,7 +244,7 @@ def JJC():  # 未完成
             if emulator.find_img('在竞技场'):
                 state += 1
                 break
-            emulator.find_and_click(['战斗竞技场','防御结果'],[(0,0),(-209,-22)])
+            emulator.find_and_click(['战斗竞技场','防御结果'],[(0,0),(-209,22)])
         while state == 1:
             if not emulator.find_img('冷却完成'):
                 time.sleep(15)
@@ -272,7 +274,7 @@ def PJJC():
         while state == 0:
             if emulator.find_img('在竞技场'):
                 state += 1
-            emulator.find_and_click(['公主竞技场','防御结果'],[(0,0),(-209,-22)])
+            emulator.find_and_click(['公主竞技场','防御结果'],[(0,0),(-209,22)])
         while state == 1:
             if not emulator.find_img('冷却完成'):
                 time.sleep(15)
@@ -306,4 +308,6 @@ if __name__ == "__main__":
     # 求装备()
     PJJC()
     JJC()
+    emulator.kill_app(PCR_APP_NAME)
+    emulator.kill_app('tw.sonet.princessconnect')
     
