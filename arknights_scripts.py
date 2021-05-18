@@ -1,9 +1,9 @@
+# !/usr/bin/python
+# coding:utf-8
+
 import logging
-import os
-import sys
 import time
 
-import psutil
 from orc import *
 from config import *
 from emulator import Emulator
@@ -35,7 +35,7 @@ def 登录方舟():
     _tmp = 0
     while _tmp < 2:
         emulator.find_and_click(['登录', '活动X', '月卡收货'], [
-                                (0, 0), (0, 0), (0, 200)])
+            (0, 0), (0, 0), (0, 200)])
         if emulator.find_img(f'在主页'):
             _tmp += 1
 
@@ -43,203 +43,99 @@ def 登录方舟():
 @emulator.dir_decorator
 def 进入基建():
     while not emulator.find_img('在基建'):
-        if not emulator.find_img('在导航'):
+        if emulator.find_img('在导航'):
             emulator.find_and_click(['导航基建', '基建'])
         else:
-            emulator.find_and_click('导航小房子')
+            emulator.find_and_click(['导航小房子', '基建'])
+        time.sleep(1.5)
     pass
 
 
 @emulator.dir_decorator
 def 基建换班():
-    进入基建()
+    facilities = {'宿舍': {'pos': [(794, 305), (794, 405), (794, 505), (794, 605)]},
+                  '会客室': {'pos': [(1229, 212)]},
+                  '控制中枢': {'pos': [(848, 158)]},
+                  '制造站': {'pos': [(56, 315), (291, 315), (794, 315), (30, 412)]},
+                  '贸易站': {'pos': [(167, 412), (381, 412)]},
+                  '发电站': {'pos': [(72, 521), (277, 405), (477, 505)]},
+                  '办公室': {'pos': [(1269, 410)]}}
+
+    def 进驻信息换人(count):
+        c_pos = [(482, 231), (482, 478), (630, 231), (630, 478), (767, 231), (767, 478)]  # 角色的位置
+        _tmp = 0
+        while _tmp == 0:
+            emulator.find_and_click(['进驻信息', '清空', '红底白勾'])
+            if emulator.find_img('0人进驻'):
+                _tmp += 1
+        while _tmp == 1:
+            emulator.find_and_click('进驻')
+            if emulator.find_img('在换班'):
+                _tmp += 1
+        while _tmp == 2:
+            for i in range(count):
+                emulator.click(c_pos[i])
+                time.sleep(0.5)
+        while _tmp == 3:
+            emulator.find_and_click(['确认'])
+            if emulator.find_img(['进驻信息', '清空']):
+                _tmp += 1
+
+    def 进入设施(name, serial):
+        进入基建()
+        _tmp = 0
+        while _tmp == 0:
+            if emulator.find_img(f'在{name}'):
+                _tmp += 1
+            else:
+                emulator.click(facilities[name][serial])
+                time.sleep(3)
+
+
 
     # 安排休息
-    dorm_order = 1
+    step = 0
     state = 0
-    while dorm_order < 5:
-        if emulator.find_img('进驻总览'):
-            emulator.click((830, 200 + 100 * dorm_order))
-            time.sleep(1)
-        if emulator.find_img('在宿舍'):
-            state = 1
-
-        clear_count = 0
-        while state == 1:
-            emulator.find_and_click('进驻信息')
-            if emulator.find_img('在进驻信息'):
-                state += 1
-        while state == 2:
-            if clear_count > 2:
-                emulator.find_and_click('进驻')
-                if emulator.find_img('在换班'):
-                    state += 1
+    while state == 0:
+        while step == 0:
+            emulator.find_and_click('进驻总览')
+            if emulator.find_img('在进驻总览'):
+                step += 1
+        while step == 1:
+            emulator.find_and_click('撤下干员')
+            if emulator.find_img('在撤下干员'):
+                step += 1
+        while step == 2:
+            if emulator.find_img(['1人', '训练室', '1人']):
+                step += 1
             else:
-                if emulator.find_and_click('清空'):
-                    clear_count += 1
+                _xys = emulator.find_imgs('撤下')
+                for _xy in _xys:
+                    emulator.click(_xy, (10, 0))
                     time.sleep(1)
-        while state == 3:
-            for wife_x in range(5):
-                for wife_y in range(2):
-                    emulator.click((487 + wife_x * 145, 226 + wife_y * 250))
-                    time.sleep(0.1)
-            state += 1
-        while state == 4:
-            emulator.find_and_click(['确认', '红底白勾'])
-            if emulator.find_img(f'在进驻信息'):
-                emulator.find_and_click('后退')
-            if emulator.find_img(f'进驻总览'):
-                dorm_order += 1
-                state = 0
-
-    # 制造站
-    factory_count = 4
-    factory_order = 1
-    stone = 0
-    factory_pose = [(270,310),(470,310),(670,310),(210,410)]
-    while factory_order < factory_count + 1:
-        if emulator.find_img('进驻总览'):
-            emulator.click(factory_pose[factory_order - 1])
-            time.sleep(1)
-        if emulator.find_img('制造站'):
-            state = 1
-
-        clear_count = 0
-        while state == 1:
-            emulator.find_and_click('进驻信息')
-            if emulator.find_img('在进驻信息'):
-                state += 1
-        while state == 2:
-            if clear_count > 2:
-                emulator.find_and_click('进驻')
-                if emulator.find_img('在换班'):
-                    state += 1
-            else:
-                emulator.find_and_click('红底白勾')
-                if emulator.find_and_click('清空'):
-                    clear_count += 1
+                    emulator.find_and_click(['红底白勾', '确认', '蓝底白勾'])
                     time.sleep(1)
-        while state == 3:
-            for wife_x in range(2):
-                for wife_y in range(2):
-                    emulator.click((487 + wife_x * 145, 226 + wife_y * 250))
-                    time.sleep(0.1)
-            state += 1
-        while state == 4:
-            emulator.find_and_click(['确认', '红底白勾'])
-            if emulator.find_img(f'在进驻信息'):
-                emulator.find_and_click('后退')
-            if emulator.find_img(f'进驻总览'):
-                factory_order += 1
-                state = 0
-
-    while factory_order == factory_count + 1:
-        if emulator.find_img('进驻总览'):
-            emulator.click((70, 310))
-            time.sleep(1)
-        if stone == 0:
-            if emulator.find_img('赤金'):
-                break
-            if emulator.find_img('源石'):
-                stone = 1
-        while stone < 10 and stone > 0:
-            if stone == 1:
-                emulator.find_and_click('源石')
-                if emulator.find_img('固源岩'):
-                    stone += 1
-            if stone == 2:
-                for _ in range(5):
-                    emulator.click((962, 206))
-                    time.sleep(0.1)
-                for _ in range(5):
-                    emulator.click((950, 579))
-                    time.sleep(0.1)
-                stone += 1
-            if stone == 3:
-                if emulator.find_img(f'进驻总览'):
-                    stone += 10
-                    factory_order += 1
+                emulator.swipe((1121, 600, 1121, 300))
+        while step == 3:
+            emulator.find_and_click('在撤下干员')
+            if emulator.find_img('撤下干员'):
+                step += 1
+        while step == 4:
+            if emulator.find_img('在进驻总览'):
+                if emulator.find_and_click('干员空位', (0, 30)):
+                    pass
+                elif emulator.find_img('控制中枢'):
+                    step += 1
                 else:
-                    emulator.click((44, 44))
-                    time.sleep(3)
+                    emulator.swipe((1121, 300, 1121, 600))
+            elif emulator.find_img('在换班'):
+                for wife_x in range(3):
+                    for wife_y in range(2):
+                        emulator.click((487 + wife_x * 145, 226 + wife_y * 250))
+                        time.sleep(0.1)
+            emulator.find_and_click(['确认', '蓝底白勾'])
 
-    # 贸易站
-    trade_count = 2
-    trade_order = 1
-    trade_pose = [(410,410),(610,410)]
-    while trade_order < trade_count + 1:
-        if emulator.find_img('进驻总览'):
-            emulator.click(trade_pose[trade_order - 1])
-            time.sleep(1)
-        if emulator.find_img('贸易站'):
-            state = 1
-
-        clear_count = 0
-        while state == 1:
-            emulator.find_and_click('进驻信息')
-            if emulator.find_img('在进驻信息'):
-                state += 1
-        while state == 2:
-            if clear_count > 2:
-                emulator.find_and_click('进驻')
-                if emulator.find_img('在换班'):
-                    state += 1
-            else:
-                emulator.find_and_click('红底白勾')
-                if emulator.find_and_click('清空'):
-                    clear_count += 1
-                    time.sleep(1)
-        while state == 3:
-            for wife_x in range(2):
-                for wife_y in range(2):
-                    emulator.click((487 + wife_x * 145, 226 + wife_y * 250))
-                    time.sleep(0.1)
-            state += 1
-        while state == 4:
-            emulator.find_and_click(['确认', '红底白勾'])
-            if emulator.find_img(f'在进驻信息'):
-                emulator.find_and_click('后退')
-            if emulator.find_img(f'进驻总览'):
-                trade_order += 1
-                state = 0
-
-    # 发电站
-    elect_order = 1
-    while elect_order < 4:
-        if emulator.find_img('进驻总览'):
-            emulator.click((70 + 200 * (elect_order - 1), 510))
-            time.sleep(1)
-        if emulator.find_img('发电站'):
-            state = 1
-
-        clear_count = 0
-        while state == 1:
-            emulator.find_and_click('进驻信息')
-            if emulator.find_img('在进驻信息'):
-                state += 1
-        while state == 2:
-            if clear_count > 2:
-                emulator.find_and_click('进驻')
-                if emulator.find_img('在换班'):
-                    state += 1
-            else:
-                emulator.find_and_click('红底白勾')
-                if emulator.find_and_click('清空'):
-                    clear_count += 1
-                    time.sleep(1)
-        while state == 3:
-            for wife_x in range(1):
-                for wife_y in range(2):
-                    emulator.click((487 + wife_x * 145, 226 + wife_y * 250))
-                    time.sleep(0.1)
-            state += 1
-        while state == 4:
-            emulator.find_and_click(['确认', '红底白勾'])
-            if emulator.find_img(f'在进驻信息'):
-                emulator.find_and_click('后退')
-            if emulator.find_img(f'进驻总览'):
-                elect_order += 1
-                state = 0
+        state += 1
 
 
 @emulator.dir_decorator
@@ -309,7 +205,7 @@ def 循环挑战():
         if emulator.find_img(f'战斗中'):
             time.sleep(30)
         emulator.find_and_click(['未代理', '已代理', '战斗完成', '开始行动'], [
-                                (50, 20), (50, 70), (0, -200), (0, 0)])
+            (50, 20), (50, 70), (0, -200), (0, 0)])
     for _ in range(3):
         time.sleep(1)
         emulator.find_and_click(f'体力刷完了')
@@ -349,7 +245,7 @@ def 信用点():
         emulator.click((1122, 109))
         for items in range(5):
             time.sleep(1)
-            emulator.click((131 + items*245, 267))
+            emulator.click((131 + items * 245, 267))
             getting = True
             while getting:
                 time.sleep(0.5)
@@ -370,7 +266,7 @@ def 刷土():
         if emulator.find_img('左箭头'):
             state += 1
         emulator.find_and_click(['主线', '异卵同生', '觉醒'], [
-                                (0, 0), (-200, 0), (0, 0)])
+            (0, 0), (-200, 0), (0, 0)])
     while state == 1:
         time.sleep(1.5)
         if not emulator.find_and_click('1-7'):
@@ -413,7 +309,7 @@ def 公开招募():
             emulator.click((1232, 46))
         else:
             if emulator.find_with('聘用', '在公招') == 1:
-                break   # 没有可以收取的
+                break  # 没有可以收取的
     count = 4
     poss = [(400, 375), (600, 375), (750, 375),
             (410, 460), (600, 460)]  # 5个tag的位置
@@ -442,7 +338,7 @@ def 公开招募():
         while step == 0:
             emulator.find_and_click('蓝底白勾')
             if emulator.find_img('在公招'):
-                break   # 没有可以收取的
+                break  # 没有可以收取的
 
 
 @emulator.dir_decorator
@@ -488,12 +384,12 @@ def 循环招募():
         while step == 4:
             emulator.click((1232, 46))
             if emulator.find_with(['聘用', '立即招募'], '在公招') == 1:
-                break   # 没有可以收取的
+                break  # 没有可以收取的
 
 
 def 识别招募():
-    _xys = [(384, 369, 507, 400), (551, 369, 674, 400), (718, 369,
-                                                         841, 400), (384, 440, 507, 474), (551, 440, 674, 474)]
+    _xys = [(384, 369, 507, 400), (551, 369, 674, 400), (718, 369, 841, 400),
+            (384, 440, 507, 474), (551, 440, 674, 474)]  # 招募tag截图的位置
     imgs = emulator.take_img(_xys)
     _res = []
     for i in range(len(imgs)):
@@ -534,7 +430,7 @@ def 剿灭():
         time.sleep(1)
     if 检查():
         return True
-    
+
     _tmp = True
     while _tmp:
         state = 0
@@ -562,17 +458,14 @@ def 剿灭():
             if emulator.find_img('已代理'):
                 state = 0
 
-        
-
-
 
 if __name__ == "__main__":
-    # logger.setLevel(logging.DEBUG)
+    logger.setLevel(logging.DEBUG)
     emulator.connect()
     登录方舟()
     基建收菜()
     基建换班()
-    # 使用无人机()
+    使用无人机()
     剿灭()
     刷土()
     # 选择关卡()

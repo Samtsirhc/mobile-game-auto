@@ -27,7 +27,6 @@ class Emulator:
         self.current_dir = ''
         self.load_imgs()
 
-
     def connect(self):
         if check_process("Nox.exe"):
             pass
@@ -35,7 +34,7 @@ class Emulator:
             logger.info('启动模拟器')
             run_sth(EMULATOR_PATH)
             time.sleep(30)
-        self.emulator = u2.connect()    # python -m uiautomator2 init
+        self.emulator = u2.connect()  # python -m uiautomator2 init
 
     def dir_decorator(self, func):
         _no_log = ['进入基建', '去战斗', '去冒险']
@@ -49,6 +48,7 @@ class Emulator:
             else:
                 logger.info(func.__name__)
             self.current_dir = _tmp_dir_name
+
         return dec
 
     def kill_app(self, app_name):
@@ -92,17 +92,25 @@ class Emulator:
         #     self.screen_shot = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
         # except:
         #     self.init_shot()
-        self.screen_shot = self.emulator.screenshot(format = 'opencv')
-
+        self.screen_shot = self.emulator.screenshot(format='opencv')
 
     def take_img(self, xys):
-        '''
+        """
         截图并且返回图片，目前专用于方舟公招
-        ''' 
+        """
         _img = self.emulator.screenshot()
         _imgs = [_img.crop(i) for i in xys]
         return _imgs
 
+    def find_imgs(self, img):
+        """
+        找一张图有多少个
+        """
+        self.take_shot()
+        _img = self.imgs[self.current_dir][img]['img']
+        _xy = match_image(_img, self.screen_shot, 0.95, True)
+        logger.debug(f'{img} {_xy}')
+        return _xy
 
     def find_img(self, img):
         self.take_shot()
@@ -117,7 +125,7 @@ class Emulator:
             if self.check_img_xy(i):
                 _tmp = True
         return _tmp
-    
+
     def check_img_xy(self, img):
         try:
             if self.imgs[self.current_dir][img]['coordinate'][0] > 0:
@@ -130,14 +138,13 @@ class Emulator:
             else:
                 return False
 
-
     def find_with(self, img, bg):
-        '''
+        """
         返回值：
         0. 没有bg
         1. 有bg没有img
         2. 有bg有img
-        '''
+        """
         _tmp = 0
         if type(img) != list:
             img = [img]
@@ -145,13 +152,19 @@ class Emulator:
         self.find_img(img)
         if self.check_img_xy(img[-1]):
             _tmp = 1
-            for i in range(len(img)-1):
+            for i in range(len(img) - 1):
                 if self.check_img_xy(img[i]):
                     _tmp = 2
         else:
             pass
         return _tmp
 
+    def clicks(self, coordinate, offset=(0, 0)):
+        for _xy in range(len(coordinate)):
+            time.sleep(0.5)
+            a = int(coordinate[-_xy][0])
+            b = int(coordinate[-_xy][1])
+            self.click((a, b), offset)
 
     def click(self, coordinate, offset=(0, 0)):
         if coordinate[0] > 0 and coordinate[1] > 0:
@@ -198,6 +211,7 @@ class Emulator:
     #     for _ in range(3):
     #         self.take_shot()
     #     logger.debug('shot manager done')
+
 
 if __name__ == "__main__":
     e = Emulator(ARKNIGHTS_IMG_PATH)
