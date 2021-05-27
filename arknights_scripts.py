@@ -45,6 +45,8 @@ def 进入基建():
     while not emulator.find_img('在基建'):
         if emulator.find_img('在导航'):
             emulator.find_and_click(['导航基建', '基建'])
+        elif emulator.find_img('设施信息'):
+            emulator.find_and_click('后退')
         else:
             emulator.find_and_click(['导航小房子', '基建'])
         time.sleep(1.5)
@@ -53,20 +55,20 @@ def 进入基建():
 
 @emulator.dir_decorator
 def 基建换班():
-    facilities = {'宿舍': {'pos': [(794, 305), (794, 405), (794, 505), (794, 605)]},
-                  '会客室': {'pos': [(1229, 212)]},
-                  '控制中枢': {'pos': [(848, 158)]},
-                  '制造站': {'pos': [(56, 315), (291, 315), (794, 315), (30, 412)]},
-                  '贸易站': {'pos': [(167, 412), (381, 412)]},
-                  '发电站': {'pos': [(72, 521), (277, 405), (477, 505)]},
-                  '办公室': {'pos': [(1269, 410)]}}
+    facilities = {'宿舍': {'pos': [(794, 305), (794, 405), (794, 505), (794, 605)], 'count': 6},
+                  '会客室': {'pos': [(1229, 212)], 'count': 3},
+                  '控制中枢': {'pos': [(848, 158)], 'count': 6},
+                  '制造站': {'pos': [(56, 315), (291, 315), (494, 315), (30, 412)], 'count': 4},
+                  '贸易站': {'pos': [(167, 412), (381, 412)], 'count': 4},
+                  '发电站': {'pos': [(72, 521), (277, 505), (477, 505)], 'count': 2},
+                  '办公室': {'pos': [(1269, 410)], 'count': 2}}
 
     def 进驻信息换人(count):
         c_pos = [(482, 231), (482, 478), (630, 231), (630, 478), (767, 231), (767, 478)]  # 角色的位置
         _tmp = 0
         while _tmp == 0:
             emulator.find_and_click(['进驻信息', '清空', '红底白勾'])
-            if emulator.find_img('0人进驻'):
+            if emulator.find_with('0人进驻', '进驻') == 2:
                 _tmp += 1
         while _tmp == 1:
             emulator.find_and_click('进驻')
@@ -75,67 +77,28 @@ def 基建换班():
         while _tmp == 2:
             for i in range(count):
                 emulator.click(c_pos[i])
-                time.sleep(0.5)
+                time.sleep(0.2)
+            _tmp += 1
         while _tmp == 3:
-            emulator.find_and_click(['确认'])
-            if emulator.find_img(['进驻信息', '清空']):
+            emulator.find_and_click(['确认', '确认2'])
+            if emulator.find_img(['进驻信息', '在进驻信息']):
                 _tmp += 1
 
-    def 进入设施(name, serial):
+    def 进入设施(name, the_serial):
+        # print(f'{name} {serial}')
         进入基建()
         _tmp = 0
         while _tmp == 0:
-            if emulator.find_img(f'在{name}'):
+            if emulator.find_img([f'在{name}', '清空']):
                 _tmp += 1
             else:
-                emulator.click(facilities[name][serial])
+                emulator.click(facilities[name]['pos'][the_serial])
                 time.sleep(3)
 
-
-
-    # 安排休息
-    step = 0
-    state = 0
-    while state == 0:
-        while step == 0:
-            emulator.find_and_click('进驻总览')
-            if emulator.find_img('在进驻总览'):
-                step += 1
-        while step == 1:
-            emulator.find_and_click('撤下干员')
-            if emulator.find_img('在撤下干员'):
-                step += 1
-        while step == 2:
-            if emulator.find_img(['1人', '训练室', '1人']):
-                step += 1
-            else:
-                _xys = emulator.find_imgs('撤下')
-                for _xy in _xys:
-                    emulator.click(_xy, (10, 0))
-                    time.sleep(1)
-                    emulator.find_and_click(['红底白勾', '确认', '蓝底白勾'])
-                    time.sleep(1)
-                emulator.swipe((1121, 600, 1121, 300))
-        while step == 3:
-            emulator.find_and_click('在撤下干员')
-            if emulator.find_img('撤下干员'):
-                step += 1
-        while step == 4:
-            if emulator.find_img('在进驻总览'):
-                if emulator.find_and_click('干员空位', (0, 30)):
-                    pass
-                elif emulator.find_img('控制中枢'):
-                    step += 1
-                else:
-                    emulator.swipe((1121, 300, 1121, 600))
-            elif emulator.find_img('在换班'):
-                for wife_x in range(3):
-                    for wife_y in range(2):
-                        emulator.click((487 + wife_x * 145, 226 + wife_y * 250))
-                        time.sleep(0.1)
-            emulator.find_and_click(['确认', '蓝底白勾'])
-
-        state += 1
+    for facility in facilities.keys():
+        for serial in range(len(facilities[facility]['pos'])):
+            进入设施(facility, serial)
+            进驻信息换人(facilities[facility]['count'])
 
 
 @emulator.dir_decorator
@@ -460,7 +423,7 @@ def 剿灭():
 
 
 if __name__ == "__main__":
-    logger.setLevel(logging.DEBUG)
+    # logger.setLevel(logging.DEBUG)
     emulator.connect()
     登录方舟()
     基建收菜()
