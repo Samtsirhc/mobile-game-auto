@@ -422,8 +422,7 @@ def 剿灭():
                 state = 0
 
 
-if __name__ == "__main__":
-    # logger.setLevel(logging.DEBUG)
+def main_script():
     emulator.connect()
     登录方舟()
     基建收菜()
@@ -436,3 +435,25 @@ if __name__ == "__main__":
     信用点()
     公开招募()
     收日常任务()
+    emulator.kill_app(ARKNIGHTS_APP_NAME)
+
+def loop():
+    emulator.connect()
+    # 登录方舟()
+    # 基建收菜()
+    # 基建换班()
+    # 使用无人机()
+    # 剿灭()
+    # 刷土()
+    # 选择关卡()
+    循环挑战()
+    # 信用点()
+    # 公开招募()
+    # 收日常任务()
+    # emulator.kill_app(ARKNIGHTS_APP_NAME)
+
+if __name__ == "__main__":
+    # logger.setLevel(logging.DEBUG)
+    emulator.connect()
+    main_script()
+    # 循环挑战()
