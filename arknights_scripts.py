@@ -158,7 +158,8 @@ def 选择关卡():
         # emulator.find_and_click(["源石尘行动","行动记录","OD-6"])
         # emulator.find_and_click(['画中人','入画','WR-3'])
         # emulator.find_and_click(["遗尘漫步", "漫漫独行", "WD-4"])
-        emulator.find_and_click(["覆潮之下", "荒败盐风", "SV-6"])
+        # emulator.find_and_click(["覆潮之下", "荒败盐风", "SV-6"])
+        emulator.find_and_click(["灯火序曲", "路线安排", "PL-4"])
     pass
 
 
@@ -429,8 +430,8 @@ def main_script():
     基建换班()
     使用无人机()
     剿灭()
-    刷土()
-    # 选择关卡()
+    # 刷土()
+    选择关卡()
     循环挑战()
     信用点()
     公开招募()

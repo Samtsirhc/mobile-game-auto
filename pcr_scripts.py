@@ -294,20 +294,68 @@ def PJJC():
                 state += 1
     daily.finish('PJJC')
 
+@emulator.dir_decorator
+def 选择角色(names):
+    '''
+    五个！
+    '''
+    def choose_wife(name):
+        _tmp = 0
+        while _tmp == 0:
+            emulator.find_and_click('以角色名搜寻')
+            time.sleep(2)
+            if  emulator.find_img('确定'):
+                _tmp += 1
+        while _tmp == 1:
+            emulator.input_text(name)
+            time.sleep(1)
+            emulator.click((153,355))
+            time.sleep(1)
+            _tmp += 1
+        while _tmp == 2:
+            if emulator.find_img('以角色名搜寻'):
+                _tmp += 1
+            else:
+                emulator.click((153,355))
+                time.sleep(1)
+    # 清空角色栏
+    while not emulator.find_img('我的队伍'):
+        time.sleep(1)
 
+    for _ in range(20):
+        emulator.click((715,600))
+        time.sleep(0.1)
+    if emulator.find_img('重置'):
+        pass
+    else:
+        emulator.swipe((634,277,634,350))
+        time.sleep(3)
+    for i in names:
+        choose_wife(i)
+    pass
 
-
-if __name__ == "__main__":
-    logger.setLevel(logging.DEBUG)
+@staticmethod
+def main_script():
     emulator.connect()
     登录PCR()
     地下城()
     MANA冒险()
     经验值冒险()
     点赞()
-    # 求装备()
-    PJJC()
+    求装备()
+    # PJJC()
     JJC()
     emulator.kill_app(PCR_APP_NAME)
     emulator.kill_app('tw.sonet.princessconnect')
+
+
+if __name__ == "__main__":
+    logger.setLevel(logging.DEBUG)
+    emulator.connect()
+    # main_script()
+    while True:
+        emulator.click((1100,600))
+        选择角色(['日和', '優衣', '優衣(新年)', '日和(公主)', '優衣(公主)'])
+        emulator.click((900,600))
+        time.sleep(1)
     

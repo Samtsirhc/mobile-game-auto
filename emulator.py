@@ -37,12 +37,12 @@ class Emulator:
         self.emulator = u2.connect()  # python -m uiautomator2 init
 
     def dir_decorator(self, func):
-        _no_log = ['进入基建', '去战斗', '去冒险']
+        _no_log = ['进入基建', '去战斗', '去冒险', '去首页', '选择角色']
 
-        def dec():
+        def dec(*args,**kwargs):
             _tmp_dir_name = self.current_dir
             self.current_dir = func.__name__
-            func()
+            func(*args,**kwargs)
             if func.__name__ in _no_log:
                 pass
             else:
