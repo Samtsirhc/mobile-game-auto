@@ -334,7 +334,7 @@ def 选择角色(names):
         choose_wife(i)
     pass
 
-@staticmethod
+
 def main_script():
     emulator.connect()
     登录PCR()
@@ -352,10 +352,5 @@ def main_script():
 if __name__ == "__main__":
     logger.setLevel(logging.DEBUG)
     emulator.connect()
-    # main_script()
-    while True:
-        emulator.click((1100,600))
-        选择角色(['日和', '優衣', '優衣(新年)', '日和(公主)', '優衣(公主)'])
-        emulator.click((900,600))
-        time.sleep(1)
-    
+    main_script()
+
