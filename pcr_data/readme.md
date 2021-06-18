@@ -2,7 +2,9 @@
 
 **_pcr_data.py** 角色别名，来自于https://github.com/Ice-Cirno/HoshinoBot/issues/5
 
+---
 
+下面的暂时不需要
 
 **sql服务器** 先下载https://dev.mysql.com/downloads/installer/
 
