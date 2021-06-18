@@ -4,7 +4,7 @@
 import logging
 import time
 
-from orc import *
+from tools.orc import *
 from config import *
 from emulator import Emulator
 
@@ -360,7 +360,7 @@ def 识别招募():
         imgs[i].save(f'{i}.jpg')
         f = open(f'{i}.jpg', 'rb')
         _tmp = f.read()
-        _res.append(my_orc(_tmp))
+        _res.append(emulator.orc.recognize(_tmp))
         f.close()
         os.remove(f'{i}.jpg')
     logger.info(_res)
@@ -436,7 +436,6 @@ def main_script():
     信用点()
     公开招募()
     收日常任务()
-    
     emulator.kill_app(ARKNIGHTS_APP_NAME)
 
 def loop():

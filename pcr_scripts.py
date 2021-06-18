@@ -7,11 +7,18 @@ from config import *
 from emulator import Emulator
 from tools.logger import creat_my_logger
 from tools.time_tool import *
+from tools.pcr_team_data import TeamData
 
 logger = get_logger()
 emulator = Emulator(PCR_IMG_PATH)
 log_list = ['MANA冒险', '经验值冒险', '地下城', '点赞', 'JJC', 'PJJC']
 daily = Periodic(log_list, 'PCR', 1)
+
+UNIT_DATA_PATH = 'pcr_data\\unit_data.json'
+TEAM_DATA_PATH = 'pcr_data\\team_data.json'
+
+
+
 
 @emulator.dir_decorator
 def 登录PCR():
@@ -351,6 +358,9 @@ def main_script():
 
 if __name__ == "__main__":
     logger.setLevel(logging.DEBUG)
-    emulator.connect()
-    main_script()
+    # emulator.connect()
+    # main_script()
+    my_team = TeamData(UNIT_DATA_PATH, TEAM_DATA_PATH)
+    re = my_team.search(['羊驼', '酒鬼', '老师', '狐狸', '魔驴'])
+    logger.debug(re)
 

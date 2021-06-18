@@ -58,8 +58,12 @@ class Periodic():
                 self.log = json.load(f)
 
     def set_loop_type(self, loop_type):
-        self.week = get_week()
-        self.date = get_time(4)
+        if get_time(3)[0] > 5:
+            self.week = get_week()
+            self.date = get_time(4)
+        else:
+            self.week = get_week(0, 24*3600)
+            self.date = get_time(4, 24*3600)
         if loop_type == 1:
             self.log_path = f'{LOG_PATH}{self.name} {self.date}.json'
         elif loop_type == 7:

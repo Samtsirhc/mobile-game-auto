@@ -5,13 +5,12 @@ import time
 from threading import Thread
 import io
 import numpy as np
-# import adbutils
-# import websocket
+import json
 import uiautomator2 as u2
 from cv2 import cv2
 from PIL import Image
 
-from orc import *
+from tools.orc import *
 from config import *
 from tools.image_tools import *
 from tools.process_tools import *
@@ -26,6 +25,8 @@ class Emulator:
         self.img_path = img_path
         self.current_dir = ''
         self.load_imgs()
+        self.orc = Orc()
+
 
     def connect(self):
         if check_process("Nox.exe"):
