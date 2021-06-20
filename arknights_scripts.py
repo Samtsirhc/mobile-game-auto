@@ -8,7 +8,6 @@ from tools.orc import *
 from config import *
 from emulator import Emulator
 
-logger = get_logger()
 emulator = Emulator(ARKNIGHTS_IMG_PATH)
 log_list = ['剿灭', '周任务']
 weekly = Periodic(log_list, 'Arknights', 7)
@@ -326,7 +325,6 @@ def 循环招募():
             for i in range(len(tags)):
                 if j == tags[i]:
                     pos = i
-                    logger.info(tags[i])
                     break
         emulator.click(poss[pos])
         emulator.click((454, 292))
@@ -363,7 +361,6 @@ def 识别招募():
         _res.append(emulator.orc.recognize(_tmp))
         f.close()
         os.remove(f'{i}.jpg')
-    logger.info(_res)
     return _res
 
 
@@ -453,8 +450,12 @@ def loop():
     # 收日常任务()
     # emulator.kill_app(ARKNIGHTS_APP_NAME)
 
+def run_tasks(tasks):
+    for i in tasks:
+        exec(f'{i}()')
+    emulator.kill_app(ARKNIGHTS_APP_NAME)
+
 if __name__ == "__main__":
-    # logger.setLevel(logging.DEBUG)
     emulator.connect()
     main_script()
     # 循环挑战()

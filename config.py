@@ -1,6 +1,9 @@
-from tools.logger import creat_my_logger, Logger
-from tools.time_tool import *
-from tools.path_tool import *
+import sys
+sys.path.append("..") 
+
+from modules.logger import creat_my_logger, Logger
+from modules.time_tool import *
+from modules.path_tool import *
 import requests
 import string
 import json

@@ -1,8 +1,8 @@
-from cv2 import cv2  # 解决一下vsc报错
-import time
-import numpy as np
-import psutil
+
 import os
+
+import psutil
+
 
 #运行某程序
 def run_sth(FileName,RunType = 1,FilePath = ""):
@@ -37,6 +37,7 @@ def check_process(name):
         except:
             pass    
     return False
+
 #关闭某进程
 def close_process(Name):
     ExePath = "taskkill /IM " + Name + " /F"

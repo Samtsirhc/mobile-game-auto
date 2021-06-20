@@ -4,7 +4,6 @@
 import logging
 import time
 
-from orc import *
 from config import *
 from emulator import Emulator
 from arknights_scripts import *

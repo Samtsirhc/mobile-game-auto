@@ -382,3 +382,29 @@
 10:25:07.838114 version@stat F·[0 1] S·737KiB[0B 737KiB] Sc·[0.00 0.01]
 10:25:07.842104 db@janitor F·3 G·0
 10:25:07.843101 db@open done T·7.9791ms
+=============== Jun 20, 2021 (CST) ===============
+15:35:02.649217 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+15:35:02.662205 CURRENT: missing target file: MANIFEST-000100
+15:35:02.672196 CURRENT.bak: missing target file: MANIFEST-000097
+15:35:02.680192 db@open opening
+15:35:02.683190 version@stat F·[] S·0B[] Sc·[]
+15:35:02.686189 db@janitor F·2 G·0
+15:35:02.686189 db@open done T·5.9968ms
+=============== Jun 20, 2021 (CST) ===============
+15:41:11.378189 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+15:41:11.380192 version@stat F·[] S·0B[] Sc·[]
+15:41:11.381190 db@open opening
+15:41:11.381190 journal@recovery F·1
+15:41:11.382213 journal@recovery recovering @1
+15:41:11.385186 version@stat F·[] S·0B[] Sc·[]
+15:41:11.399178 db@janitor F·2 G·0
+15:41:11.400178 db@open done T·18.9882ms
+=============== Jun 20, 2021 (CST) ===============
+15:51:05.291526 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+15:51:05.292526 version@stat F·[] S·0B[] Sc·[]
+15:51:05.292526 db@open opening
+15:51:05.292526 journal@recovery F·1
+15:51:05.293524 journal@recovery recovering @2
+15:51:05.294524 version@stat F·[] S·0B[] Sc·[]
+15:51:05.303518 db@janitor F·2 G·0
+15:51:05.303518 db@open done T·10.992ms

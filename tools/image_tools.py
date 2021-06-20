@@ -36,7 +36,7 @@ def match_image(image, templ, similarity = 0.8, all = False):
 def load_img(image):
     try:
         if type(image) == str:
-            if not '.jpg' in image:
+            if not '.' in image:
                 image = image + '.jpg'
             # 原本是直接cv2.imread(image) 但是可怜的孤儿opencv不能读取中文名称文件
             return cv2.imdecode(np.fromfile(image, dtype=np.uint8), -1)
