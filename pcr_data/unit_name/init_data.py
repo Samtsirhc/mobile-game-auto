@@ -70,13 +70,21 @@ if __name__ == "__main__":
                 miss += _name
                 miss += '\n'
             pass
-    print(f'一共有{len(id_name)}个角色')
 
+    # 修正一些字错误
+    words = [['憐', '怜'], ['裏', '里'], ['喫', '吃']]
+    for i in id_name:
+        for j in range(len(id_name[i])):
+            for k in range(len(words)):
+                id_name[i][j] = id_name[i][j].replace(words[k][0], words[k][1])
+
+    print(f'一共有{len(id_name)}个角色')
+ 
     with open('unit_data.json', 'w', encoding='utf-8') as f:
         f.write(json.dumps(id_name, ensure_ascii=False, sort_keys=True, indent=4, separators=(',', ':')))
 
     with open('miss.log', 'w', encoding='utf-8') as f:
-        f.write(miss)
+        f.write(miss) 
 
     os.system('pause')
     pass

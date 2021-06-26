@@ -1,79 +1,65 @@
-
-import os
-import string
+import uiautomator2 as u2
 import time
 
-import adbutils
-import numpy as np
-import uiautomator2 as u2
-import websocket
-
-from config import get_logger
-from modules.image_tool import load_img, match_image
 from modules.orc import Orc
-from modules.path_tool import get_files
-from modules.process_tool import check_process, run_sth
-
-logger = get_logger()
+from modules.process_tool import check_process, close_process, run, run_sth
+from modules.logger import Logger
 
 
 class Emulator:
-    def __init__(self, img_path=''):
-        self.init_shot()
-        if img_path == '':
-            return
-        self.img_path = img_path
-        self.current_dir = ''
-        self.load_imgs()
-        # self.orc = Orc()
+    def __init__(self, img_path, logger:Logger):
+        self.orc = Orc()
+        self.logger = logger
         self.no_log = ['进入基建', '去战斗', '去冒险', '去首页', '选择角色']
 
-    def connect(self):
+
+    def connect(self, emulator_path):
         if check_process("Nox.exe"):
             pass
         else:
-            logger.info('启动模拟器')
+            self.logger.info('启动模拟器')
+            run_sth(emulator_path)
             time.sleep(30)
         self.emulator = u2.connect()  # python -m uiautomator2 init
 
     def dir_decorator(self, func):
-        def dec(*args, **kwargs):
+        def dec(*args,**kwargs):
             _tmp_dir_name = self.current_dir
             self.current_dir = func.__name__
-            func(*args, **kwargs)
+            func(*args,**kwargs)
             if func.__name__ in self.no_log:
                 pass
             else:
-                logger.info(func.__name__)
+                self.logger.info(func.__name__)
             self.current_dir = _tmp_dir_name
 
         return dec
 
     def kill_app(self, app_name):
         self.emulator.app_stop(app_name)
-        logger.debug(f'{app_name} dead')
+        self.logger.debug(f'{app_name} dead')
 
-    def load_imgs(self):
-        self.imgs = {}
-        self.img_dirs = get_files(self.img_path, 1)
-        for i in self.img_dirs:
-            _img_sub_dir = f'{self.img_path}{i}//'
-            self.imgs[i] = {}
-            for j in get_files(_img_sub_dir, 2):
-                _tmp = j.replace('.jpg', '')
-                self.imgs[i][_tmp] = {}
-                self.imgs[i][_tmp]['img'] = load_img(
-                    f'{self.img_path}{i}//{_tmp}')
-                self.imgs[i][_tmp]['coordinate'] = (-1, -1)
+    # def load_imgs(self):
+    #     self.imgs = {}
+    #     self.img_dirs = get_files(self.img_path, 1)
+    #     for i in self.img_dirs:
+    #         _img_sub_dir = f'{self.img_path}{i}//'
+    #         self.imgs[i] = {}
+    #         for j in get_files(_img_sub_dir, 2):
+    #             _tmp = j.replace('.jpg', '')
+    #             self.imgs[i][_tmp] = {}
+    #             self.imgs[i][_tmp]['img'] = load_img(
+    #                 f'{self.img_path}{i}//{_tmp}')
+    #             self.imgs[i][_tmp]['coordinate'] = (-1, -1)
 
     def run_app(self, app_name):
         try:
             self.kill_app(app_name)
             self.emulator.app_start(app_name)
             # logger.info("a")
-            logger.debug(f'{app_name} start')
+            self.logger.debug(f'{app_name} start')
         except Exception as e:
-            logger.error(e)
+            self.logger.error(e)
         # "com.hypergryph.arknights"
 
     def check_app(self, app_name):
@@ -83,43 +69,20 @@ class Emulator:
         else:
             return False
 
-
-    def init_shot(self):
-        d = adbutils.adb.device()
-        lport = d.forward_port(7912)
-        self.ws = websocket.WebSocket()
-        self.ws.connect("ws://localhost:{}/minicap".format(lport))
-
     def take_shot(self):
-        try:
-            _tmp = self.ws.recv()
-            while not isinstance(_tmp, (bytes, bytearray)):
-                _tmp = self.ws.recv()
-        except:
-            self.init_shot()
-            _tmp = self.ws.recv()
-            while not isinstance(_tmp, (bytes, bytearray)):
-                _tmp = self.ws.recv()
-
-        # for _ in range(100):
-        #     with open('_tmp.jpg', 'wb') as f:     # 百次 3.2s
-        #         f.write(_tmp)
-        #     self.screen_shot = load_img('_tmp.jpg')
-
-        with open('_tmp.jpg', 'wb') as f:     # 百次 25.5s
-            f.write(_tmp)
-        self.screen_shot = load_img('_tmp.jpg')
-        os.remove('_tmp.jpg')
-
-        # self.screen_shot = self.emulator.screenshot(format='opencv') # 百次 232.9s
-        return self.screen_shot
+        # try:
+        #     _tmp = self.ws.recv()
+        #     nparr = np.fromstring(_tmp, np.uint8)
+        #     self.screen_shot = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+        # except:
+        #     self.init_shot()
+        self.screen_shot = self.emulator.screenshot(format='opencv')
 
     def take_img(self, xys):
         """
         截图并且返回图片，目前专用于方舟公招
-        例如xys = [(384, 369, 507, 400), (551, 369, 674, 400)]
         """
-        _img = self.take_shot()
+        _img = self.emulator.screenshot()
         _imgs = [_img.crop(i) for i in xys]
         return _imgs
 
@@ -226,13 +189,7 @@ class Emulator:
 
 
 if __name__ == "__main__":
-    e = Emulator()
+    e = Emulator(ARKNIGHTS_IMG_PATH)
     e.connect()
-    a = load_img('1.jpg')
-    t = time.time()
-    for _ in range(100):
-        b = e.take_shot()
-        c = match_image(a,b)
-        print(c)
-    print(time.time()-t)
 
+    pass

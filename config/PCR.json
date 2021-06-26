@@ -8,7 +8,7 @@
         "JJC",
         "PJJC"
     ],
-    "IMG_PATH":"/img/pcr",
+    "IMG_PATH":"imgs/pcr/",
     "START_APP_NAME":"com.netease.uu",
     "TASKS":{
         "daily_stone":[

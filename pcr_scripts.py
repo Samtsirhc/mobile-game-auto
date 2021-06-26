@@ -3,43 +3,80 @@ import os
 import sys
 import time
 
-from config import *
+from config import read_config
 from emulator import Emulator
-from tools.logger import creat_my_logger
-from tools.time_tool import *
-from tools.pcr_team_data import TeamData
+from modules.periodic import Periodic
+from modules.tools import load_img
+from team import TeamManager
+from unit import UnitManager
 
-logger = get_logger()
-emulator = Emulator(PCR_IMG_PATH)
-log_list = ['MANA冒险', '经验值冒险', '地下城', '点赞', 'JJC', 'PJJC']
-daily = Periodic(log_list, 'PCR', 1)
+config = read_config('config/pcr.json')
+log_list = config["DAILY"]
+daily = Periodic(log_list, 'PCR', 1, 'logs/')
 
-UNIT_DATA_PATH = 'pcr_data\\unit_data.json'
-TEAM_DATA_PATH = 'pcr_data\\team_data.json'
+img_path = 'imgs/pcr'
+emulator = Emulator(config["IMG_PATH"])
 
 
+class JJCSearcher:
+    def __init__(self):
+        self.u = UnitManager()
+        self.t = TeamManager()
+        self._tmp = '_tmp.jpg'
+
+    def search(self, team):
+        _team = []
+        for i in team:
+            i.save(self._tmp)
+            _tmp = load_img(self._tmp)
+            _team.append(self.u.reg_wife(_tmp))
+        return self.t.serch(_team)
+
+
+searcher = JJCSearcher()
 
 
 @emulator.dir_decorator
 def 登录PCR():
-    logger.info('开始登录PCR')
-    emulator.run_app(PCR_APP_NAME)
-    while not emulator.check_app('tw.sonet.princessconnect'):
+    emulator.run_app(config["START_APP_NAME"])
+    while not emulator.check_app(config["APP_NAME"]):
         emulator.find_and_click(['我的', '加速'], [(-230, 10), (578, 37)])
     while not emulator.find_img('商店'):
         time.sleep(1)
-        emulator.find_and_click(['下载','关闭','生日快乐'])
+        emulator.find_and_click(['下载', '关闭', '生日快乐'])
         emulator.click((650, 620))
         if emulator.find_img('请选择角色'):
             兰德索尔杯()
         if emulator.find_img('签筒'):
-            emulator.swipe((540,500,540,250))
+            emulator.swipe((540, 500, 540, 250))
     while True:
         time.sleep(1)
         emulator.click((650, 620))
         if emulator.find_img('商店'):
             # 登录成功
             break
+
+
+def 找解法():
+    _xys = [(783, 114, 854, 156),
+            (873, 114, 944, 156),
+            (963, 114, 1034, 156),
+            (1053, 114, 1124, 156),
+            (1143, 114, 1214, 156)]
+    _team = emulator.take_img(_xys)
+    return searcher.search(_team)
+
+def JJC进攻():
+    _teams = 找解法()
+    _team = []
+    for i in _teams:
+        if searcher.t.check_unget(i):
+            _team = i
+            break
+    选择角色(_team)
+
+def 结束():
+    emulator.kill_app(config['APP_NAME'])
 
 
 @emulator.dir_decorator
@@ -110,7 +147,6 @@ def MANA冒险():
                 break
     扫荡()
     daily.finish('MANA冒险')
-
 
 
 @emulator.dir_decorator
@@ -240,6 +276,7 @@ def 求装备():
         if emulator.find_img(['请求状况', '无战队']):
             break
 
+
 @emulator.dir_decorator
 def JJC():  # 未完成
     if daily.check('JJC'):
@@ -251,7 +288,7 @@ def JJC():  # 未完成
             if emulator.find_img('在竞技场'):
                 state += 1
                 break
-            emulator.find_and_click(['战斗竞技场','防御结果'],[(0,0),(-209,22)])
+            emulator.find_and_click(['战斗竞技场', '防御结果'], [(0, 0), (-209, 22)])
         while state == 1:
             if not emulator.find_img('冷却完成'):
                 time.sleep(15)
@@ -264,12 +301,13 @@ def JJC():  # 未完成
                 state += 1
                 time.sleep(3)
             else:
-                emulator.click((1188,186))
+                emulator.click((1188, 186))
         while state == 3:
             emulator.find_and_click(['战斗开始', '下一步'])
             if emulator.find_img('在竞技场'):
                 state += 1
     daily.finish('JJC')
+
 
 @emulator.dir_decorator
 def PJJC():
@@ -281,7 +319,7 @@ def PJJC():
         while state == 0:
             if emulator.find_img('在竞技场'):
                 state += 1
-            emulator.find_and_click(['公主竞技场','防御结果'],[(0,0),(-209,22)])
+            emulator.find_and_click(['公主竞技场', '防御结果'], [(0, 0), (-209, 22)])
         while state == 1:
             if not emulator.find_img('冷却完成'):
                 time.sleep(15)
@@ -294,12 +332,13 @@ def PJJC():
                 state += 1
                 time.sleep(3)
             else:
-                emulator.click((1188,186))
+                emulator.click((1188, 186))
         while state == 3:
-            emulator.find_and_click(['队伍2','队伍3','战斗开始', '下一步'])
+            emulator.find_and_click(['队伍2', '队伍3', '战斗开始', '下一步'])
             if emulator.find_img('在竞技场'):
                 state += 1
     daily.finish('PJJC')
+
 
 @emulator.dir_decorator
 def 选择角色(names):
@@ -310,57 +349,57 @@ def 选择角色(names):
         _tmp = 0
         while _tmp == 0:
             emulator.find_and_click('以角色名搜寻')
-            time.sleep(2)
-            if  emulator.find_img('确定'):
+            time.sleep(1)
+            if emulator.find_img('确定'):
                 _tmp += 1
         while _tmp == 1:
             emulator.input_text(name)
             time.sleep(1)
-            emulator.click((153,355))
+            emulator.click((153, 355))
             time.sleep(1)
             _tmp += 1
         while _tmp == 2:
             if emulator.find_img('以角色名搜寻'):
                 _tmp += 1
             else:
-                emulator.click((153,355))
+                emulator.click((153, 355))
                 time.sleep(1)
     # 清空角色栏
     while not emulator.find_img('我的队伍'):
         time.sleep(1)
 
     for _ in range(20):
-        emulator.click((715,600))
+        emulator.click((715, 600))
         time.sleep(0.1)
     if emulator.find_img('重置'):
         pass
     else:
-        emulator.swipe((634,277,634,350))
+        emulator.swipe((634, 277, 634, 350))
         time.sleep(3)
     for i in names:
         choose_wife(i)
     pass
 
 
-def main_script():
+# def main_script():
+#     emulator.connect()
+#     登录PCR()
+#     地下城()
+#     MANA冒险()
+#     经验值冒险()
+#     点赞()
+#     求装备()
+#     # PJJC()
+#     JJC()
+#     emulator.kill_app(PCR_APP_NAME)
+#     emulator.kill_app('tw.sonet.princessconnect')
+
+def run_tasks(tasks):
     emulator.connect()
-    登录PCR()
-    地下城()
-    MANA冒险()
-    经验值冒险()
-    点赞()
-    求装备()
-    # PJJC()
-    JJC()
-    emulator.kill_app(PCR_APP_NAME)
-    emulator.kill_app('tw.sonet.princessconnect')
+    for i in tasks:
+        exec(f'{i}()')
 
 
 if __name__ == "__main__":
-    logger.setLevel(logging.DEBUG)
-    # emulator.connect()
-    # main_script()
-    my_team = TeamData(UNIT_DATA_PATH, TEAM_DATA_PATH)
-    re = my_team.search(['羊驼', '酒鬼', '老师', '狐狸', '魔驴'])
-    logger.debug(re)
-
+    emulator.connect()
+    JJC进攻()

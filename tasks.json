@@ -1,9 +1,0 @@
-{
-    "arknights_daily":{
-        "script_name":"arknights_scripts.py",
-        "tasks":[
-            "1",
-            "2"
-        ]
-    }
-}

@@ -1,7 +1,7 @@
 {
     "APP_NAME":"com.hypergryph.arknights",
     "DAILY":{},
-    "IMG_PATH":"/img/arknights",
+    "IMG_PATH":"imgs/arknights/",
     "START_APP_NAME":"com.hypergryph.arknights",
     "TASKS":{
         "daily_stone":[

@@ -3,19 +3,21 @@
 
 import logging
 import time
+import os
 
-from tools.orc import *
-from config import *
+from modules.periodic import Periodic
+from config import read_config
 from emulator import Emulator
 
-emulator = Emulator(ARKNIGHTS_IMG_PATH)
-log_list = ['剿灭', '周任务']
-weekly = Periodic(log_list, 'Arknights', 7)
+config = read_config('config/arknights.json')
+log_list = config["WEEKLY"]
+weekly = Periodic(log_list, 'Arknights', 7, 'logs/')
 
+emulator = Emulator(config["IMG_PATH"])
 
 @emulator.dir_decorator
 def 登录方舟():
-    emulator.run_app(ARKNIGHTS_APP_NAME)
+    emulator.run_app(config["START_APP_NAME"])
     time.sleep(10)
     while not emulator.find_img(f'鹰角图标'):
         emulator.find_and_click(['下载资源确认', 'start'])
@@ -38,6 +40,8 @@ def 登录方舟():
         if emulator.find_img(f'在主页'):
             _tmp += 1
 
+def 结束():
+    emulator.kill_app(config['APP_NAME'])
 
 @emulator.dir_decorator
 def 进入基建():
@@ -285,7 +289,7 @@ def 公开招募():
         while True:
             emulator.find_and_click([f'招募{i}' for i in range(1, 5)])
             if emulator.find_img('正在招募'):
-                tags = 识别招募()
+                # tags = 识别招募()
                 break
         for j in abs_tags:
             if pos != -1:
@@ -317,7 +321,7 @@ def 循环招募():
                 emulator.click(xys[0])
                 time.sleep(1)
             if emulator.find_img('正在招募'):
-                tags = 识别招募()
+                # tags = 识别招募()
                 break
         for j in abs_tags:
             if pos != -1:
@@ -350,18 +354,19 @@ def 循环招募():
 
 
 def 识别招募():
-    _xys = [(384, 369, 507, 400), (551, 369, 674, 400), (718, 369, 841, 400),
-            (384, 440, 507, 474), (551, 440, 674, 474)]  # 招募tag截图的位置
-    imgs = emulator.take_img(_xys)
-    _res = []
-    for i in range(len(imgs)):
-        imgs[i].save(f'{i}.jpg')
-        f = open(f'{i}.jpg', 'rb')
-        _tmp = f.read()
-        _res.append(emulator.orc.recognize(_tmp))
-        f.close()
-        os.remove(f'{i}.jpg')
-    return _res
+    pass
+#     _xys = [(384, 369, 507, 400), (551, 369, 674, 400), (718, 369, 841, 400),
+#             (384, 440, 507, 474), (551, 440, 674, 474)]  # 招募tag截图的位置
+#     imgs = emulator.take_img(_xys)
+#     _res = []
+#     for i in range(len(imgs)):
+#         imgs[i].save(f'{i}.jpg')
+#         f = open(f'{i}.jpg', 'rb')
+#         _tmp = f.read()
+#         _res.append(emulator.orc.recognize(_tmp))
+#         f.close()
+#         os.remove(f'{i}.jpg')
+#     return _res
 
 
 @emulator.dir_decorator
@@ -431,32 +436,19 @@ def main_script():
     #选择关卡()
     循环挑战()
     信用点()
-    公开招募()
-    收日常任务()
-    emulator.kill_app(ARKNIGHTS_APP_NAME)
-
-def loop():
-    emulator.connect()
-    # 登录方舟()
-    # 基建收菜()
-    # 基建换班()
-    # 使用无人机()
-    # 剿灭()
-    # 刷土()
-    # 选择关卡()
-    循环挑战()
-    # 信用点()
     # 公开招募()
-    # 收日常任务()
-    # emulator.kill_app(ARKNIGHTS_APP_NAME)
+    收日常任务()
+    结束()
+
+
 
 def run_tasks(tasks):
+    emulator.connect()
     for i in tasks:
         exec(f'{i}()')
-    emulator.kill_app(ARKNIGHTS_APP_NAME)
 
 if __name__ == "__main__":
-    emulator.connect()
     main_script()
+    pass
     # 循环挑战()
     
