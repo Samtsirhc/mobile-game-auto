@@ -2,25 +2,25 @@ from nonebot import on_command
 from nonebot.rule import to_me
 from nonebot.typing import T_State
 from nonebot.adapters import Bot, Event
+import requests
 
-weather = on_command("天气", rule=to_me(), priority=5)
+script = on_command("运行脚本", rule=to_me(), priority=1)
+url = "http://127.0.0.1:8888/"
 
-
-@weather.handle()
+@script.handle()
 async def handle_first_receive(bot: Bot, event: Event, state: T_State):
-    args = str(event.get_message()).strip()  # 首次发送命令时跟随的参数，例：/天气 上海，则args为上海
+    args = str(event.get_message()).strip()  # 首次发送命令时跟随的参数，
     if args:
-        state["city"] = args  # 如果用户发送了参数则直接赋值
+        state["name"] = args  # 如果用户发送了参数则直接赋值
 
 
-@weather.got("city", prompt="你想查询哪个城市的天气呢？")
+@script.got("name", prompt="运行什么脚本？")
 async def handle_city(bot: Bot, event: Event, state: T_State):
-    city = state["city"]
-    if city not in ["上海", "北京"]:
-        await weather.reject("你想查询的城市暂不支持，请重新输入！")
-    city_weather = await get_weather(city)
-    await weather.finish(city_weather)
+    name = state["name"]
+    _res = await send_info(name)
+    await script.finish(_res)
 
 
-async def get_weather(city: str):
-    return f"{city}的天气是..."
+async def send_info(name: str):
+    _res = requests.post(url, data = str(name))
+    return _res.content.decode()

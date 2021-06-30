@@ -3,19 +3,18 @@ import os
 import sys
 import time
 
-from config import read_config
 from emulator import Emulator
 from modules.periodic import Periodic
 from modules.tools import load_img
 from team import TeamManager
 from unit import UnitManager
 
-config = read_config('config/pcr.json')
-log_list = config["DAILY"]
+log_list = ["MANA冒险", "经验值冒险", "地下城", "点赞", "JJC", "PJJC"]
 daily = Periodic(log_list, 'PCR', 1, 'logs/')
-
-img_path = 'imgs/pcr'
-emulator = Emulator(config["IMG_PATH"])
+img_path = 'imgs/pcr/'
+emulator = Emulator(img_path)
+START_APP_NAME = "com.netease.uu"
+APP_NAME = "tw.sonet.princessconnect"
 
 
 class JJCSearcher:
@@ -38,8 +37,8 @@ searcher = JJCSearcher()
 
 @emulator.dir_decorator
 def 登录PCR():
-    emulator.run_app(config["START_APP_NAME"])
-    while not emulator.check_app(config["APP_NAME"]):
+    emulator.run_app(START_APP_NAME)
+    while not emulator.check_app(APP_NAME):
         emulator.find_and_click(['我的', '加速'], [(-230, 10), (578, 37)])
     while not emulator.find_img('商店'):
         time.sleep(1)
@@ -58,25 +57,28 @@ def 登录PCR():
 
 
 def 找解法():
-    _xys = [(783, 114, 854, 156),
+    _xys= [(783, 114, 854, 156),
             (873, 114, 944, 156),
             (963, 114, 1034, 156),
             (1053, 114, 1124, 156),
             (1143, 114, 1214, 156)]
-    _team = emulator.take_img(_xys)
+    _team= emulator.take_img(_xys)
     return searcher.search(_team)
 
+
 def JJC进攻():
-    _teams = 找解法()
-    _team = []
+    _teams= 找解法()
+    _team= []
     for i in _teams:
         if searcher.t.check_unget(i):
-            _team = i
+            _team= i
             break
     选择角色(_team)
 
+
 def 结束():
-    emulator.kill_app(config['APP_NAME'])
+    emulator.kill_app(APP_NAME)
+    emulator.kill_app(START_APP_NAME)
 
 
 @emulator.dir_decorator
@@ -89,7 +91,7 @@ def 兰德索尔杯():
             return
 
 
-@emulator.dir_decorator
+@ emulator.dir_decorator
 def 去冒险():
     while True:
         emulator.find_and_click('冒险未激活')
@@ -100,7 +102,7 @@ def 去冒险():
             break
 
 
-@emulator.dir_decorator
+@ emulator.dir_decorator
 def 去主页():
     while True:
         emulator.click((121, 655))
@@ -110,12 +112,12 @@ def 去主页():
             break
 
 
-@emulator.dir_decorator
+@ emulator.dir_decorator
 def 扫荡():
     while True:
         if emulator.find_img('在扫荡页面'):
             break
-    sweep_times = 5
+    sweep_times= 5
     while sweep_times > 0:
         time.sleep(0.3)
         emulator.click((1179, 439))
@@ -133,7 +135,7 @@ def 扫荡():
             break
 
 
-@emulator.dir_decorator
+@ emulator.dir_decorator
 def MANA冒险():
     if daily.check('MANA冒险'):
         return None
@@ -149,7 +151,7 @@ def MANA冒险():
     daily.finish('MANA冒险')
 
 
-@emulator.dir_decorator
+@ emulator.dir_decorator
 def 经验值冒险():
     if daily.check('经验值冒险'):
         return None
@@ -166,7 +168,7 @@ def 经验值冒险():
     daily.finish('经验值冒险')
 
 
-@emulator.dir_decorator
+@ emulator.dir_decorator
 def 进入商店():
     去主页()
     while True:
@@ -175,12 +177,12 @@ def 进入商店():
             break
 
 
-@emulator.dir_decorator
+@ emulator.dir_decorator
 def 买经验():
     进入商店()
     if emulator.find_img('经验买完了'):
         return
-    buy_times = 4
+    buy_times= 4
     while buy_times > 0:
         if emulator.find_and_click('选择'):
             buy_times -= 1
@@ -192,12 +194,12 @@ def 买经验():
             return
 
 
-@emulator.dir_decorator
+@ emulator.dir_decorator
 def 地下城():
     if daily.check('地下城'):
         return None
     去冒险()
-    times = 3
+    times= 3
     while True:
         emulator.find_and_click(['地下城', '蓝OK'])
         if emulator.find_and_click('EX3'):
@@ -206,8 +208,8 @@ def 地下城():
             break
         if emulator.find_img('返回'):
             break
-    step = 1
-    team = 1
+    step= 1
+    team= 1
     while True:
         if step == 1:
             time.sleep(1)
@@ -231,34 +233,34 @@ def 地下城():
                     emulator.click((1058, 568))
             if emulator.find_and_click('战斗开始'):
                 step += 1
-        tmp = True
+        tmp= True
         if step == 4:
             emulator.find_and_click(['下一步', 'OK', 'AUTO'])
             if emulator.find_and_click('前往地下城') and tmp:
                 team += 1
-                tmp = False
+                tmp= False
             if emulator.find_img('EX3'):
                 break
             if emulator.find_img('返回'):
                 time.sleep(3)
                 if emulator.find_img('返回'):
-                    step = 1
+                    step= 1
     daily.finish('地下城')
 
 
-@emulator.dir_decorator
+@ emulator.dir_decorator
 def 持续战斗():
     while True:
         time.sleep(3)
         emulator.find_and_click(['妈2', '妈', '进行挑战', '战斗开始', '下一步', '关闭', '取消'])
 
 
-@emulator.dir_decorator
+@ emulator.dir_decorator
 def 点赞():
     if daily.check('点赞'):
         return None
     去主页()
-    _tmp = 0
+    _tmp= 0
     while True:
         emulator.find_and_click(['战队', '白底OK', 'OK', '成员情报'])
         if emulator.find_and_click(['赞', '无战队']):
@@ -268,7 +270,7 @@ def 点赞():
     daily.finish('点赞')
 
 
-@emulator.dir_decorator
+@ emulator.dir_decorator
 def 求装备():
     去主页()
     while True:
@@ -277,13 +279,13 @@ def 求装备():
             break
 
 
-@emulator.dir_decorator
+@ emulator.dir_decorator
 def JJC():  # 未完成
     if daily.check('JJC'):
         return None
     去冒险()
     for _ in range(5):
-        state = 0
+        state= 0
         while state == 0:
             if emulator.find_img('在竞技场'):
                 state += 1
@@ -309,13 +311,13 @@ def JJC():  # 未完成
     daily.finish('JJC')
 
 
-@emulator.dir_decorator
+@ emulator.dir_decorator
 def PJJC():
     if daily.check('PJJC'):
         return None
     去冒险()
     for _ in range(5):
-        state = 0
+        state= 0
         while state == 0:
             if emulator.find_img('在竞技场'):
                 state += 1
@@ -340,13 +342,13 @@ def PJJC():
     daily.finish('PJJC')
 
 
-@emulator.dir_decorator
+@ emulator.dir_decorator
 def 选择角色(names):
     '''
     五个！
     '''
     def choose_wife(name):
-        _tmp = 0
+        _tmp= 0
         while _tmp == 0:
             emulator.find_and_click('以角色名搜寻')
             time.sleep(1)

@@ -19,7 +19,7 @@ logger = get_logger()
 
 class Emulator:
     def __init__(self, img_path=''):
-        self.init_shot()
+        # self.init_shot()
         if img_path == '':
             return
         self.img_path = img_path
@@ -91,27 +91,27 @@ class Emulator:
         self.ws.connect("ws://localhost:{}/minicap".format(lport))
 
     def take_shot(self):
-        try:
-            _tmp = self.ws.recv()
-            while not isinstance(_tmp, (bytes, bytearray)):
-                _tmp = self.ws.recv()
-        except:
-            self.init_shot()
-            _tmp = self.ws.recv()
-            while not isinstance(_tmp, (bytes, bytearray)):
-                _tmp = self.ws.recv()
+        # try:
+        #     _tmp = self.ws.recv()
+        #     while not isinstance(_tmp, (bytes, bytearray)):
+        #         _tmp = self.ws.recv()
+        # except:
+        #     self.init_shot()
+        #     _tmp = self.ws.recv()
+        #     while not isinstance(_tmp, (bytes, bytearray)):
+        #         _tmp = self.ws.recv()
 
         # for _ in range(100):
         #     with open('_tmp.jpg', 'wb') as f:     # 百次 3.2s
         #         f.write(_tmp)
         #     self.screen_shot = load_img('_tmp.jpg')
 
-        with open('_tmp.jpg', 'wb') as f:     # 百次 25.5s
-            f.write(_tmp)
-        self.screen_shot = load_img('_tmp.jpg')
-        os.remove('_tmp.jpg')
+        # with open('_tmp.jpg', 'wb') as f:     # 百次 25.5s
+        #     f.write(_tmp)
+        # self.screen_shot = load_img('_tmp.jpg')
+        # os.remove('_tmp.jpg')
 
-        # self.screen_shot = self.emulator.screenshot(format='opencv') # 百次 232.9s
+        self.screen_shot = self.emulator.screenshot(format='opencv') # 百次 232.9s
         return self.screen_shot
 
     def take_img(self, xys):

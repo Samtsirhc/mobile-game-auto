@@ -1,24 +1,14 @@
 {
-    "APP_NAME":"com.hypergryph.arknights",
-    "DAILY":{},
-    "IMG_PATH":"imgs/arknights/",
-    "START_APP_NAME":"com.hypergryph.arknights",
-    "TASKS":{
-        "daily_stone":[
-            "登录方舟",
-            "基建收菜",
-            "基建换班",
-            "使用无人机",
-            "剿灭",
-            "刷土",
-            "循环挑战",
-            "信用点",
-            "公开招募",
-            "收日常任务"
-        ]
-    },
-    "WEEKLY":[
+    "日常刷石头":[
+        "登录方舟",
+        "基建收菜",
+        "基建换班",
+        "使用无人机",
         "剿灭",
-        "周任务"
+        "刷土",
+        "循环挑战",
+        "信用点",
+        "公开招募",
+        "收日常任务"
     ]
 }

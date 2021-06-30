@@ -3,11 +3,6 @@ import json
 import os
 # import pcr_data
 
-def read_config(name):
-    _config = None
-    with open(name, 'rb') as f:
-        _config = json.loads(f.read())
-    return _config
 
 def get_logger():
     CQHTTP_CONFIG = "http://127.0.0.1:5700/send_private_msg?user_id=812266890&message=MSG"

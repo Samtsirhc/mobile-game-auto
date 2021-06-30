@@ -3,6 +3,14 @@ import os
 
 UNIT_DATA = load_json('pcr_data/unit_name/unit_data.json')
 
+def nick_name2name(name):
+    for i in UNIT_DATA:
+        if name in UNIT_DATA[i]:
+            return UNIT_DATA[i][0]
+    else:
+        return name
+
+
 def name2id(name):
     for i in UNIT_DATA:
         if name in UNIT_DATA[i]:

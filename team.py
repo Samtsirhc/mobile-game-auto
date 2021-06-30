@@ -4,7 +4,7 @@ import os
 
 import requests
 from modules.tools import *
-from unit import id2name, name2id
+from unit import id2name, name2id, nick_name2name
 
 solution_path = "pcr_data/team_data/solutions/"
 
@@ -85,6 +85,9 @@ class TeamManager:
         
     def init_unget_role(self):
         self.unget_roles = load_json(unget_roles_file)['unget_roles']
+        for i in range(len(self.unget_roles)):
+            self.unget_roles[i] = nick_name2name(self.unget_roles[i])
+        write_json(unget_roles_file, {'unget_roles':self.unget_roles})
 
     def write_pjjc_data(self):
         sorted(self.pjjc_atk, key=lambda i: i['rate'])
@@ -105,6 +108,13 @@ class TeamManager:
         self.pjjc_atk = load_json(pjjc_data_file)['data']
         _now = get_time()
         _ddl_time = _now - 14 * 24 * 3600
+
+        _re = []
+        for i in self.pjjc_atk:
+            try:
+                _re.append(i['name'])
+            except:
+                pass
         for i in self.pjjc_atk:
             if len(i.keys()) == 1:
                 _team = Team(i['team'])
@@ -117,7 +127,10 @@ class TeamManager:
             #         for k in range(len(i[j])):
             #             if i[j][k] < _ddl_time:
             #                 i[j][k].remove()
-            i['rate'] = round(len(i['win'])/len(i['total']), 3)
+                if i['name'] in _re:
+                    self.pjjc_atk.remove(i)
+                else:
+                    i['rate'] = round(len(i['win'])/len(i['total']), 3)
         self.write_pjjc_data()
 
     def serch(self, team):
@@ -127,7 +140,5 @@ class TeamManager:
 
 
 if __name__ == "__main__":
-    a = Team(["羊驼", "酒鬼", "ue", "露娜", "星法"])
-    c = a.get_solutions()
-    print(c)
+    a = TeamManager()
     pass

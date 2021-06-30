@@ -2,22 +2,21 @@
 # coding:utf-8
 
 import logging
-import time
 import os
+import time
 
-from modules.periodic import Periodic
-from config import read_config
 from emulator import Emulator
+from modules.periodic import Periodic
 
-config = read_config('config/arknights.json')
-log_list = config["WEEKLY"]
+log_list = ["剿灭", "周任务"]
 weekly = Periodic(log_list, 'Arknights', 7, 'logs/')
 
-emulator = Emulator(config["IMG_PATH"])
+emulator = Emulator("imgs/arknights/")
+START_APP_NAME = "com.hypergryph.arknights"
 
 @emulator.dir_decorator
 def 登录方舟():
-    emulator.run_app(config["START_APP_NAME"])
+    emulator.run_app(START_APP_NAME)
     time.sleep(10)
     while not emulator.find_img(f'鹰角图标'):
         emulator.find_and_click(['下载资源确认', 'start'])
@@ -40,8 +39,10 @@ def 登录方舟():
         if emulator.find_img(f'在主页'):
             _tmp += 1
 
+
 def 结束():
-    emulator.kill_app(config['APP_NAME'])
+    emulator.kill_app(START_APP_NAME)
+
 
 @emulator.dir_decorator
 def 进入基建():
@@ -65,9 +66,10 @@ def 基建换班():
                   '贸易站': {'pos': [(167, 412), (381, 412)], 'count': 4},
                   '发电站': {'pos': [(72, 521), (277, 505), (477, 505)], 'count': 2},
                   '办公室': {'pos': [(1269, 410)], 'count': 2}}
-    
+
     def 进驻信息换人(count):
-        c_pos = [(482, 231), (482, 478), (630, 231), (630, 478), (767, 231), (767, 478)]  # 角色的位置
+        c_pos = [(482, 231), (482, 478), (630, 231),
+                 (630, 478), (767, 231), (767, 478)]  # 角色的位置
         _tmp = 0
         while _tmp == 0:
             emulator.find_and_click(['进驻信息', '清空', '红底白勾'])
@@ -417,10 +419,12 @@ def 剿灭():
             if emulator.find_img(f'战斗中'):
                 time.sleep(300)
                 state += 1
-            emulator.find_and_click(['未代理', '已代理', '开始行动'], [(50, 20), (50, 70), (0, 0)])
+            emulator.find_and_click(['未代理', '已代理', '开始行动'], [
+                                    (50, 20), (50, 70), (0, 0)])
         while state == 2:
             time.sleep(3)
-            emulator.find_and_click(['战斗完成1', '战斗完成2', '战斗完成3'], [(0, -200), (0, -200), (0, -200)])
+            emulator.find_and_click(['战斗完成1', '战斗完成2', '战斗完成3'], [
+                                    (0, -200), (0, -200), (0, -200)])
             if emulator.find_img('已代理'):
                 state = 0
 
@@ -433,7 +437,7 @@ def main_script():
     使用无人机()
     剿灭()
     刷土()
-    #选择关卡()
+    # 选择关卡()
     循环挑战()
     信用点()
     # 公开招募()
@@ -441,14 +445,23 @@ def main_script():
     结束()
 
 
-
 def run_tasks(tasks):
     emulator.connect()
     for i in tasks:
         exec(f'{i}()')
 
+
 if __name__ == "__main__":
-    main_script()
-    pass
-    # 循环挑战()
-    
+    a = [
+        "登录方舟",
+        "基建收菜",
+        "基建换班",
+        "使用无人机",
+        "剿灭",
+        "刷土",
+        "循环挑战",
+        "信用点",
+        "公开招募",
+        "收日常任务"
+    ]
+    run_tasks(a)

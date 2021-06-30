@@ -1,25 +1,11 @@
 {
-    "APP_NAME":"tw.sonet.princessconnect",
-    "DAILY":[
+    "daily_stone":[
+        "登录PCR",
+        "地下城",
         "MANA冒险",
         "经验值冒险",
-        "地下城",
         "点赞",
-        "JJC",
-        "PJJC"
-    ],
-    "IMG_PATH":"imgs/pcr/",
-    "START_APP_NAME":"com.netease.uu",
-    "TASKS":{
-        "daily_stone":[
-            "登录PCR",
-            "地下城",
-            "MANA冒险",
-            "经验值冒险",
-            "点赞",
-            "求装备",
-            "JJC"
-        ]
-    },
-    "WEEKLY":[]
+        "求装备",
+        "JJC"
+    ]
 }
