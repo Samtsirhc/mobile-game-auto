@@ -10,15 +10,15 @@
 """
 __author__ = "yanyongyu"
 
-from nonebot.typing import T_State
-from nonebot.matcher import Matcher
+from nonebot import get_driver, on_command, on_message, on_notice
 from nonebot.adapters import Bot, Event
+from nonebot.adapters.cqhttp import PokeNotifyEvent, PrivateMessageEvent
+from nonebot.matcher import Matcher
 from nonebot.permission import SUPERUSER
-from nonebot import get_driver, on_command, on_notice, on_message
-from nonebot.adapters.cqhttp import PrivateMessageEvent, PokeNotifyEvent
+from nonebot.typing import T_State
 
 from .config import Config
-from .data_source import cpu_status, per_cpu_status, memory_status, disk_usage
+from .data_source import cpu_status, disk_usage, memory_status, per_cpu_status
 
 global_config = get_driver().config
 status_config = Config(**global_config.dict())

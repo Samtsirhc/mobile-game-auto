@@ -2,8 +2,13 @@
 import logging
 import time
 from http.server import BaseHTTPRequestHandler, HTTPServer
-from threading import Thread
+from task_manager import TaskManager
 
+t = TaskManager()
+
+def handle_task(task):
+    _res = t.run_task(task)
+    return _res
 
 class Handler(BaseHTTPRequestHandler):
     def do_HEAD(self):
@@ -20,9 +25,11 @@ class Handler(BaseHTTPRequestHandler):
         # Get the size of data
         content_length = int(self.headers['Content-Length'])
         post_data = self.rfile.read(content_length)  # Get the data
-        logging.info(f"POST request " + post_data.decode('utf-8'))
+        data = post_data.decode('utf-8')
+        logging.info(f"[POST] " + data)
         self.do_HEAD()
-        self.wfile.write("POST request received!".encode('utf-8'))
+        _res = handle_task(data)
+        self.wfile.write(_res.encode('utf-8'))
 
     def respond(self, opts):
         response = self.handle_http(opts['status'], self.path)
@@ -42,7 +49,7 @@ class Handler(BaseHTTPRequestHandler):
 
 
 def run(server_class=HTTPServer, handler_class=Handler, port=8888):
-    logging.basicConfig(level=logging.INFO, format='[%(asctime)s] [%(levelname)s] : %(message)s',
+    logging.basicConfig(level=logging.INFO, format='[%(asctime)s] [%(levelname)s]: %(message)s',
                         datefmt='%H:%M:%S')
     server_address = ('localhost', port)
     server = server_class(server_address, handler_class)

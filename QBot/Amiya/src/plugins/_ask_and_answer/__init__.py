@@ -1,13 +1,12 @@
-import time
 import os
+import time
+
+from nonebot import on_command, on_message, on_startswith
+from nonebot.adapters import Bot, Event
+from nonebot.rule import startswith, to_me
+from nonebot.typing import T_State
 
 from .data import Question
-
-from nonebot import on_command, on_startswith, on_message
-from nonebot.rule import to_me, startswith
-from nonebot.typing import T_State
-from nonebot.adapters import Bot, Event
-
 
 answers = {}
 
@@ -21,7 +20,7 @@ for qu in Question.select():
         answers[qu.quest] = {}
     answers[qu.quest][union(qu.rep_group, qu.rep_member)] = qu.answer
 
-ask = on_message(priority=5)
+ask = on_message(priority=1)
 
 @ask.handle()
 async def handle_first_receive(bot: Bot, event: Event, state: T_State):

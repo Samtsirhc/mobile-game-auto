@@ -396,7 +396,7 @@ def 选择角色(names):
 #     emulator.kill_app(PCR_APP_NAME)
 #     emulator.kill_app('tw.sonet.princessconnect')
 
-def run_tasks(tasks):
+def pcr_run(tasks):
     emulator.connect()
     for i in tasks:
         exec(f'{i}()')

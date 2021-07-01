@@ -445,7 +445,7 @@ def main_script():
     结束()
 
 
-def run_tasks(tasks):
+def ark_run(tasks):
     emulator.connect()
     for i in tasks:
         exec(f'{i}()')
@@ -464,4 +464,4 @@ if __name__ == "__main__":
         "公开招募",
         "收日常任务"
     ]
-    run_tasks(a)
+    ark_run(a)

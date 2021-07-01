@@ -6,7 +6,9 @@ PKGS = [{'module': 'uiautomator2', 'package': 'uiautomator2', 'version':'2.12.1'
         {'module': 'cv2', 'package': 'opencv-python', 'version':'4.5.2.54'},
         {'module': 'adbutils', 'package': 'adbutils', 'version':'0.10.0'},
         {'module': 'websocket', 'package': 'websocket_client', 'version':'0.58.0'},
-        {'module': 'PIL', 'package': 'pillow', 'version':'8.0.1'}]
+        {'module': 'PIL', 'package': 'pillow', 'version':'8.0.1'},
+        {'module': 'peewee', 'package': 'peewee', 'version':'3.14.4'},
+        {'module': 'nonebot', 'package': 'nb-cli', 'version':''}]
 
 def check_environment(pkgs):
     print('checking...')
@@ -15,7 +17,10 @@ def check_environment(pkgs):
             exec(f'import {i["module"]}')
             print(f'{i["module"]}')
         except:
-            os.system(f'pip install {i["package"]}=={i["version"]}')
+            if i["version"] == '':
+                os.system(f'pip install {i["package"]}')
+            else:
+                os.system(f'pip install {i["package"]}=={i["version"]}')
             check_environment(pkgs)
             break
     else:

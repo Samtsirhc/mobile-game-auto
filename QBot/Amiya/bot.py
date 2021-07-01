@@ -15,7 +15,7 @@ from nonebot.adapters.cqhttp import Bot as CQHTTPBot
 
 # You can pass some keyword args config to init function
 nonebot.init()
-# app = nonebot.get_asgi()
+app = nonebot.get_asgi()
 
 driver = nonebot.get_driver()
 driver.register_adapter("cqhttp", CQHTTPBot)

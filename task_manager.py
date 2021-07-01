@@ -5,6 +5,8 @@ from modules.tools import load_json
 from threading import Thread
 from modules.process_tool import close_process
 import time
+from arknights_scripts import ark_run
+from pcr_scripts import pcr_run
 
 def _async_raise(tid, exctype):
     """raises the exception, performs cleanup if needed"""
@@ -44,35 +46,26 @@ class TaskManager():
         close_process('Nox.exe')
 
 
-    def run_pcr(self, task_name):
-        _task = None
-        try:
-            self.stop_all()
-            _task = self.pcr[task_name]
-            from pcr_scripts import run_tasks
-            _thread = Thread(target=run_tasks, args=(_task,))
-            _thread.start()
-            self.threads.append(_thread)
-        except Exception as e:
-            print(e)
-            return False
 
-    def run_ark(self, task_name):
+    def run_task(self, task):
         _task = None
         try:
+            task_type, task_name = task.split(' ')
             self.stop_all()
-            _task = self.arknights[task_name]
-            from arknights_scripts import run_tasks
-            _thread = Thread(target=run_tasks, args=(_task,))
+            if task_type == '方舟':
+                _task = self.arknights[task_name]
+                _thread = Thread(target=ark_run, args=(_task,))
+            else:
+                _task = self.pcr[task_name]
+                _thread = Thread(target=pcr_run, args=(_task,))
             _thread.start()
             self.threads.append(_thread)
-            return True
+            return '成功'
         except Exception as e:
-            print(e)
-            return False
+            return str(e)
 
 if __name__ == "__main__":
     t = TaskManager()
-    t.run_ark('日常刷石头')
+    t.run_task('方舟 日常刷石头')
     time.sleep(60)
     t.stop_all()
