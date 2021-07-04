@@ -1,12 +1,13 @@
-
 import os
 import string
 import time
-
+import io
 import adbutils
 import numpy as np
 import uiautomator2 as u2
 import websocket
+from cv2 import cv2
+from PIL import Image
 
 from config import get_logger
 from modules.image_tool import load_img, match_image
@@ -83,7 +84,6 @@ class Emulator:
         else:
             return False
 
-
     def init_shot(self):
         d = adbutils.adb.device()
         lport = d.forward_port(7912)
@@ -111,7 +111,9 @@ class Emulator:
         # self.screen_shot = load_img('_tmp.jpg')
         # os.remove('_tmp.jpg')
 
-        self.screen_shot = self.emulator.screenshot(format='opencv') # 百次 232.9s
+        _tmp = self.emulator.screenshot(format='raw')  # 百次 232.9s
+        _tmp = np.fromstring(_tmp, np.uint8)
+        self.screen_shot = cv2.imdecode(_tmp, cv2.IMREAD_COLOR)
         return self.screen_shot
 
     def take_img(self, xys):
@@ -119,7 +121,7 @@ class Emulator:
         截图并且返回图片，目前专用于方舟公招
         例如xys = [(384, 369, 507, 400), (551, 369, 674, 400)]
         """
-        _img = self.take_shot()
+        _img = self.emulator.screenshot()
         _imgs = [_img.crop(i) for i in xys]
         return _imgs
 
@@ -133,18 +135,26 @@ class Emulator:
         logger.debug(f'{img} {_xy}')
         return _xy
 
-    def find_img(self, img):
+    def find_img(self, img, return_type = 0, bg = 0):
         self.take_shot()
         _tmp = False
         if type(img) != list:
             img = [img]
         for i in img:
-            _img = self.imgs[self.current_dir][i]['img']
-            _xy = match_image(_img, self.screen_shot)
-            self.imgs[self.current_dir][i]['coordinate'] = _xy
-            logger.debug(f'{i} {_xy}')
-            if self.check_img_xy(i):
-                _tmp = True
+            if type(i) == str:
+                _img = self.imgs[self.current_dir][i]['img']
+                if type(bg) == int:
+                    bg = self.screen_shot
+                _xy = match_image(_img, bg)
+                self.imgs[self.current_dir][i]['coordinate'] = _xy
+                logger.debug(f'{i} {_xy}')
+                if self.check_img_xy(i):
+                    _tmp = True
+            else:
+                _xy = match_image(i, self.screen_shot)
+                logger.debug(f'{_xy}')
+                if return_type == 1 and _xy[0] > 0:
+                    _tmp = _xy
         return _tmp
 
     def check_img_xy(self, img):
@@ -226,13 +236,7 @@ class Emulator:
 
 
 if __name__ == "__main__":
-    e = Emulator()
-    e.connect()
-    a = load_img('1.jpg')
-    t = time.time()
-    for _ in range(100):
-        b = e.take_shot()
-        c = match_image(a,b)
-        print(c)
-    print(time.time()-t)
-
+    a = [1,2,3]
+    b = [2,3]
+    print(a+b)
+    pass

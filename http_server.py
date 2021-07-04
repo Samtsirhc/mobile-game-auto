@@ -2,13 +2,41 @@
 import logging
 import time
 from http.server import BaseHTTPRequestHandler, HTTPServer
-from task_manager import TaskManager
 
+from modules.process_tool import close_process
+from modules.tools import load_json, write_json
+from task_manager import TaskManager
+from config import get_logger
+
+
+logger = get_logger()
 t = TaskManager()
 
+STOP_COMMAND = ['停止', '停止脚本']
+RESTART_COMMAND = ['重启', '重启模拟器', '关闭']
+ADD_TEAM_COMMAND = ['添加', '增加']
+
+pcr_atk_path = 'pcr_data/team_data/pjjc_atk.json'
+
 def handle_task(task):
-    _res = t.run_task(task)
+    if task in STOP_COMMAND:
+        _res = t.stop_all()
+    elif task in RESTART_COMMAND:
+        _res = t.stop_all() + '\n'
+        _res += close_process('Nox.exe')
+    elif task.startswith(ADD_TEAM_COMMAND[0]) or task.startswith(ADD_TEAM_COMMAND[1]):
+        _team = task.split(' ')
+        _team.remove(_team[0])
+        if len(_team) != 5:
+            return '添加失败'
+        _json = load_json(pcr_atk_path)
+        _json['data'].append({'team':_team})
+        write_json(pcr_atk_path, _json)
+        _res = '添加了: ' + str(_team)
+    else:
+        _res = t.run_task(task)
     return _res
+
 
 class Handler(BaseHTTPRequestHandler):
     def do_HEAD(self):
@@ -18,7 +46,7 @@ class Handler(BaseHTTPRequestHandler):
 
     def do_GET(self):
         self.do_HEAD()
-        logging.info("GET request received!")
+        logger.info("GET request received!")
         self.wfile.write("GET request received!".encode('utf-8'))
 
     def do_POST(self):
@@ -26,9 +54,12 @@ class Handler(BaseHTTPRequestHandler):
         content_length = int(self.headers['Content-Length'])
         post_data = self.rfile.read(content_length)  # Get the data
         data = post_data.decode('utf-8')
-        logging.info(f"[POST] " + data)
+        logger.info(f"[POST] " + data)
         self.do_HEAD()
+
+        # 处理命令
         _res = handle_task(data)
+
         self.wfile.write(_res.encode('utf-8'))
 
     def respond(self, opts):
@@ -49,21 +80,18 @@ class Handler(BaseHTTPRequestHandler):
 
 
 def run(server_class=HTTPServer, handler_class=Handler, port=8888):
-    logging.basicConfig(level=logging.INFO, format='[%(asctime)s] [%(levelname)s]: %(message)s',
-                        datefmt='%H:%M:%S')
     server_address = ('localhost', port)
     server = server_class(server_address, handler_class)
-    logging.info('Starting server...')
+    logger.info('Http server 已经启动')
     try:
         server.serve_forever()
     except KeyboardInterrupt:
         pass
     server.server_close()
-    logging.info('Stopping server...')
-
-
-
+    logger.info('Http server 已经停止')
 
 
 if __name__ == '__main__':
     run()
+
+

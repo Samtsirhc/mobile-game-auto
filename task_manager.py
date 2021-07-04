@@ -34,9 +34,14 @@ class TaskManager():
         self.threads = []
 
     def stop_all(self):
-        for i in self.threads:
-            stop_thread(i)
-        self.threads = []
+        try:
+            for i in self.threads:
+                stop_thread(i)
+            self.threads = []
+            return '已经停止所有脚本'
+        except Exception as e:
+            return str(e)
+
 
     def load_config(self):
         self.pcr = load_json('config/pcr.json')

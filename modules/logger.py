@@ -72,7 +72,7 @@ class Logger():
         self._logger.addHandler(handler)
     
     def get_format(self):
-        self.fmt = logging.Formatter(fmt='[%(asctime)s] [%(levelname)s]: %(message)s',
+        self.fmt = logging.Formatter(fmt='[%(asctime)s] [%(levelname)s] [%(filename)s] [%(lineno)d]: %(message)s',
                                 datefmt='%H:%M:%S')    # datefmt='%Y-%m-%d %H:%M:%S'
     def set_flt(self, logger_name):
         flt = logging.Filter(logger_name)

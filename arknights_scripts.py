@@ -158,14 +158,15 @@ def 去战斗():
 def 选择关卡():
     去战斗()
     while True:
-        if emulator.find_img(f'关卡已选择'):
+        if emulator.find_img(["关卡已选择", "关卡已选择2"]):
             break
         # emulator.find_and_click(['物资筹备', '战术演习', 'LS-5'])
         # emulator.find_and_click(["源石尘行动","行动记录","OD-6"])
         # emulator.find_and_click(['画中人','入画','WR-3'])
         # emulator.find_and_click(["遗尘漫步", "漫漫独行", "WD-4"])
         # emulator.find_and_click(["覆潮之下", "荒败盐风", "SV-6"])
-        emulator.find_and_click(["灯火序曲", "路线安排", "PL-4"])
+        # emulator.find_and_click(["灯火序曲", "路线安排", "PL-4"])
+        emulator.find_and_click(["联锁竞赛", "始发营地", "FIN-TS"])
     pass
 
 
@@ -453,15 +454,8 @@ def ark_run(tasks):
 
 if __name__ == "__main__":
     a = [
-        "登录方舟",
-        "基建收菜",
-        "基建换班",
-        "使用无人机",
-        "剿灭",
-        "刷土",
-        "循环挑战",
-        "信用点",
-        "公开招募",
-        "收日常任务"
+
+        "循环挑战"
+
     ]
     ark_run(a)

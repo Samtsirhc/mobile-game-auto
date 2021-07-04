@@ -77,12 +77,25 @@ class UnitManager():
                 i['count'] += 1
         self.write_imgs_data()
 
-    def get_img(self, unit):
+    def get_img(self, unit, re_type: 0):
         if '1' not in unit and '2' not in unit and type(unit) != int:
             unit = name2id(unit)
-        return self.imgs[unit + '.webp']
+        if re_type == 0:
+            return self.imgs[unit + '.webp']
+        else:
+            _ids = []
+            _ids.append(str(int(unit) +10))
+            _ids.append(str(int(unit) +30))
+            _ids.append(str(int(unit) +60))
+            _imgs = []
+            for i in _ids:
+                try:
+                    _imgs.append(self.imgs[i + '.webp'])
+                except:
+                    pass
+            return _imgs
 
-    def reg_wife(self, img, resize=80, similarity=0.9):
+    def reg_wife(self, img, resize=80, similarity=0.85):
         _tmp = '未知'
         for i in self.imgs_data:
             try:
@@ -93,6 +106,7 @@ class UnitManager():
             _res = match_image(img, _bg)
             # print(f'{_res} *** {i["name"]}')
             if _res > similarity:
+                # print(_res)
                 self.add_count(i['file_name'])
                 # print(i['name'])
                 _tmp = i['name']
@@ -100,6 +114,9 @@ class UnitManager():
         return _tmp
 
 if __name__ == "__main__":
-    unit_imgs_path = 'pcr_data/unit_imgs/'
-    a = os.listdir(unit_imgs_path)
-    print(a)
+    u = UnitManager()
+    a = load_img('1.jpg')
+    for i in range(110,140):
+        b = u.reg_wife(a, i)
+        print(f'{b} {i}')
+    # 95

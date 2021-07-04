@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import nonebot
-from nonebot.adapters.cqhttp import Bot as CQHTTPBot
+from nonebot_adapter_gocq import Bot as GOCQBot
 
 # Custom your logger
 # 
@@ -18,9 +18,8 @@ nonebot.init()
 app = nonebot.get_asgi()
 
 driver = nonebot.get_driver()
-driver.register_adapter("cqhttp", CQHTTPBot)
+driver.register_adapter("gocq", GOCQBot)
 
-nonebot.load_builtin_plugins()
 nonebot.load_from_toml("pyproject.toml")
 
 # Modify some config / config depends on loaded configs

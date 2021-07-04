@@ -61,8 +61,30 @@ def get_all_files_name(path):
     # os.path.dirname(__file__) + '/' + 
     pass
     
+def list_combinate(my_list, N, n):
+        '''
+        输入N = n
+        my_list要是list
+        长度大于等于N
+        '''
+        _res = []
+        if n == N:
+            _my_list = [[i] for i in my_list]
+        else:
+            _my_list = my_list
+        lens = len(_my_list)
+        if n < 0 or type(n) != int:
+            raise ValueError
+        if n == 1 or lens < n:
+            return _my_list
+        else:
+            for i in range(lens - n + 1):
+                _list = list_combinate(_my_list[i+1:], N, n-1)
+                for j in _list:
+                    _res.append(j + _my_list[i])
+        return _res
 if __name__ == "__main__":
-    a = {'1':2}
-    write_json('/1.json', a)
-    pass
+    a = [[1,2,3],[1,2,4],[23,4],'aaa']
+    count = 3
+    print(list_combinate(a,count,count))
 

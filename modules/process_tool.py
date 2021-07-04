@@ -40,5 +40,9 @@ def check_process(name):
 
 #关闭某进程
 def close_process(Name):
-    ExePath = "taskkill /IM " + Name + " /F"
-    os.system(ExePath)
+    try:
+        ExePath = "taskkill /IM " + Name + " /F"
+        os.system(ExePath)
+        return '成功关闭 ' + Name
+    except Exception as e:
+        return str(e)
