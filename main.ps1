@@ -6,3 +6,6 @@ nb run"
 Start-Sleep -Seconds 10
 Start-Process powershell -ArgumentList "-noexit", "-noprofile", "-command & cd ~\Desktop\mobile-game-auto
 python http_server.py"
+Start-Sleep -Seconds 3
+Start-Process powershell -ArgumentList "-noexit", "-noprofile", "-command & cd ~\Desktop\mobile-game-auto
+python my_schedule.py"

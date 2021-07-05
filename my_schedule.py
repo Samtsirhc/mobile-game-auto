@@ -1,0 +1,23 @@
+import schedule
+import requests
+import time
+
+ARK_COMMAND = '方舟 日常刷石头'
+PCR_COMMMAND = 'pcr 日常'
+
+url = "http://127.0.0.1:8888/"
+
+def send_command(command):
+    _res = requests.post(url, data = str(command).encode())
+
+schedule.every().day.at("8:30").do(send_command,(ARK_COMMAND))
+schedule.every().day.at("13:00").do(send_command,(PCR_COMMMAND)) 
+schedule.every().day.at("15:30").do(send_command,(ARK_COMMAND))
+schedule.every().day.at("23:30").do(send_command,(ARK_COMMAND))
+
+if __name__ == "__main__":
+    while True:
+        schedule.run_pending()
+        time.sleep(30)
+    
+
