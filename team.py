@@ -92,6 +92,19 @@ class TeamManager:
                 return False
         return True
 
+    def role_available(self, roles):
+        if type(roles) == list:
+            _tmp = roles + self.unget_roles
+            if len(set(_tmp)) == len(_tmp):
+                return True
+            else:
+                return False
+        else:
+            if roles in self.unget_roles:
+                return False
+            else:
+                return True
+
     def init_unget_role(self):
         self.unget_roles = load_json(unget_roles_file)['unget_roles']
         for i in range(len(self.unget_roles)):
@@ -190,34 +203,15 @@ class TeamManager:
         _safe_teams = get_unused_teams(self.pjjc_atk, self.unget_roles)
         _safe_team_group = get_conflict_free_teams(_safe_teams, used, count)
         if _safe_team_group == []:
-            if count == 3:
-                _teams = self.get_best_teams(used, 2)
-                for i in _teams:
-                    used += i
-                _tmp = []
-                for _ in range(5):
-                    _role = add_role(used)
-                    used += _role
-                    _tmp.append(_role)
-                _teams.append(_tmp)
-            if count == 2:
-                _teams = self.get_best_teams(used, 1)
-                for i in _teams:
-                    used += i
-                _tmp = []
-                for _ in range(5):
-                    _role = add_role(used)
-                    used += _role
-                    _tmp.append(_role)
-                _teams.append(_tmp)
-            else:
-                _teams = []
-                _tmp = []
-                for _ in range(5):
-                    _role = add_role(used)
-                    used += _role
-                    _tmp.append(_role)
-                _teams.append(_tmp)
+            _teams = self.get_best_teams(used, count - 1)
+            for i in _teams:
+                used += i
+            _tmp = []
+            for _ in range(5):
+                _role = add_role(used)
+                used += _role
+                _tmp.append(_role)
+            _teams.append(_tmp)
             return _teams
         else:
             _safe_team_group = sorted(_safe_team_group, key=lambda i: i['rate'], reverse=True)

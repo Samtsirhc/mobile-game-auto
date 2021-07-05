@@ -1,12 +1,14 @@
 import ctypes
 import inspect
-
-from modules.tools import load_json
-from threading import Thread
-from modules.process_tool import close_process
 import time
+from threading import Thread
+
 from arknights_scripts import ark_run
+from modules.process_tool import close_process
+from modules.tools import load_json
 from pcr_scripts import pcr_run
+from emulator import Emulator
+
 
 def _async_raise(tid, exctype):
     """raises the exception, performs cleanup if needed"""
@@ -38,19 +40,19 @@ class TaskManager():
             for i in self.threads:
                 stop_thread(i)
             self.threads = []
+            e = Emulator()
+            e.connect()
+            e.kill_app()
             return '已经停止所有脚本'
         except Exception as e:
             return str(e)
 
-
     def load_config(self):
         self.pcr = load_json('config/pcr.json')
         self.arknights = load_json('config/arknights.json')
-    
+
     def close_emu(self):
         close_process('Nox.exe')
-
-
 
     def run_task(self, task):
         _task = None
@@ -68,6 +70,7 @@ class TaskManager():
             return '成功'
         except Exception as e:
             return str(e)
+
 
 if __name__ == "__main__":
     t = TaskManager()

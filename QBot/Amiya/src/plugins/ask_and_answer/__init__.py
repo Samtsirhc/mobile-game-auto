@@ -5,8 +5,10 @@ from nonebot import on_command, on_message, on_startswith
 from nonebot.adapters import Bot, Event
 from nonebot.rule import startswith, to_me
 from nonebot.typing import T_State
-
+from nonebot.adapters.cqhttp.utils import escape, unescape
+from nonebot.adapters.cqhttp import MessageSegment
 from .data import Question
+from requests import get
 
 answers = {}
 
@@ -20,7 +22,7 @@ for qu in Question.select():
         answers[qu.quest] = {}
     answers[qu.quest][union(qu.rep_group, qu.rep_member)] = qu.answer
 
-ask = on_message(priority=1)
+ask = on_message(priority=99)
 
 @ask.handle()
 async def handle_first_receive(bot: Bot, event: Event, state: T_State):
@@ -110,11 +112,17 @@ async def answer(bot: Bot, event: Event, state: T_State):
     ans = answers.get(state['raw_message'])
     if ans:
         a = ans.get(union(state['group_id'], state['user_id']))
+        print(state['group_id'])
         if a:
-           await ask.finish(a)
+            if state['group_id'] != 0:
+                get(f'http://127.0.0.1:5700/send_group_msg?group_id={state["group_id"]}&&message={a}')
+            else:
+                get(f'http://127.0.0.1:5700/send_private_msg?&user_id={state["user_id"]}&message={a}')
+            await ask.finish()
         a = ans.get(union(state['group_id'], 1))
         if a:
-            await ask.finish(a)
+            get(f'http://127.0.0.1:5700/send_group_msg?group_id={state["group_id"]}&message={a}')
+            await ask.finish()
 
 async def nothing():
     return None

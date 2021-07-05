@@ -13,7 +13,7 @@ from config import get_logger
 from modules.image_tool import load_img, match_image
 from modules.orc import Orc
 from modules.path_tool import get_files
-from modules.process_tool import check_process, run_sth
+from modules.process_tool import check_process, run
 
 logger = get_logger()
 
@@ -33,6 +33,7 @@ class Emulator:
         if check_process("Nox.exe"):
             pass
         else:
+            run('%USERPROFILE%/Desktop/Nox.lnk')
             logger.info('启动模拟器')
             time.sleep(30)
         self.emulator = u2.connect()  # python -m uiautomator2 init
@@ -236,7 +237,5 @@ class Emulator:
 
 
 if __name__ == "__main__":
-    a = [1,2,3]
-    b = [2,3]
-    print(a+b)
+    run('%USERPROFILE%/Desktop/1.txt')
     pass

@@ -7,6 +7,7 @@ from modules.process_tool import close_process
 from modules.tools import load_json, write_json
 from task_manager import TaskManager
 from config import get_logger
+from team import TeamManager
 
 
 logger = get_logger()
@@ -15,11 +16,23 @@ t = TaskManager()
 STOP_COMMAND = ['停止', '停止脚本']
 RESTART_COMMAND = ['重启', '重启模拟器', '关闭']
 ADD_TEAM_COMMAND = ['添加', '增加']
+JJC_COMMAND = ['怎么拆', 'jjc查询']
 
 pcr_atk_path = 'pcr_data/team_data/pjjc_atk.json'
+tm = TeamManager()
 
 def handle_task(task):
-    if task in STOP_COMMAND:
+    if task.startswith(JJC_COMMAND[0]) or task.startswith(JJC_COMMAND[1]):
+        _team = []
+        _team = task.split(' ')
+        _team.pop(0)
+        if len(_team) != 5:
+            return '人数不足5或命令错误，示例：jjc查询 角色1 角色2 角色3 角色4 角色5，输入查询不到的角色或无答案的阵容将返回空'
+        _teams = tm.serch(_team)
+        _res = ''
+        for i in _teams:
+            _res += str(i) + '\n'
+    elif task in STOP_COMMAND:
         _res = t.stop_all()
     elif task in RESTART_COMMAND:
         _res = t.stop_all() + '\n'
@@ -54,7 +67,7 @@ class Handler(BaseHTTPRequestHandler):
         content_length = int(self.headers['Content-Length'])
         post_data = self.rfile.read(content_length)  # Get the data
         data = post_data.decode('utf-8')
-        logger.info(f"[POST] " + data)
+        # logger.info(f"[POST] " + data)
         self.do_HEAD()
 
         # 处理命令

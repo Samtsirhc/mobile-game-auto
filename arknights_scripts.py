@@ -16,6 +16,8 @@ START_APP_NAME = "com.hypergryph.arknights"
 
 @emulator.dir_decorator
 def 登录方舟():
+    emulator.kill_app("tw.sonet.princessconnect")
+    emulator.kill_app("com.netease.uu")
     emulator.run_app(START_APP_NAME)
     time.sleep(10)
     while not emulator.find_img(f'鹰角图标'):
@@ -39,9 +41,10 @@ def 登录方舟():
         if emulator.find_img(f'在主页'):
             _tmp += 1
 
-
+@emulator.dir_decorator
 def 结束():
     emulator.kill_app(START_APP_NAME)
+    
 
 
 @emulator.dir_decorator
