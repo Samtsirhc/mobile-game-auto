@@ -10,12 +10,13 @@ url = "http://127.0.0.1:8888/"
 def send_command(command):
     _res = requests.post(url, data = str(command).encode())
 
-schedule.every().day.at("8:30").do(send_command,(ARK_COMMAND))
-schedule.every().day.at("13:00").do(send_command,(PCR_COMMMAND)) 
-schedule.every().day.at("15:30").do(send_command,(ARK_COMMAND))
-schedule.every().day.at("23:30").do(send_command,(ARK_COMMAND))
+schedule.every().day.at("08:30:00").do(send_command,(ARK_COMMAND))
+schedule.every().day.at("13:00:00").do(send_command,(PCR_COMMMAND)) 
+schedule.every().day.at("15:30:00").do(send_command,(ARK_COMMAND))
+schedule.every().day.at("23:30:00").do(send_command,(ARK_COMMAND))
 
 if __name__ == "__main__":
+    print("==========开始执行每日任务==========")
     while True:
         schedule.run_pending()
         time.sleep(30)
