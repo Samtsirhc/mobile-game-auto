@@ -42,8 +42,7 @@ class TaskManager():
             self.threads = []
             e = Emulator()
             e.connect()
-            e.kill_app()
-            return '已经停止所有脚本'
+            return f'已经停止 {str(i)}'
         except Exception as e:
             return str(e)
 

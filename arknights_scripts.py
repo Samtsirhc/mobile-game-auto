@@ -7,12 +7,14 @@ import time
 
 from emulator import Emulator
 from modules.periodic import Periodic
+from modules.process_tool import close_process
 
 log_list = ["剿灭", "周任务"]
 weekly = Periodic(log_list, 'Arknights', 7, 'logs/')
 
 emulator = Emulator("imgs/arknights/")
 START_APP_NAME = "com.hypergryph.arknights"
+
 
 @emulator.dir_decorator
 def 登录方舟():
@@ -41,10 +43,12 @@ def 登录方舟():
         if emulator.find_img(f'在主页'):
             _tmp += 1
 
+
 @emulator.dir_decorator
 def 结束():
     emulator.kill_app(START_APP_NAME)
-    
+    close_process('Nox.exe')
+    close_process('NoxVMHandle.exe')
 
 
 @emulator.dir_decorator
@@ -127,6 +131,7 @@ def 基建收菜():
 @emulator.dir_decorator
 def 使用无人机():
     进入基建()
+
     while True:
         emulator.find_and_click(['贸易站1', '贸易站2', '贸易站3'])
         if emulator.find_img(f'获取中'):
@@ -146,6 +151,32 @@ def 使用无人机():
                 emulator.click((959, 338))
                 emulator.click((959, 338))
                 emulator.click((956, 588))
+
+
+@emulator.dir_decorator
+def 制造站补货():
+    进入基建()
+
+    while True:
+        emulator.find_and_click(['制造站1'])
+        if emulator.find_img(f'在制造站'):
+            break
+    while True:
+        emulator.click((148, 646))
+        if emulator.find_img(f'在设施列表'):
+            break
+    _xys = [(138, 207), (138, 293), (138, 380), (138, 454)]
+    for i in _xys:
+        for _ in range(3):
+            time.sleep(0.3)
+            emulator.click(i)
+        for _ in range(3):
+            time.sleep(0.3)
+            emulator.click((966, 206))
+        for _ in range(3):
+            time.sleep(0.3)
+            emulator.click((951, 599))
+        time.sleep(5)
 
 
 @emulator.dir_decorator
@@ -456,9 +487,10 @@ def ark_run(tasks):
 
 
 if __name__ == "__main__":
-    a = [
-
-        "循环挑战"
-
-    ]
-    ark_run(a)
+    emulator.connect()
+    t = time.time()
+    for i in range(20):
+        print(i)
+        emulator.take_shot()
+    t = t - time.time()
+    print(t)

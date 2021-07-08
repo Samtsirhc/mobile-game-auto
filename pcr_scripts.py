@@ -11,6 +11,8 @@ from modules.periodic import Periodic
 from modules.tools import load_img
 from team import TeamManager
 from unit import UnitManager
+from modules.process_tool import close_process
+
 
 log_list = ["MANA冒险", "经验值冒险", "地下城", "点赞", "JJC", "PJJC"]
 daily = Periodic(log_list, 'PCR', 1, 'logs/')
@@ -19,6 +21,24 @@ emulator = Emulator(img_path)
 START_APP_NAME = "com.netease.uu"
 APP_NAME = "tw.sonet.princessconnect"
 logger = get_logger()
+
+
+class WhiteList:
+    def __init__(self):
+        self.load_white_list()
+
+    def load_white_list(self):
+        _white_list_path = 'pcr_data/white_list/000.jpg'
+        self.white_list = load_img(_white_list_path)
+
+    def check(self, target):
+        target.save('faf.jpg')
+        target = load_img('faf.jpg')
+        os.remove('faf.jpg')
+        if emulator.find_img(img = target, bg = self.white_list):
+            return True
+        else:
+            return False
 
 
 class JJCSearcher:
@@ -51,9 +71,10 @@ def 登录PCR():
     emulator.run_app(START_APP_NAME)
     while not emulator.check_app(APP_NAME):
         emulator.find_and_click(['我的', '加速'], [(-230, 10), (578, 37)])
+        time.sleep(1)
     while not emulator.find_img('商店'):
         time.sleep(1)
-        emulator.find_and_click(['下载', '关闭', '生日快乐'])
+        emulator.find_and_click(['下载', '关闭', '生日快乐', '生日1', '生日2', '生日3'])
         emulator.click((650, 620))
         if emulator.find_img('请选择角色'):
             兰德索尔杯()
@@ -95,10 +116,13 @@ def 选择进攻队伍(used=None):
     选择角色(_team)
     return _team
 
+
 @emulator.dir_decorator
 def 结束():
     emulator.kill_app(APP_NAME)
     emulator.kill_app(START_APP_NAME)
+    close_process('Nox.exe')
+    close_process('NoxVMHandle.exe')
 
 
 @emulator.dir_decorator
@@ -213,14 +237,14 @@ def 商店购物():
             time.sleep(1)
 
         for i in range(4):
-            emulator.click((517 + i* 230, 205))
+            emulator.click((517 + i * 230, 205))
             time.sleep(0.5)
 
         while _step == 1:
-            emulator.find_and_click(['一次购买','OK'])
+            emulator.find_and_click(['一次购买', 'OK'])
             if emulator.find_img('立即更新'):
                 _step += 1
-    
+
     def 地下城商店():
         进入商店()
         _step = 0
@@ -231,22 +255,16 @@ def 商店购物():
             time.sleep(1)
 
         for i in range(4):
-            emulator.click((517 + i* 230, 205))
+            emulator.click((517 + i * 230, 205))
             time.sleep(1)
 
         while _step == 1:
-            emulator.find_and_click(['一次购买','OK'])
+            emulator.find_and_click(['一次购买', 'OK'])
             if emulator.find_img('立即更新'):
                 _step += 1
 
     一般商店()
     地下城商店()
-
-
-        
-        
-        
-        
 
 
 @ emulator.dir_decorator
@@ -333,6 +351,7 @@ def 求装备():
         if emulator.find_img(['请求状况', '无战队']):
             break
 
+
 @ emulator.dir_decorator
 def 选择角色(names):
     '''
@@ -409,7 +428,7 @@ def 打双场():
             else:
                 time.sleep(1)
         while _step == 2:
-            emulator.find_and_click(['取消','更新清单'], [(0, 0),(16,93)])
+            emulator.find_and_click(['更新清单'], [(16, 93)])
             if emulator.find_img('次数上限'):
                 daily.finish('JJC')
                 return
@@ -424,12 +443,14 @@ def 打双场():
             emulator.find_and_click(['战斗开始', '下一步'])
             if emulator.find_img('更新清单'):
                 _step += 1
-            time.sleep(3)
+            time.sleep(15)
+    w = WhiteList()
 
     def 打PJJC():
-        if daily.check('PJJC'):
-            return
+        # if daily.check('PJJC'):
+        #     return
         去冒险()
+        count = 0
         _step = 0
         while _step == 0:
             if emulator.find_img('更新清单'):
@@ -441,14 +462,35 @@ def 打双场():
             else:
                 time.sleep(1)
         while _step == 2:
-            emulator.find_and_click(['更新清单', '取消'], [(-16, 93),(0,0)])
-            if emulator.find_img('次数上限'):
+            count += 1
+            if count > 5:
                 daily.finish('PJJC')
                 return
-            if emulator.find_img('我的队伍'):
-                _step += 1
+            _white_xy = [(642, 199, 694, 218), 
+                         (642, 354, 694, 373),
+                         (642, 509, 694, 528)]
+            _white_imgs = emulator.take_img(_white_xy)
+            _res = False
+            for i in range(3):
+                _res = w.check(_white_imgs[i])
+                if not _res:
+                    emulator.click((852, 232+i * 158))
+                    time.sleep(0.5)
+                    break
+            else:
+                emulator.click((1146, 124))
+                time.sleep(5)
+            if not _res:
+                while True:
+                    if emulator.find_img('次数上限'):
+                        daily.finish('PJJC')
+                        return
+                    if emulator.find_img('我的队伍'):
+                        _step += 1
+                        break
         _used = searcher.t.unget_roles.copy()
         _teams = []
+
         if _step == 3:
             # 清空队伍
             for _ in range(3):
@@ -474,10 +516,12 @@ def 打双场():
                         _team1 = [_teams[i]]
                         _used_ = _used.copy() + _team1[0]
                         _team23, _rate_ = searcher.t.get_best_teams(_used_, 2)
-                        _teams_list.append({'teams':_team1 + _team23, 'rate':_rate_})
+                        _teams_list.append(
+                            {'teams': _team1 + _team23, 'rate': _rate_})
                         if _rate_ > 1.99:
                             break
-                    _teams_list = sorted(_teams_list, key=lambda i: i['rate'], reverse=True)
+                    _teams_list = sorted(
+                        _teams_list, key=lambda i: i['rate'], reverse=True)
                     _teams = _teams_list[0]['teams']
                     _rate = _teams_list[0]['rate'] + 1.0
             logger.info(f'胜率{_rate}，队伍{_teams}')
@@ -500,12 +544,12 @@ def 打双场():
             if emulator.find_img('下一步'):
                 _step += 1
             else:
-                time.sleep(3)
+                time.sleep(15)
         if _step == 5:
             _fight_res = []
-            _xy = [(68, 202, 291, 312),(68, 342, 291, 452),(68, 482, 291, 592)]
+            _xy = [(68, 202, 291, 312), (68, 342, 291, 452), (68, 482, 291, 592)]
             _res_img = emulator.take_img(_xy)
-            _count_game = [0,0,0]
+            _count_game = [0, 0, 0]
             for i in range(3):
                 _count_game[0] += 1
                 _res_img[i].save('_tmpp.jpg')
@@ -525,11 +569,10 @@ def 打双场():
             emulator.find_and_click('下一步')
             if emulator.find_img('更新清单'):
                 _step += 1
-    
+
     for _ in range(5):
         打JJC()
         打PJJC()
-
 
 
 def pcr_run(tasks):
@@ -538,7 +581,35 @@ def pcr_run(tasks):
         exec(f'{i}()')
 
 
+@ emulator.dir_decorator
+def 好感度():
+    _step = 1
+    while _step == 1:
+        emulator.find_and_click(['羁绊剧情', 'Rank提升'])
+        if emulator.find_img('赠送'):
+            _step += 1
+    while _step == 2:
+        if emulator.find_img('MAX'):
+            _step += 10
+        else:
+            _step += 1
+    while _step == 3:
+        for _ in range(3):
+            emulator.click((869, 300))
+            time.sleep(0.3)
+        for _ in range(3):
+            emulator.click((800, 641))
+            time.sleep(0.3)
+        _step += 1
+        time.sleep(3)
+    while _step > 3:
+        emulator.find_and_click(['关闭', '取消', '关闭2'])
+        if emulator.find_img('羁绊剧情'):
+            break
+    emulator.click((1240, 361))
+
+
 if __name__ == "__main__":
-    # logger.setLevel(logging.DEBUG)
+    logger.setLevel(logging.DEBUG)
     emulator.connect()
-    商店购物()
+    打双场()

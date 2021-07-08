@@ -50,6 +50,7 @@ class Periodic():
             print('error!!!!!!!!!!!!')
     
     def check(self, key):
+        self.check_log()
         return self.log[key]
 
     def finish(self, key):

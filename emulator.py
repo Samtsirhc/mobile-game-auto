@@ -30,10 +30,11 @@ class Emulator:
         self.no_log = ['进入基建', '去战斗', '去冒险', '去首页', '选择角色']
 
     def connect(self):
-        if check_process("Nox.exe"):
+        em_name =  'Nox' # 'Nox' 'dnplayer'
+        if check_process(f"{em_name}.exe"):
             pass
         else:
-            run('%USERPROFILE%/Desktop/Nox.lnk')
+            run(f'%USERPROFILE%/Desktop/{em_name}.lnk')
             logger.info('启动模拟器')
             time.sleep(30)
         self.emulator = u2.connect()  # python -m uiautomator2 init
@@ -141,21 +142,23 @@ class Emulator:
         _tmp = False
         if type(img) != list:
             img = [img]
+        if type(bg) == int:
+            bg = self.screen_shot
         for i in img:
             if type(i) == str:
                 _img = self.imgs[self.current_dir][i]['img']
-                if type(bg) == int:
-                    bg = self.screen_shot
                 _xy = match_image(_img, bg)
                 self.imgs[self.current_dir][i]['coordinate'] = _xy
                 logger.debug(f'{i} {_xy}')
                 if self.check_img_xy(i):
                     _tmp = True
             else:
-                _xy = match_image(i, self.screen_shot)
+                _xy = match_image(i, bg)
                 logger.debug(f'{_xy}')
-                if return_type == 1 and _xy[0] > 0:
-                    _tmp = _xy
+                if _xy[0] > 0:
+                    _tmp = True
+                    if return_type == 1 :
+                        _tmp = _xy
         return _tmp
 
     def check_img_xy(self, img):
