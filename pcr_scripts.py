@@ -5,6 +5,7 @@ import time
 
 from cv2 import cv2
 
+import random
 from config import get_logger
 from emulator import Emulator
 from modules.periodic import Periodic
@@ -413,6 +414,45 @@ def 打双场():
     if daily.check('JJC') and daily.check('PJJC'):
         return None
 
+    w = WhiteList()
+    def 选择对手(mode):
+        '''
+        mode = 'JJC'  'PJJC'
+        return 0 选择好了 1 打完了
+        '''
+        _step = 1
+        _white_xy = [(642, 199, 694, 218), (642, 354, 694, 373), (642, 509, 694, 528)]
+        while _step == 1:
+            if emulator.find_img(['冷却完成', '冷却完成2']):
+                _step += 1
+            else:
+                time.sleep(1)
+        _count = 0
+        while _step == 2:
+            # 白名单
+            _white_imgs = emulator.take_img(_white_xy)
+            _res = 3
+            for i in range(3):
+                if not w.check(_white_imgs[i]):
+                    _res = i
+                    break
+            if _res < 3:
+                while True:
+                    emulator.find_and_click('更新清单', (-276, 124 + _res* 155))
+                    time.sleep(0.5)
+                    emulator.find_and_click(['已经更新', '正在对战', '正在对战2'], [(0, 155), (0, 162), (0, 162)])
+                    if emulator.find_img('次数上限'):
+                        daily.finish(mode)
+                        return 1
+                    if emulator.find_img('我的队伍'):
+                        return 0
+            else:
+                _count += 1
+                if _count > 5:
+                    daily.finish(mode)
+                    return 1
+
+        
     def 打JJC():
         if daily.check('JJC'):
             return
@@ -422,16 +462,11 @@ def 打双场():
             if emulator.find_img('更新清单'):
                 _step += 1
             emulator.find_and_click(['战斗竞技场', '取消'])
-        while _step == 1:
-            if emulator.find_img(['冷却完成', '冷却完成2']):
-                _step += 1
-            else:
-                time.sleep(1)
+        if 选择对手('JJC') == 0:
+            _step += 1
+        else:
+            return
         while _step == 2:
-            emulator.find_and_click(['更新清单'], [(16, 93)])
-            if emulator.find_img('次数上限'):
-                daily.finish('JJC')
-                return
             if emulator.find_img('我的队伍'):
                 # 清空角色栏
                 for _ in range(10):
@@ -440,58 +475,32 @@ def 打双场():
                 _step += 1
         选择进攻队伍()
         while _step == 3:
+            time.sleep(5)
             emulator.find_and_click(['战斗开始', '下一步'])
             if emulator.find_img('更新清单'):
                 _step += 1
-            time.sleep(15)
-    w = WhiteList()
+    
 
     def 打PJJC():
-        # if daily.check('PJJC'):
-        #     return
+        if daily.check('PJJC'):
+            return
         去冒险()
-        count = 0
         _step = 0
         while _step == 0:
             if emulator.find_img('更新清单'):
                 _step += 1
             emulator.find_and_click(['公主竞技场', '取消'])
-        while _step == 1:
-            if emulator.find_img(['冷却完成', '冷却完成2']):
-                _step += 1
-            else:
-                time.sleep(1)
-        while _step == 2:
-            count += 1
-            if count > 5:
-                daily.finish('PJJC')
-                return
-            _white_xy = [(642, 199, 694, 218), 
-                         (642, 354, 694, 373),
-                         (642, 509, 694, 528)]
-            _white_imgs = emulator.take_img(_white_xy)
-            _res = False
-            for i in range(3):
-                _res = w.check(_white_imgs[i])
-                if not _res:
-                    emulator.click((852, 232+i * 158))
-                    time.sleep(0.5)
-                    break
-            else:
-                emulator.click((1146, 124))
-                time.sleep(5)
-            if not _res:
-                while True:
-                    if emulator.find_img('次数上限'):
-                        daily.finish('PJJC')
-                        return
-                    if emulator.find_img('我的队伍'):
-                        _step += 1
-                        break
+
+        if 选择对手('JJC') == 0:
+            _step += 2
+        else:
+            return
+
         _used = searcher.t.unget_roles.copy()
         _teams = []
 
         if _step == 3:
+
             # 清空队伍
             for _ in range(3):
                 for _ in range(10):
@@ -502,6 +511,7 @@ def 打双场():
                 emulator.click((128, 115))
                 time.sleep(0.5)
                 pass
+
             if emulator.find_with('问号', '我的队伍') == 2:
                 # 第一队不可见
                 _teams, _rate = searcher.t.get_best_teams(_used, 3)

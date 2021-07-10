@@ -57,13 +57,13 @@ class Team:
 
     def serch_in_net(self, team):
         self.payload['def'] = team
-        _re = requests.post(self.search_url, data=json.dumps(
-            self.payload), headers=self.headers)
-        _re = json.loads(_re.text)
         try:
+            _re = requests.post(self.search_url, data=json.dumps(
+            self.payload), headers=self.headers)
+            _re = json.loads(_re.text)
             _row_data = _re['data']['result']
         except:
-            l.info(_re)
+            l.info('请求远端JJC解法失败')
             return []
         _teams = []
         for i in _row_data:
@@ -218,6 +218,11 @@ class TeamManager:
             return (_safe_team_group[0]['teams'], _safe_team_group[0]['rate'])
 
 if __name__ == "__main__":
-    a = TeamManager()
-    a.write_pjjc_data()
-
+    # a = TeamManager()
+    # b = a.serch(['羊驼', '子龙', '蕾姆', '依里', '暴击弓'])
+    # print(b)
+    url = r"https://server.whitemagic2014.com/pcrjjc/api/temp"
+    headers = {"authorization": '720828494',
+                        'User-Agent': 'PostmanRuntime/7.28.0', 'content-type': 'application/json'}
+    payload = {"def": [], "region": 3}
+    requests.post(url, headers = headers)
