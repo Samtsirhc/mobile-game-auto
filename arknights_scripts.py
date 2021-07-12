@@ -423,13 +423,13 @@ def 剿灭():
                     _res = False
                 break
         while not emulator.find_img('剿灭已选择'):
-            emulator.find_and_click(['潮没海滨', '长期剿灭委托'], [(0, 0), (-50, 100)])
+            emulator.find_and_click('长期剿灭委托', (-50, 100))
             time.sleep(1)
         return _res
 
     去战斗()
     while not emulator.find_img('剿灭已选择'):
-        emulator.find_and_click(['剿灭作战', '汐斯塔'])
+        emulator.find_and_click(['剿灭作战', '伊比利亚'])
         time.sleep(1)
     if 检查():
         return True
