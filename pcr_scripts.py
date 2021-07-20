@@ -72,10 +72,10 @@ def 登录PCR():
     emulator.run_app(START_APP_NAME)
     while not emulator.check_app(APP_NAME):
         emulator.find_and_click(['我的', '加速'], [(-230, 10), (578, 37)])
-        time.sleep(1)
+        time.sleep(3)
     while not emulator.find_img('商店'):
-        time.sleep(1)
-        emulator.find_and_click(['下载', '关闭', '生日快乐', '生日1', '生日2', '生日3'])
+        time.sleep(3)
+        emulator.find_and_click(['下载', '关闭', '生日快乐', '生日1', '生日2', '生日3', '主页未激活'])
         emulator.click((650, 620))
         if emulator.find_img('请选择角色'):
             兰德索尔杯()

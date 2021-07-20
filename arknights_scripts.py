@@ -20,28 +20,39 @@ START_APP_NAME = "com.hypergryph.arknights"
 def 登录方舟():
     emulator.kill_app("tw.sonet.princessconnect")
     emulator.kill_app("com.netease.uu")
-    emulator.run_app(START_APP_NAME)
-    time.sleep(10)
-    while not emulator.find_img(f'鹰角图标'):
-        emulator.find_and_click(['下载资源确认', 'start'])
-    while not emulator.find_img(f'输入密码'):
-        emulator.find_and_click(['账号管理', '账号登录'])
-    while True:
-        if not emulator.find_img(f'确认密码'):
-            emulator.find_and_click(f'输入密码')
-            time.sleep(1)
-        else:
-            if not emulator.find_img(f'已输入密码'):
-                emulator.input_text('1qaz741.')
+    _step = -1
+    while _step < 99:
+        # print(emulator.emulator.app_current())
+        if _step == -1:
+            emulator.run_app(START_APP_NAME)
+            time.sleep(15)
+            _step += 1
+        if _step == 0:
+            if emulator.find_img(f'鹰角网络'): _step = -1
+            if emulator.find_img(f'鹰角图标'): _step += 1
+            time.sleep(5)
+            emulator.find_and_click(['下载资源确认', 'start'])
+        if _step == 1:
+            if emulator.find_img(f'输入密码'): _step += 1
+            emulator.find_and_click(['账号管理', '账号登录'])
+        if _step == 2:
+            if not emulator.find_img(f'确认密码'):
+                emulator.find_and_click(f'输入密码')
+                time.sleep(1)
             else:
-                emulator.find_and_click(f'确认密码')
-                break
-    _tmp = 0
-    while _tmp < 2:
-        emulator.find_and_click(['登录', '活动X', '月卡收货'], [
-            (0, 0), (0, 0), (0, 200)])
-        if emulator.find_img(f'在主页'):
-            _tmp += 1
+                if not emulator.find_img(f'已输入密码'):
+                    emulator.input_text('1qaz741.')
+                else:
+                    emulator.find_and_click(f'确认密码')
+                    _step += 1
+        if _step == 3:
+            _tmp = 0
+            while _tmp < 2:
+                emulator.find_and_click(['登录', '活动X', '月卡收货'], [
+                    (0, 0), (0, 0), (0, 200)])
+                if emulator.find_img(f'在主页'):
+                    _step += 100
+                    _tmp += 1
 
 
 @emulator.dir_decorator
@@ -200,8 +211,8 @@ def 选择关卡():
         # emulator.find_and_click(["遗尘漫步", "漫漫独行", "WD-4"])
         # emulator.find_and_click(["覆潮之下", "荒败盐风", "SV-6"])
         # emulator.find_and_click(["灯火序曲", "路线安排", "PL-4"])
-        emulator.find_and_click(["联锁竞赛", "始发营地", "FIN-TS"])
-    pass
+        # emulator.find_and_click(["联锁竞赛", "始发营地", "FIN-TS"])
+        emulator.find_and_click(["如我所见", "同我所历", "VI-6"])
 
 
 @emulator.dir_decorator
@@ -487,10 +498,8 @@ def ark_run(tasks):
 
 
 if __name__ == "__main__":
-    emulator.connect()
-    t = time.time()
-    for i in range(20):
-        print(i)
-        emulator.take_shot()
-    t = t - time.time()
-    print(t)
+    task = ['登录方舟']
+    ark_run(task)
+    # emulator.connect()
+    # a = emulator.emulator.app_current()
+    # print(a)
