@@ -14,7 +14,7 @@ schedule.every().day.at("09:30").do(send_command,(ARK_COMMAND))
 schedule.every().day.at("14:20").do(send_command,(PCR_COMMMAND)) 
 schedule.every().day.at("17:30").do(send_command,(ARK_COMMAND))
 # schedule.every().day.at("18:30").do(send_command,(PCR_COMMMAND)) 
-schedule.every().day.at("23:30").do(send_command,(ARK_COMMAND))
+schedule.every().day.at("22:30").do(send_command,(ARK_COMMAND))
 
 if __name__ == "__main__":
     print("==========开始执行每日任务==========")

@@ -206,13 +206,15 @@ def 选择关卡():
         if emulator.find_img(["关卡已选择", "关卡已选择2"]):
             break
         # emulator.find_and_click(['物资筹备', '战术演习', 'LS-5'])
+        # emulator.find_and_click(["密林悍将", "大酋长之路", "RI-4"])
         # emulator.find_and_click(["源石尘行动","行动记录","OD-6"])
         # emulator.find_and_click(['画中人','入画','WR-3'])
         # emulator.find_and_click(["遗尘漫步", "漫漫独行", "WD-4"])
         # emulator.find_and_click(["覆潮之下", "荒败盐风", "SV-6"])
         # emulator.find_and_click(["灯火序曲", "路线安排", "PL-4"])
         # emulator.find_and_click(["联锁竞赛", "始发营地", "FIN-TS"])
-        emulator.find_and_click(["如我所见", "同我所历", "VI-6"])
+        # emulator.find_and_click(["如我所见", "同我所历", "VI-6"])
+        emulator.find_and_click(["多索雷斯", "铁人", "DH-8"])
 
 
 @emulator.dir_decorator

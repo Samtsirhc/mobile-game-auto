@@ -3,10 +3,8 @@ import inspect
 import time
 from threading import Thread
 
-from arknights_scripts import ark_run
 from modules.process_tool import close_process
 from modules.tools import load_json
-from pcr_scripts import pcr_run
 from emulator import Emulator
 
 
@@ -60,9 +58,11 @@ class TaskManager():
             self.stop_all()
             if task_type == '方舟':
                 _task = self.arknights[task_name]
+                from arknights_scripts import ark_run
                 _thread = Thread(target=ark_run, args=(_task,))
             else:
                 _task = self.pcr[task_name]
+                from pcr_scripts import pcr_run
                 _thread = Thread(target=pcr_run, args=(_task,))
             _thread.start()
             self.threads.append(_thread)

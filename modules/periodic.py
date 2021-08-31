@@ -14,17 +14,20 @@ class Periodic():
         '''
         self.name = name
         self.dir = log_dir
-        self.init_basic_log(log_list)
-        self.set_loop_type(loop_type)
-        self.check_log()
-        
-    def init_basic_log(self, log_list):
-        self.basic_log = {}
-        for i in log_list:
-            self.basic_log[i] = False
-        self.basic_log = json.dumps(self.basic_log, ensure_ascii=False)
-
-    def check_log(self):
+        self.log_list = log_list
+        self.loop_type = loop_type
+        self.init_basic_log(self.log_list)
+        self.init()
+    
+    def init(self):
+        self.week = get_week(0, -5*3600)
+        self.date = get_time(4, -5*3600)
+        if self.loop_type == 1:
+            self.log_path = f'{self.dir}{self.name} {self.date}.json'
+        elif self.loop_type == 7:
+            self.log_path = f'{self.dir}{self.name} {self.week}.json'
+        else:
+            print('error!!!!!!!!!!!!')
         if os.path.isfile(self.log_path):
             with open(self.log_path, 'rb') as f:
                 self.log = json.load(f)
@@ -34,29 +37,21 @@ class Periodic():
                 f.write(self.basic_log)
             with open(self.log_path, 'rb') as f:
                 self.log = json.load(f)
+        pass
 
-    def set_loop_type(self, loop_type):
-        if get_time(3)[0] > 5:
-            self.week = get_week()
-            self.date = get_time(4)
-        else:
-            self.week = get_week(0, 24*3600)
-            self.date = get_time(4, 24*3600)
-        if loop_type == 1:
-            self.log_path = f'{self.dir}{self.name} {self.date}.json'
-        elif loop_type == 7:
-            self.log_path = f'{self.dir}{self.name} {self.week}.json'
-        else:
-            print('error!!!!!!!!!!!!')
-    
+    def init_basic_log(self, log_list):
+        self.basic_log = {}
+        for i in log_list:
+            self.basic_log[i] = False
+        self.basic_log = json.dumps(self.basic_log, ensure_ascii=False)
+
     def check(self, key):
-        self.check_log()
+        self.init()
         return self.log[key]
 
     def finish(self, key):
-        with open(self.log_path, 'rb') as f:
-            self.log = json.load(f)
-            self.log[key] = True
+        self.init()
+        self.log[key] = True
         with open(self.log_path, 'w', encoding = 'utf-8') as f:
             f.write(json.dumps(self.log, ensure_ascii=False))
 

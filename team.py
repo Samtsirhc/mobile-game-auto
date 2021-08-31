@@ -142,6 +142,7 @@ class TeamManager:
                 _re.append(i['name'])
             except:
                 pass
+        _pjjc_atk = []
         for i in self.pjjc_atk:
             if len(i.keys()) == 1:
                 _team = Team(i['team'])
@@ -151,10 +152,13 @@ class TeamManager:
                 i['win'] = [_now, _now, _now]
                 if i['name'] in _re or '未知' in i['team']:
                     l.info(f'移除了 {i["team"]}')
-                    self.pjjc_atk.remove(i)
                 else:
                     i['rate'] = round(len(i['win'])/len(i['total']), 3)
                     l.info(f'初始化了 {i["team"]}')
+                    _pjjc_atk.append(i)
+            else:
+                _pjjc_atk.append(i)
+            self.pjjc_atk = _pjjc_atk
         self.write_pjjc_data()
 
     def serch(self, team):
@@ -219,6 +223,5 @@ class TeamManager:
 
 if __name__ == "__main__":
     a = TeamManager()
-    b = a.serch(['羊驼', '子龙', '蕾姆', '依里', '暴击弓'])
-    print(b)
+    # print(b)
 

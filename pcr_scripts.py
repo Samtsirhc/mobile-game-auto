@@ -68,10 +68,12 @@ searcher = JJCSearcher()
 @emulator.dir_decorator
 def 登录PCR():
     emulator.kill_app(APP_NAME)
+    emulator.kill_app(START_APP_NAME)
     emulator.kill_app("com.hypergryph.arknights")
-    emulator.run_app(START_APP_NAME)
+    # emulator.run_app(START_APP_NAME)
     while not emulator.check_app(APP_NAME):
-        emulator.find_and_click(['我的', '加速'], [(-230, 10), (578, 37)])
+        # emulator.find_and_click(['我的', '加速'], [(-230, 10), (245, 16)])
+        emulator.find_and_click("pcr")
         time.sleep(3)
     while not emulator.find_img('商店'):
         time.sleep(3)
@@ -82,6 +84,7 @@ def 登录PCR():
         if emulator.find_img('签筒'):
             emulator.swipe((540, 500, 540, 250))
     while True:
+        emulator.find_and_click(['下载', '关闭', '主页未激活'])
         time.sleep(1)
         emulator.click((650, 620))
         if emulator.find_img('商店'):
@@ -491,7 +494,7 @@ def 打双场():
                 _step += 1
             emulator.find_and_click(['公主竞技场', '取消'])
 
-        if 选择对手('JJC') == 0:
+        if 选择对手('PJJC') == 0:
             _step += 2
         else:
             return
@@ -621,5 +624,6 @@ def 好感度():
 
 if __name__ == "__main__":
     logger.setLevel(logging.DEBUG)
-    emulator.connect()
-    打双场()
+    a = ['登录PCR']
+    pcr_run(a)
+
