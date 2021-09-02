@@ -276,52 +276,12 @@ def 地下城():
     if daily.check('地下城'):
         return None
     去冒险()
-    times = 3
-    while True:
-        emulator.find_and_click(['地下城', '蓝OK'])
-        if emulator.find_and_click('EX3'):
-            times -= 1
-        if times < 0:
-            break
-        if emulator.find_img('返回'):
-            break
-    step = 1
-    team = 1
-    while True:
-        if step == 1:
-            time.sleep(1)
-            emulator.find_and_click(['妈2', '妈', '进行挑战'])
-            if emulator.find_img('EX3'):
-                break
-            if emulator.find_img('我的队伍'):
-                step += 1
-        if step == 2:
-            time.sleep(1)
-            emulator.find_and_click(['我的队伍', '地下城编组'])
-            if emulator.find_img('在地下城编组'):
-                step += 1
-        if step == 3:
-            if emulator.find_img('在地下城编组'):
-                if team == 1:
-                    emulator.click((1058, 273))
-                if team == 2:
-                    emulator.click((1058, 437))
-                if team == 3:
-                    emulator.click((1058, 568))
-            if emulator.find_and_click('战斗开始'):
-                step += 1
-        tmp = True
-        if step == 4:
-            emulator.find_and_click(['下一步', 'OK', 'AUTO'])
-            if emulator.find_and_click('前往地下城') and tmp:
-                team += 1
-                tmp = False
-            if emulator.find_img('EX3'):
-                break
-            if emulator.find_img('返回'):
-                time.sleep(3)
-                if emulator.find_img('返回'):
-                    step = 1
+    max_times = 3
+    times = 0
+    while times < max_times:
+        emulator.find_and_click(["跳过", "OK2"])
+        if emulator.find_and_click("EX4"):
+            times += 1
     daily.finish('地下城')
 
 
@@ -624,6 +584,6 @@ def 好感度():
 
 if __name__ == "__main__":
     logger.setLevel(logging.DEBUG)
-    a = ['登录PCR']
+    a = ['持续战斗']
     pcr_run(a)
 
