@@ -24,6 +24,19 @@ for qu in Question.select():
 
 ask = on_message(priority=99)
 
+async def ask_answer_check(state):
+    _ques = []
+    for i in Question.select():
+        if state['group_id'] == i.rep_group and state['user_id'] == i.rep_member:
+            _ques.append(i.answer)
+        if state['group_id'] == i.rep_group and state['user_id'] == 0:
+            _ques.append(i.answer)
+    _ans = ''
+    for i in _ques:
+        _ans += str(i) + " "
+    return _ans
+
+
 @ask.handle()
 async def handle_first_receive(bot: Bot, event: Event, state: T_State):
     a = await nothing()
@@ -33,6 +46,9 @@ async def handle_first_receive(bot: Bot, event: Event, state: T_State):
     if 'group' in session:
         state['group_id'] = int(session.split('_')[1])
     message = state['raw_message']
+    if message.startswith('你问我答查询'):
+        tmp = await ask_answer_check(state)
+        await ask.finish(tmp)
     if message.startswith('我问'):
         msg = message[2:].split('你答', 1)
         if len(msg) == 1:
