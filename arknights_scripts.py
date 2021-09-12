@@ -442,7 +442,7 @@ def 剿灭():
 
     去战斗()
     while not emulator.find_img('剿灭已选择'):
-        emulator.find_and_click(['剿灭作战', '伊比利亚'])
+        emulator.find_and_click(['剿灭作战', '萨尔贡'])
         time.sleep(1)
     if 检查():
         return True

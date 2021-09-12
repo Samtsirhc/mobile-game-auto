@@ -279,7 +279,7 @@ def 地下城():
     max_times = 3
     times = 0
     while times < max_times:
-        emulator.find_and_click(["跳过", "OK2"])
+        emulator.find_and_click(["地下城","跳过", "OK2"])
         if emulator.find_and_click("EX4"):
             times += 1
     daily.finish('地下城')
