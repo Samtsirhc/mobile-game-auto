@@ -29,3 +29,7 @@ def init():
 
 
 init()
+
+if __name__ == "__main__":
+    for i in Question.select():
+        print(f'{i.quest} {i.rep_group} {i.rep_member} {i.answer} ')
