@@ -28,9 +28,9 @@ async def ask_answer_check(state):
     _ques = []
     for i in Question.select():
         if state['group_id'] == i.rep_group and state['user_id'] == i.rep_member:
-            _ques.append(i.answer)
-        if state['group_id'] == i.rep_group and state['user_id'] == 0:
-            _ques.append(i.answer)
+            _ques.append(i.quest)
+        if state['group_id'] == i.rep_group and i.rep_member == 1:
+            _ques.append(i.quest)
     _ans = ''
     for i in _ques:
         _ans += str(i) + " "
