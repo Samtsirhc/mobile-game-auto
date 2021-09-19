@@ -283,8 +283,8 @@ def 刷土():
     while state == 0:
         if emulator.find_img('左箭头'):
             state += 1
-        emulator.find_and_click(['主线', '异卵同生', '觉醒'], [
-            (0, 0), (-200, 0), (0, 0)])
+        emulator.find_and_click(['主线','Act0', '异卵同生', '觉醒'], [
+            (0, 0),(10, 10), (-200, 0), (0, 0)])
     while state == 1:
         time.sleep(1.5)
         if not emulator.find_and_click('1-7'):
@@ -500,7 +500,7 @@ def ark_run(tasks):
 
 
 if __name__ == "__main__":
-    task = ['登录方舟']
+    task = ['刷土']
     ark_run(task)
     # emulator.connect()
     # a = emulator.emulator.app_current()
