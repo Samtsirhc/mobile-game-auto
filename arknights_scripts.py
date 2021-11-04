@@ -214,7 +214,8 @@ def 选择关卡():
         # emulator.find_and_click(["灯火序曲", "路线安排", "PL-4"])
         # emulator.find_and_click(["联锁竞赛", "始发营地", "FIN-TS"])
         # emulator.find_and_click(["如我所见", "同我所历", "VI-6"])
-        emulator.find_and_click(["多索雷斯", "铁人", "DH-8"])
+        # emulator.find_and_click(["多索雷斯", "铁人", "DH-8"])
+        emulator.find_and_click(["玛丽娅", "大竞技场", "MN-5"])
 
 
 @emulator.dir_decorator
