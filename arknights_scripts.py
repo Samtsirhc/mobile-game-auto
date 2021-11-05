@@ -5,6 +5,7 @@ import logging
 import os
 import time
 
+
 from emulator import Emulator
 from modules.periodic import Periodic
 from modules.process_tool import close_process
@@ -215,7 +216,8 @@ def 选择关卡():
         # emulator.find_and_click(["联锁竞赛", "始发营地", "FIN-TS"])
         # emulator.find_and_click(["如我所见", "同我所历", "VI-6"])
         # emulator.find_and_click(["多索雷斯", "铁人", "DH-8"])
-        emulator.find_and_click(["玛丽娅", "大竞技场", "MN-5"])
+        # emulator.find_and_click(["玛丽娅", "大竞技场", "MN-5"])
+        emulator.find_and_click(["长夜临光", "大骑士领", "NL-9"])
 
 
 @emulator.dir_decorator
@@ -404,22 +406,6 @@ def 循环招募():
                 break  # 没有可以收取的
 
 
-def 识别招募():
-    pass
-#     _xys = [(384, 369, 507, 400), (551, 369, 674, 400), (718, 369, 841, 400),
-#             (384, 440, 507, 474), (551, 440, 674, 474)]  # 招募tag截图的位置
-#     imgs = emulator.take_img(_xys)
-#     _res = []
-#     for i in range(len(imgs)):
-#         imgs[i].save(f'{i}.jpg')
-#         f = open(f'{i}.jpg', 'rb')
-#         _tmp = f.read()
-#         _res.append(emulator.orc.recognize(_tmp))
-#         f.close()
-#         os.remove(f'{i}.jpg')
-#     return _res
-
-
 @emulator.dir_decorator
 def 剿灭():
     if weekly.check('剿灭'):
@@ -443,7 +429,7 @@ def 剿灭():
 
     去战斗()
     while not emulator.find_img('剿灭已选择'):
-        emulator.find_and_click(['剿灭作战', '萨尔贡'])
+        emulator.find_and_click(['剿灭作战', '玻利瓦尔'])
         time.sleep(1)
     if 检查():
         return True
@@ -501,8 +487,25 @@ def ark_run(tasks):
 
 
 if __name__ == "__main__":
+    # logging.basicConfig(level=logging.DEBUG)
+    from config import get_logger
+    l = get_logger()
+    l.setLevel(logging.DEBUG)
     task = ['刷土']
-    ark_run(task)
+    t = [
+        "登录方舟",
+        "基建收菜",
+        "基建换班",
+        "使用无人机",
+        "制造站补货",
+        "剿灭",
+        "选择关卡",
+        "循环挑战",
+        "信用点",
+        "收日常任务",
+        "结束"
+    ]
+    ark_run(t)
     # emulator.connect()
     # a = emulator.emulator.app_current()
     # print(a)
