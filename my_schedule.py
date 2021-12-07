@@ -2,7 +2,7 @@ import schedule
 import requests
 import time
 
-ARK_COMMAND = '方舟 日常刷活动'
+ARK_COMMAND = '方舟 日常刷石头'
 PCR_COMMMAND = 'pcr 日常'
 
 url = "http://127.0.0.1:8888/"
