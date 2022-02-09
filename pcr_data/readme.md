@@ -1,9 +1,5 @@
 ### 更新PCR数据
 
-#### unit_imgs
-
-运行那个python脚本下载新的头像
-
 #### unit_name
 
 先到下面这个网站去更新_pcr_data.py
@@ -15,6 +11,12 @@
 [esterTion/redive_master_db_diff: Diff repo to show the master database difference between TruthVersion change for game 《プリコネR》 Subscribe update pushes at https://redive.estertion.win/masterdb_subscription/ (github.com)](https://github.com/esterTion/redive_master_db_diff)
 
 然后运行init_data.py
+
+#### unit_imgs
+
+更新完name以后把unit_data.json复制过来
+
+运行那个python脚本下载新的头像并更新imgs_data.json
 
 
 

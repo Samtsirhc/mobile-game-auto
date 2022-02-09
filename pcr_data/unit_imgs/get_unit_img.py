@@ -48,6 +48,7 @@ if __name__ == "__main__":
                 raise FileNotFoundError
         except FileNotFoundError:
             get_img(i)
+    print("==========现在开始更新imgs_data.json==========")
     os.system('pause')
 
 
