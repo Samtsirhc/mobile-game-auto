@@ -217,7 +217,9 @@ def 选择关卡():
         # emulator.find_and_click(["如我所见", "同我所历", "VI-6"])
         # emulator.find_and_click(["多索雷斯", "铁人", "DH-8"])
         # emulator.find_and_click(["玛丽娅", "大竞技场", "MN-5"])
-        emulator.find_and_click(["长夜临光", "大骑士领", "NL-9"])
+        # emulator.find_and_click(["长夜临光", "大骑士领", "NL-9"])
+        # emulator.find_and_click(["雪山大典", "风雪过境", "BI-6"])
+        emulator.find_and_click(["终端", "三山奇闻", "IW-4"],[(0,-100),(0,0),(0,0)])
 
 
 @emulator.dir_decorator
@@ -429,7 +431,7 @@ def 剿灭():
 
     去战斗()
     while not emulator.find_img('剿灭已选择'):
-        emulator.find_and_click(['剿灭作战', '玻利瓦尔'])
+        emulator.find_and_click(['剿灭作战', '哥伦比亚'])
         time.sleep(1)
     if 检查():
         return True
@@ -494,10 +496,10 @@ if __name__ == "__main__":
     task = ['刷土']
     t = [
         "登录方舟",
-        "基建收菜",
-        "基建换班",
-        "使用无人机",
-        "制造站补货",
+        # "基建收菜",
+        # "基建换班",
+        # "使用无人机",
+        # "制造站补货",
         "剿灭",
         "选择关卡",
         "循环挑战",
