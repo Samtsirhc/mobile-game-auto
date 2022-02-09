@@ -14,9 +14,11 @@
 
 #### unit_imgs
 
-更新完name以后把unit_data.json复制过来
-
 运行那个python脚本下载新的头像并更新imgs_data.json
+
+---
+
+然后就好了
 
 
 
