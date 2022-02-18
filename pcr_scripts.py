@@ -268,7 +268,7 @@ def 商店购物():
                 _step += 1
 
     一般商店()
-    地下城商店()
+
 
 
 @ emulator.dir_decorator
@@ -389,7 +389,8 @@ def 打双场():
             if emulator.find_img(['冷却完成', '冷却完成2']):
                 _step += 1
             else:
-                time.sleep(1)
+                emulator.find_and_click(['更新清单'])
+                time.sleep(10)
         _count = 0
         while _step == 2:
             # 白名单
@@ -479,24 +480,26 @@ def 打双场():
                 # 第一队不可见
                 _teams, _rate = searcher.t.get_best_teams(_used, 3)
             else:
+                # 第一队不可见
+                _teams, _rate = searcher.t.get_best_teams(_used, 3)
                 # 第一队可见
-                _teams = 找解法()
-                if _teams == []:
-                    _teams, _rate = searcher.t.get_best_teams(_used, 3)
-                else:
-                    _teams_list = []
-                    for i in range(len(_teams)):
-                        _team1 = [_teams[i]]
-                        _used_ = _used.copy() + _team1[0]
-                        _team23, _rate_ = searcher.t.get_best_teams(_used_, 2)
-                        _teams_list.append(
-                            {'teams': _team1 + _team23, 'rate': _rate_})
-                        if _rate_ > 1.99:
-                            break
-                    _teams_list = sorted(
-                        _teams_list, key=lambda i: i['rate'], reverse=True)
-                    _teams = _teams_list[0]['teams']
-                    _rate = _teams_list[0]['rate'] + 1.0
+                # _teams = 找解法()
+                # if _teams == []:
+                #     _teams, _rate = searcher.t.get_best_teams(_used, 3)
+                # else:
+                #     _teams_list = []
+                #     for i in range(len(_teams)):
+                #         _team1 = [_teams[i]]
+                #         _used_ = _used.copy() + _team1[0]
+                #         _team23, _rate_ = searcher.t.get_best_teams(_used_, 2)
+                #         _teams_list.append(
+                #             {'teams': _team1 + _team23, 'rate': _rate_})
+                #         if _rate_ > 1.99:
+                #             break
+                #     _teams_list = sorted(
+                #         _teams_list, key=lambda i: i['rate'], reverse=True)
+                #     _teams = _teams_list[0]['teams']
+                #     _rate = _teams_list[0]['rate'] + 1.0
             logger.info(f'胜率{_rate}，队伍{_teams}')
             选择角色(_teams[0])
             while True:
@@ -584,6 +587,6 @@ def 好感度():
 
 if __name__ == "__main__":
     logger.setLevel(logging.DEBUG)
-    a = ['持续战斗']
+    a = ['登录PCR', "打双场"]
     pcr_run(a)
 
