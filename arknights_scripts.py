@@ -224,6 +224,17 @@ def 选择关卡():
 
 
 @emulator.dir_decorator
+def 资源关卡():
+    去战斗()
+    while True:
+        if emulator.find_img(["关卡已选择", "关卡已选择2"]):
+            break
+        emulator.find_and_click(["资源关卡", "刷钱", "刷经验", "第五关"])
+
+
+
+
+@emulator.dir_decorator
 def 循环挑战():
     while not emulator.find_img(f'体力刷完了'):
         if emulator.find_img(f'战斗中'):
@@ -496,13 +507,13 @@ if __name__ == "__main__":
     l.setLevel(logging.DEBUG)
     task = ['刷土']
     t = [
-        "登录方舟",
+        # "登录方舟",
         # "基建收菜",
         # "基建换班",
         # "使用无人机",
         # "制造站补货",
         "剿灭",
-        "选择关卡",
+        "资源关卡",
         "循环挑战",
         "信用点",
         "收日常任务",
