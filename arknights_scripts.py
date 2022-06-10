@@ -34,22 +34,9 @@ def 登录方舟():
             time.sleep(5)
             emulator.find_and_click(['下载资源确认', 'start'])
         if _step == 1:
-            if emulator.find_img(f'输入密码'): _step += 1
-            emulator.find_and_click(['账号管理', '账号登录'])
-        if _step == 2:
-            if not emulator.find_img(f'确认密码'):
-                emulator.find_and_click(f'输入密码')
-                time.sleep(1)
-            else:
-                if not emulator.find_img(f'已输入密码'):
-                    emulator.input_text('1qaz741.')
-                else:
-                    emulator.find_and_click(f'确认密码')
-                    _step += 1
-        if _step == 3:
             _tmp = 0
             while _tmp < 2:
-                emulator.find_and_click(['登录', '活动X', '月卡收货'], [
+                emulator.find_and_click(['开始唤醒','登录', '活动X', '月卡收货'], [
                     (0, 0), (0, 0), (0, 200)])
                 if emulator.find_img(f'在主页'):
                     _step += 100
@@ -211,7 +198,7 @@ def 选择关卡():
         # emulator.find_and_click(["源石尘行动","行动记录","OD-6"])
         # emulator.find_and_click(['画中人','入画','WR-3'])
         # emulator.find_and_click(["遗尘", "漫漫独行", "WD-4"],[(0,0),(0,0),(0,0)])
-        # emulator.find_and_click(["覆潮之下", "荒败盐风", "SV-6"])
+        # emulator.find_and_click(["终端", "荒败盐风", "SV-6"],[(0,-100),(0,0),(0,0)])
         # emulator.find_and_click(["灯火序曲", "路线安排", "PL-4"])
         # emulator.find_and_click(["联锁竞赛", "始发营地", "FIN-TS"])
         # emulator.find_and_click(["如我所见", "同我所历", "VI-6"])
@@ -221,7 +208,8 @@ def 选择关卡():
         # emulator.find_and_click(["雪山大典", "风雪过境", "BI-6"])
         # emulator.find_and_click(["终端", "三山奇闻", "IW-4"],[(0,-100),(0,0),(0,0)])
         # emulator.find_and_click(["终端", "万国峰会", "GA-7"],[(0,-100),(0,0),(0,0)])
-        emulator.find_and_click(["终端", "失落旗舰", "SN-8"],[(0,-100),(0,0),(0,0)])
+        # emulator.find_and_click(["终端", "失落旗舰", "SN-8"],[(0,-100),(0,0),(0,0)])
+        emulator.find_and_click(["终端", "夕照大厅", "LE-7"],[(0,-100),(0,0),(0,0)])
         time.sleep(0.5)
 
 
@@ -241,7 +229,7 @@ def 循环挑战():
     while not emulator.find_img(f'体力刷完了'):
         if emulator.find_img(f'战斗中'):
             time.sleep(30)
-        emulator.find_and_click(['战斗完成', '开始行动','未代理', '已代理', '未代理2', '已代理2'], [
+        emulator.find_and_click(['战斗完成', '开始行动','未代理', '已代理'], [
              (0, -200), (0, 0),(50, 20), (50, 70),(50, 20), (50, 70)])
     for _ in range(3):
         time.sleep(1)
@@ -516,7 +504,7 @@ if __name__ == "__main__":
         # "使用无人机",
         # "制造站补货",
         # "剿灭",
-        "选择关卡",
+        # "选择关卡",
         "循环挑战",
         "信用点",
         "收日常任务",
