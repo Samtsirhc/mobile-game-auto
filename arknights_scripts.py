@@ -37,7 +37,7 @@ def 登录方舟():
             _tmp = 0
             while _tmp < 10:
                 emulator.find_and_click(['开始唤醒','登录', '活动X', '月卡收货'], [
-                    (0, 0), (0, 0), (0, 200)])
+                    (0, 0), (0, 0), (0, 0), (0, 200)])
                 if emulator.find_img(f'在主页'):
                     _step += 100
                     _tmp += 1
