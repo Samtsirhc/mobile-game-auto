@@ -559,34 +559,57 @@ def pcr_run(tasks):
 
 @ emulator.dir_decorator
 def 好感度():
-    _step = 1
-    while _step == 1:
-        emulator.find_and_click(['羁绊剧情', 'Rank提升'])
-        if emulator.find_img('赠送'):
+    while True:
+        _step = 1
+        while _step == 1:
+            emulator.find_and_click(['羁绊剧情', 'Rank提升'])
+            if emulator.find_img('赠送'):
+                _step += 1
+        while _step == 2:
+            if emulator.find_img('MAX'):
+                _step += 10
+            else:
+                _step += 1
+        while _step == 3:
+            for _ in range(3):
+                emulator.click((869, 300))
+                time.sleep(0.3)
+            for _ in range(3):
+                emulator.click((800, 641))
+                time.sleep(0.3)
             _step += 1
-    while _step == 2:
-        if emulator.find_img('MAX'):
-            _step += 10
-        else:
-            _step += 1
-    while _step == 3:
-        for _ in range(3):
-            emulator.click((869, 300))
-            time.sleep(0.3)
-        for _ in range(3):
-            emulator.click((800, 641))
-            time.sleep(0.3)
-        _step += 1
-        time.sleep(3)
-    while _step > 3:
-        emulator.find_and_click(['关闭', '取消', '关闭2'])
-        if emulator.find_img('羁绊剧情'):
-            break
-    emulator.click((1240, 361))
+            time.sleep(3)
+        while _step > 3:
+            emulator.find_and_click(['关闭', '取消', '关闭2'])
+            if emulator.find_img('羁绊剧情'):
+                break
+        emulator.click((1240, 361))
 
+
+@ emulator.dir_decorator
+def 过剧情():
+    while True:
+        _step = 1
+        while _step == 1:
+            emulator.find_and_click(['羁绊剧情', 'NEW', '关闭', '跳过', '开始跳过', 'menu'])
+            if emulator.find_img(['NEW']):
+                _step += 1
+            if emulator.find_img(['到此为止']):
+                _step += 10
+            
+        while _step == 2:
+            emulator.find_and_click(['NEW', '跳过', '开始跳过', 'menu', '无配音', '关闭'])
+            if emulator.find_img(['到此为止']):
+                _step += 10
+        while _step >= 10:
+            for i in range(3):
+                time.sleep(0.3)
+                emulator.find_and_click(['关闭'])
+            break
+        emulator.click((1240, 361))
 
 if __name__ == "__main__":
     logger.setLevel(logging.DEBUG)
-    a = ['登录PCR', "打双场"]
+    a = ['过剧情']
     pcr_run(a)
 
