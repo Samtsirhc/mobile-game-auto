@@ -210,7 +210,7 @@ def 选择关卡():
         # emulator.find_and_click(["终端", "三山奇闻", "IW-4"],[(0,-100),(0,0),(0,0)])
         # emulator.find_and_click(["终端", "万国峰会", "GA-7"],[(0,-100),(0,0),(0,0)])
         # emulator.find_and_click(["终端", "失落旗舰", "SN-8"],[(0,-100),(0,0),(0,0)])
-        emulator.find_and_click(["终端", "夕照大厅", "LE-7"],[(0,-100),(0,0),(0,0)])
+        emulator.find_and_click(["尘影余音", "夕照大厅", "LE-7"],[(0,-100),(0,0),(0,0)])
         time.sleep(0.5)
 
 
