@@ -1,5 +1,6 @@
 
 import logging
+from os import system
 import time
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
@@ -17,8 +18,11 @@ STOP_COMMAND = ['停止', '停止脚本']
 RESTART_COMMAND = ['重启', '重启模拟器', '关闭']
 ADD_TEAM_COMMAND = ['添加', '增加']
 JJC_COMMAND = ['怎么拆', 'jjc查询']
+SET_ARK_COMMAND = ['设置方舟']
+RESTART_PC_COMMAND = ['重启电脑']
 
 pcr_atk_path = 'pcr_data/team_data/pjjc_atk.json'
+ark_set_path = 'config/Arknights.json'
 tm = TeamManager()
 
 def handle_task(task):
@@ -46,6 +50,12 @@ def handle_task(task):
         _json['data'].append({'team':_team})
         write_json(pcr_atk_path, _json)
         _res = '添加了: ' + str(_team)
+    elif task.startswith(SET_ARK_COMMAND[0]):
+        _json = load_json(ark_set_path)
+        _json['当前任务'] = task.split(' ')[1]
+        write_json(ark_set_path, _json)
+    elif task in RESTART_PC_COMMAND:
+        system("shutdown -r -t 100")
     else:
         _res = t.run_task(task)
     return _res

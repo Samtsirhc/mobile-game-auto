@@ -1,8 +1,10 @@
+from modules.tools import load_json, write_json
 import schedule
 import requests
 import time
 
-ARK_COMMAND = '方舟 日常刷资源'
+ArkSettings = load_json("./config/Arknights.json")
+ARK_COMMAND = ArkSettings[ArkSettings["当前任务"]]
 PCR_COMMMAND = 'pcr 日常'
 
 url = "http://127.0.0.1:8888/"
