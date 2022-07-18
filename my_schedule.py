@@ -4,7 +4,7 @@ import requests
 import time
 
 ArkSettings = load_json("./config/Arknights.json")
-ARK_COMMAND = ArkSettings[ArkSettings["当前任务"]]
+ARK_COMMAND = '方舟 日常刷活动'
 PCR_COMMMAND = 'pcr 日常'
 
 url = "http://127.0.0.1:8888/"
