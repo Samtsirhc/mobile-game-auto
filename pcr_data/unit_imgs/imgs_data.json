@@ -7,7 +7,7 @@
             "name":"優花梨"
         },
         {
-            "count":3513,
+            "count":3514,
             "file_name":"105261.webp",
             "id":"105201",
             "name":"莉瑪"
@@ -25,7 +25,7 @@
             "name":"依里"
         },
         {
-            "count":2152,
+            "count":2153,
             "file_name":"112231.webp",
             "id":"112201",
             "name":"霞(魔法少女)"
@@ -43,7 +43,7 @@
             "name":"優妮"
         },
         {
-            "count":1635,
+            "count":1636,
             "file_name":"101061.webp",
             "id":"101001",
             "name":"真步"
@@ -79,7 +79,7 @@
             "name":"露娜"
         },
         {
-            "count":1427,
+            "count":1428,
             "file_name":"104961.webp",
             "id":"104901",
             "name":"靜流"
@@ -187,7 +187,7 @@
             "name":"鏡華"
         },
         {
-            "count":504,
+            "count":505,
             "file_name":"102961.webp",
             "id":"102901",
             "name":"望"
@@ -2548,6 +2548,294 @@
             "count":0,
             "file_name":"unit_data.json",
             "id":"unit0data.json",
+            "name":"未知"
+        },
+        {
+            "count":0,
+            "file_name":"100761.webp",
+            "id":"100701",
+            "name":"宮子"
+        },
+        {
+            "count":0,
+            "file_name":"101561.webp",
+            "id":"101501",
+            "name":"美里"
+        },
+        {
+            "count":0,
+            "file_name":"102661.webp",
+            "id":"102601",
+            "name":"鈴"
+        },
+        {
+            "count":0,
+            "file_name":"102761.webp",
+            "id":"102701",
+            "name":"惠理子"
+        },
+        {
+            "count":0,
+            "file_name":"104561.webp",
+            "id":"104501",
+            "name":"空花"
+        },
+        {
+            "count":0,
+            "file_name":"107561.webp",
+            "id":"107501",
+            "name":"貪吃佩可(夏日)"
+        },
+        {
+            "count":0,
+            "file_name":"107661.webp",
+            "id":"107601",
+            "name":"可可蘿(夏日)"
+        },
+        {
+            "count":0,
+            "file_name":"107861.webp",
+            "id":"107801",
+            "name":"凱留(夏日)"
+        },
+        {
+            "count":0,
+            "file_name":"118111.webp",
+            "id":"118101",
+            "name":"蘭法"
+        },
+        {
+            "count":0,
+            "file_name":"118131.webp",
+            "id":"118101",
+            "name":"蘭法"
+        },
+        {
+            "count":0,
+            "file_name":"121111.webp",
+            "id":"121101",
+            "name":"凱留(超載)"
+        },
+        {
+            "count":0,
+            "file_name":"121131.webp",
+            "id":"121101",
+            "name":"凱留(超載)"
+        },
+        {
+            "count":0,
+            "file_name":"121311.webp",
+            "id":"121301",
+            "name":"胡桃(舞臺)"
+        },
+        {
+            "count":0,
+            "file_name":"121331.webp",
+            "id":"121301",
+            "name":"胡桃(舞臺)"
+        },
+        {
+            "count":0,
+            "file_name":"121411.webp",
+            "id":"121401",
+            "name":"美咲(舞臺)"
+        },
+        {
+            "count":0,
+            "file_name":"121431.webp",
+            "id":"121401",
+            "name":"美咲(舞臺)"
+        },
+        {
+            "count":0,
+            "file_name":"121511.webp",
+            "id":"121501",
+            "name":"步未(怪盜)"
+        },
+        {
+            "count":0,
+            "file_name":"121531.webp",
+            "id":"121501",
+            "name":"步未(怪盜)"
+        },
+        {
+            "count":0,
+            "file_name":"121611.webp",
+            "id":"121601",
+            "name":"祈梨(怪盜)"
+        },
+        {
+            "count":0,
+            "file_name":"121631.webp",
+            "id":"121601",
+            "name":"祈梨(怪盜)"
+        },
+        {
+            "count":0,
+            "file_name":"121711.webp",
+            "id":"121701",
+            "name":"未知"
+        },
+        {
+            "count":0,
+            "file_name":"121731.webp",
+            "id":"121701",
+            "name":"未知"
+        },
+        {
+            "count":0,
+            "file_name":"121811.webp",
+            "id":"121801",
+            "name":"未知"
+        },
+        {
+            "count":0,
+            "file_name":"121831.webp",
+            "id":"121801",
+            "name":"未知"
+        },
+        {
+            "count":0,
+            "file_name":"121911.webp",
+            "id":"121901",
+            "name":"杏奈(海盜)"
+        },
+        {
+            "count":0,
+            "file_name":"121931.webp",
+            "id":"121901",
+            "name":"杏奈(海盜)"
+        },
+        {
+            "count":0,
+            "file_name":"122011.webp",
+            "id":"122001",
+            "name":"忍(海盜)"
+        },
+        {
+            "count":0,
+            "file_name":"122031.webp",
+            "id":"122001",
+            "name":"忍(海盜)"
+        },
+        {
+            "count":0,
+            "file_name":"122111.webp",
+            "id":"122101",
+            "name":"碧(露營)"
+        },
+        {
+            "count":0,
+            "file_name":"122131.webp",
+            "id":"122101",
+            "name":"碧(露營)"
+        },
+        {
+            "count":0,
+            "file_name":"122211.webp",
+            "id":"122201",
+            "name":"優花梨(露營)"
+        },
+        {
+            "count":0,
+            "file_name":"122231.webp",
+            "id":"122201",
+            "name":"優花梨(露營)"
+        },
+        {
+            "count":0,
+            "file_name":"122311.webp",
+            "id":"122301",
+            "name":"斑比"
+        },
+        {
+            "count":0,
+            "file_name":"122331.webp",
+            "id":"122301",
+            "name":"斑比"
+        },
+        {
+            "count":0,
+            "file_name":"122411.webp",
+            "id":"122401",
+            "name":"日和(夏日)"
+        },
+        {
+            "count":0,
+            "file_name":"122431.webp",
+            "id":"122401",
+            "name":"日和(夏日)"
+        },
+        {
+            "count":0,
+            "file_name":"122511.webp",
+            "id":"122501",
+            "name":"怜(夏日)"
+        },
+        {
+            "count":0,
+            "file_name":"122531.webp",
+            "id":"122501",
+            "name":"怜(夏日)"
+        },
+        {
+            "count":0,
+            "file_name":"122611.webp",
+            "id":"122601",
+            "name":"優衣(夏日)"
+        },
+        {
+            "count":0,
+            "file_name":"122631.webp",
+            "id":"122601",
+            "name":"優衣(夏日)"
+        },
+        {
+            "count":0,
+            "file_name":"122711.webp",
+            "id":"122701",
+            "name":"鏡華(夏日)"
+        },
+        {
+            "count":0,
+            "file_name":"122731.webp",
+            "id":"122701",
+            "name":"鏡華(夏日)"
+        },
+        {
+            "count":0,
+            "file_name":"122811.webp",
+            "id":"122801",
+            "name":"禊(夏日)"
+        },
+        {
+            "count":0,
+            "file_name":"122831.webp",
+            "id":"122801",
+            "name":"禊(夏日)"
+        },
+        {
+            "count":0,
+            "file_name":"122911.webp",
+            "id":"122901",
+            "name":"美美(夏日)"
+        },
+        {
+            "count":0,
+            "file_name":"122931.webp",
+            "id":"122901",
+            "name":"美美(夏日)"
+        },
+        {
+            "count":0,
+            "file_name":"180911.webp",
+            "id":"180901",
+            "name":"未知"
+        },
+        {
+            "count":0,
+            "file_name":"180931.webp",
+            "id":"180901",
             "name":"未知"
         }
     ]
