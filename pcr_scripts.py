@@ -610,6 +610,14 @@ def 过剧情():
 
 if __name__ == "__main__":
     logger.setLevel(logging.DEBUG)
-    a = ['过剧情']
+    a = [
+		"打双场",
+        "MANA冒险",
+        "经验值冒险",
+		"地下城",
+        "点赞",
+        "商店购物",
+        "结束"
+        ]
     pcr_run(a)
 
