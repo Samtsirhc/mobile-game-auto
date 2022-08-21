@@ -60,10 +60,10 @@ class TaskManager():
             if task_type == '方舟':
                 # _task = self.arknights[task_name]
                 # from arknights_scripts import ark_run
-                def ark_run():
+                def ark():
                     os.system('%ARK_AUTO%')
                     pass
-                _thread = Thread(target=ark_run, args=(_task,))
+                _thread = Thread(target=ark)
             else:
                 _task = self.pcr[task_name]
                 from pcr_scripts import pcr_run

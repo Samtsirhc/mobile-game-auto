@@ -17,7 +17,7 @@ def send_command(command):
 
 schedule.every().day.at("05:30").do(send_command,(ARK_COMMAND))
 schedule.every().day.at("15:30").do(send_command,(ARK_COMMAND))
-schedule.every().day.at("23:30").do(send_command,(PCR_COMMMAND)) 
+schedule.every().day.at("23:30").do(send_command,(ARK_COMMAND)) 
 # schedule.every().day.at("22:30").do(send_command,(ARK_COMMAND))
 
 
