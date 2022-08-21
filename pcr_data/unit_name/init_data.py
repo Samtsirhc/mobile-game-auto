@@ -40,11 +40,18 @@ if __name__ == "__main__":
     # 简体名称转繁体
     s2t = OpenCC('s2t')
 
-    # 人为修复一些错误
+    # 这是_pcr_data里面的id 人为修复一些错误 多人角色都有问题 手动修复一下
     corrections = { 'ぺコリーヌ(ニューイヤー)':1118,
                     'ミフユ(作業服)':1167,
-                    'ぺコリーヌ(プリンセス)':1804}
-
+                    'ぺコリーヌ(プリンセス)':1804,
+                    "アキノ＆サレン":1217,
+                    "ハツネ＆シオリ":1807,
+                    "ミソギ＆ミミ＆キョウカ":1808
+                }
+    # 这是游戏里面的id
+    extra_nickname = {
+        "180901":["秋乃&咲戀"],
+    }
     id_name = {}
     miss = ''
     id_jpname = get_id_jpname()
@@ -53,6 +60,7 @@ if __name__ == "__main__":
         _name = _name.replace(' ','')
         _name = _name.replace('（','(')
         _name = _name.replace('）',')')
+        _name = _name.replace('&','＆')
         for j in CHARA_NAME:
             if _name in CHARA_NAME[j]:
                 id_name[i] = CHARA_NAME[j]
@@ -70,6 +78,10 @@ if __name__ == "__main__":
                 miss += _name
                 miss += '\n'
             pass
+    for i in extra_nickname:
+        for j in extra_nickname[i]:
+            id_name[i].append(j)
+        print("额外昵称增加：" + extra_nickname[i][0])
 
     # 修正一些字错误
     words = [['憐', '怜'], ['裏', '里'], ['喫', '吃']]

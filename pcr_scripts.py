@@ -15,7 +15,7 @@ from unit import UnitManager
 from modules.process_tool import close_process
 
 
-log_list = ["MANA冒险", "经验值冒险", "地下城", "点赞", "JJC", "PJJC"]
+log_list = ["MANA冒险", "经验值冒险", "地下城", "点赞", "JJC", "PJJC", "神殿调查", "圣迹调查"]
 daily = Periodic(log_list, 'PCR', 1, 'logs/')
 img_path = 'imgs/pcr/'
 emulator = Emulator(img_path)
@@ -41,7 +41,6 @@ class WhiteList:
         else:
             return False
 
-
 class JJCSearcher:
     def __init__(self):
         self.u = UnitManager()
@@ -58,6 +57,7 @@ class JJCSearcher:
 
     def get_img(self, name, size=100):
         _tmp = self.u.get_img(name, 1)
+        logger.debug(name)
         _imgs = [cv2.resize(i, (115, 115)) for i in _tmp]
         return _imgs
 
@@ -149,7 +149,25 @@ def 去冒险():
             # 处于冒险页面
             break
 
+@ emulator.dir_decorator
+def 去公会小屋():
+    while True:
+        emulator.find_and_click('公会小屋未激活')
+        emulator.click((644, 655))
+        time.sleep(0.5)
+        if emulator.find_img('公会小屋已激活'):
+            # 处于冒险页面
+            break
 
+@ emulator.dir_decorator
+def 去转蛋():
+    while True:
+        emulator.find_and_click('转蛋未激活')
+        emulator.click((644, 655))
+        time.sleep(0.5)
+        if emulator.find_img('转蛋已激活'):
+            # 处于冒险页面
+            break
 @ emulator.dir_decorator
 def 去主页():
     while True:
@@ -161,7 +179,7 @@ def 去主页():
 
 
 @ emulator.dir_decorator
-def 扫荡():
+def 扫荡(need_back = True):
     while True:
         if emulator.find_img('在扫荡页面'):
             break
@@ -175,6 +193,12 @@ def 扫荡():
         emulator.click((940, 442))
         if emulator.find_and_click('OK'):
             break
+    if not need_back:
+        for i in range(10):
+            time.sleep(0.3)
+            emulator.click((670, 640))
+        time.sleep(2)
+        return
     while True:
         time.sleep(0.3)
         emulator.click((633, 640))
@@ -608,16 +632,113 @@ def 过剧情():
             break
         emulator.click((1240, 361))
 
+
+@ emulator.dir_decorator
+def 神殿调查():
+    if daily.check('神殿调查'):
+        return None
+    去冒险()
+    while True:
+        emulator.find_and_click('调查')
+        emulator.find_and_click('神殿调查')
+        if emulator.find_img('在神殿调查页面'):
+            emulator.click((849, 198))
+            time.sleep(2)
+            if emulator.find_img('在扫荡页面'):
+                break
+    for i in range(6):
+        扫荡(False)
+        time.sleep(1)
+        emulator.click((20, 367))
+        time.sleep(3)
+        if not emulator.find_img('在扫荡页面'):
+            break
+    daily.finish('神殿调查')
+
+@ emulator.dir_decorator
+def 圣迹调查():
+    if daily.check('圣迹调查'):
+        return None
+    去冒险()
+    while True:
+        emulator.find_and_click('调查')
+        emulator.find_and_click('圣迹调查')
+        if emulator.find_img('在圣迹调查页面'):
+            emulator.click((849, 198))
+            time.sleep(2)
+            if emulator.find_img('在扫荡页面'):
+                break
+    for i in range(6):
+        扫荡(False)
+        time.sleep(1)
+        emulator.click((20, 367))
+        time.sleep(3)
+        if not emulator.find_img('在扫荡页面'):
+            break
+    daily.finish('圣迹调查')
+
+
+@ emulator.dir_decorator
+def 领体力():
+    去公会小屋()
+    for i in range(10):
+        emulator.find_and_click('全部领取')
+        emulator.find_and_click('关闭')
+        time.sleep(0.5)
+
+@ emulator.dir_decorator
+def 领礼物任务():
+    去主页()
+    # 先领任务
+    for i in range(10):
+        emulator.find_and_click(['任务','全部领取2','关闭'])
+        time.sleep(0.5)
+    去主页()
+    # 领礼物
+    for i in range(10):
+        emulator.find_and_click(['礼物','OK','OK2','全部领取'])
+        time.sleep(1)
+    for i in range(3):
+        emulator.find_and_click('取消')
+        time.sleep(0.5)
+    去主页()
+
+@ emulator.dir_decorator
+def 限定商店():
+    去主页()
+    # 先领任务
+    for i in range(10):
+        emulator.find_and_click(['商店','限定','全部','全部选择','一次购买','OK','OK2'])
+        time.sleep(1)
+
+@ emulator.dir_decorator
+def 一般商店():
+    去主页()
+    # 先领任务
+    for i in range(10):
+        emulator.find_and_click(['商店','一般','全部','全部选择','一次购买','OK','OK2'])
+        time.sleep(1)
+
+@ emulator.dir_decorator
+def 免费十连():
+    去转蛋()
+    for i in range(10):
+        emulator.find_and_click(['普通','免费','OK'])
+        time.sleep(1)   
+        
 if __name__ == "__main__":
     logger.setLevel(logging.DEBUG)
     a = [
-		"打双场",
-        "MANA冒险",
-        "经验值冒险",
-		"地下城",
-        "点赞",
-        "商店购物",
-        "结束"
+        "领礼物任务",
+        # "持续战斗",
+        # "圣迹调查",
+		# "打双场",
+        # "MANA冒险",
+        # "经验值冒险",
+		# "地下城",
+        # "点赞",
+        # "商店购物",
+        # "结束"
         ]
     pcr_run(a)
 

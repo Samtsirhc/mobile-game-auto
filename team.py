@@ -57,6 +57,7 @@ class Team:
 
     def serch_in_net(self, team):
         self.payload['def'] = team
+        l.info("查询远端解法：" + str(team))
         try:
             _re = requests.post(self.search_url, data=json.dumps(
             self.payload), headers=self.headers)
@@ -222,6 +223,10 @@ class TeamManager:
             return (_safe_team_group[0]['teams'], _safe_team_group[0]['rate'])
 
 if __name__ == "__main__":
-    a = TeamManager()
+    # a = TeamManager()
+    # a.serch([])
     # print(b)
+    a = Team(["酒鬼","水电","妹弓","松鼠","露娜"])
+    res = a.serch_in_net(a.ids)
+    print(res)
 

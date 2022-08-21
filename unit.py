@@ -98,18 +98,20 @@ class UnitManager():
     def reg_wife(self, img, resize=80, similarity=0.85):
         _tmp = '未知'
         for i in self.imgs_data:
+            _res = 0
             try:
                 _bg = self.imgs[i['file_name']]
+                _bg = img_resize(_bg, (resize, resize))
+                _res = match_image(img, _bg)
             except:
                 continue
-            _bg = img_resize(_bg, (resize, resize))
-            _res = match_image(img, _bg)
             # print(f'{_res} *** {i["name"]}')
             if _res > similarity:
                 # print(_res)
                 self.add_count(i['file_name'])
                 # print(i['name'])
                 _tmp = i['name']
+                print(i['name'])
                 break
         return _tmp
 
