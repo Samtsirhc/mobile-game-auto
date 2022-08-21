@@ -2,6 +2,7 @@ import ctypes
 import inspect
 import time
 from threading import Thread
+import os
 
 from modules.process_tool import close_process
 from modules.tools import load_json
@@ -57,8 +58,11 @@ class TaskManager():
             task_type, task_name = task.split(' ')
             self.stop_all()
             if task_type == '方舟':
-                _task = self.arknights[task_name]
-                from arknights_scripts import ark_run
+                # _task = self.arknights[task_name]
+                # from arknights_scripts import ark_run
+                def ark_run():
+                    os.system('%ARK_AUTO%')
+                    pass
                 _thread = Thread(target=ark_run, args=(_task,))
             else:
                 _task = self.pcr[task_name]
@@ -72,7 +76,8 @@ class TaskManager():
 
 
 if __name__ == "__main__":
-    t = TaskManager()
-    t.run_task('方舟 日常刷石头')
-    time.sleep(60)
-    t.stop_all()
+    # t = TaskManager()
+    # t.run_task('方舟 日常刷石头')
+    # time.sleep(60)
+    # t.stop_all()
+    os.system('%ARK_AUTO%')
