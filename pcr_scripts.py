@@ -194,7 +194,7 @@ def 扫荡(need_back = True):
         if emulator.find_and_click('OK'):
             break
     if not need_back:
-        for i in range(10):
+        for i in range(15):
             time.sleep(0.3)
             emulator.click((670, 640))
         time.sleep(2)
@@ -722,22 +722,34 @@ def 一般商店():
 def 免费十连():
     去转蛋()
     for i in range(10):
-        emulator.find_and_click(['普通','免费','OK'])
+        emulator.find_and_click(['普通','免费','OK','关闭'])
         time.sleep(1)   
         
 if __name__ == "__main__":
     logger.setLevel(logging.DEBUG)
+    # a = [
+    #     "领礼物任务",
+    #     # "持续战斗",
+    #     # "圣迹调查",
+	# 	# "打双场",
+    #     # "MANA冒险",
+    #     # "经验值冒险",
+	# 	# "地下城",
+    #     # "点赞",
+    #     # "商店购物",
+    #     # "结束"
+    #     ]
     a = [
-        "领礼物任务",
-        # "持续战斗",
-        # "圣迹调查",
-		# "打双场",
-        # "MANA冒险",
-        # "经验值冒险",
-		# "地下城",
-        # "点赞",
-        # "商店购物",
-        # "结束"
-        ]
+
+		# "一般商店",
+        # "免费十连",
+		# "领礼物任务",
+		# "领体力",
+		"圣迹调查",
+		"神殿调查",
+		"领礼物任务",
+		"限定商店",
+        "结束"
+    ]
     pcr_run(a)
 

@@ -27,7 +27,7 @@ class Emulator:
         self.current_dir = ''
         self.load_imgs()
         # self.orc = Orc()
-        self.no_log = ['进入基建', '去战斗', '去冒险', '去首页', '选择角色']
+        self.no_log = ['进入基建', '去战斗', '去冒险', '去首页', '去转蛋', '去公会小屋', '选择角色']
 
     def connect(self):
         em_name =  'Nox' # 'Nox' 'dnplayer'
