@@ -11,8 +11,16 @@ from unit import id2name, name2id, nick_name2name, UNIT_DATA
 import random
 
 solution_path = "pcr_data/team_data/solutions/"
+wait_to_get_solution_path = "pcr_data/team_data/wait_to_get_solution.json"
 l = get_logger()
 
+def RefreshTeam():
+    data = load_json(wait_to_get_solution_path)
+    for i in data["data"]:
+        t = Team(i)
+        t.get_solutions()
+    data["data"] = []
+    write_json(wait_to_get_solution_path, data)
 
 class Team:
     def __init__(self, team):
@@ -23,6 +31,9 @@ class Team:
     def init_team(self, team):
         self.ids = []
         for i in team:
+            if  type(i) == int:
+                self.ids.append(str(i))
+                continue
             if '1' not in i and '2' not in i and type(i) != int:
                 self.ids.append(name2id(i))
             else:
@@ -65,6 +76,9 @@ class Team:
             _row_data = _re['data']['result']
         except:
             l.info('请求远端JJC解法失败')
+            data = load_json(wait_to_get_solution_path)
+            data["data"].append(self.ids)
+            write_json(wait_to_get_solution_path, data)
             return []
         _teams = []
         for i in _row_data:
@@ -226,7 +240,9 @@ if __name__ == "__main__":
     # a = TeamManager()
     # a.serch([])
     # print(b)
-    a = Team(["酒鬼","水电","妹弓","松鼠","露娜"])
+    # a = Team(["酒鬼","水电","妹弓","松鼠","露娜"])
+    b = [101801, 102801, 103401, 105201, 112201]
+    a = Team(b)
     res = a.serch_in_net(a.ids)
     print(res)
 

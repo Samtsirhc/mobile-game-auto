@@ -11,6 +11,7 @@ from emulator import Emulator
 from modules.periodic import Periodic
 from modules.tools import load_img
 from team import TeamManager
+from team import RefreshTeam
 from unit import UnitManager
 from modules.process_tool import close_process
 
@@ -177,7 +178,6 @@ def 去主页():
             # 处于主页
             break
 
-
 @ emulator.dir_decorator
 def 扫荡(need_back = True):
     while True:
@@ -205,7 +205,6 @@ def 扫荡(need_back = True):
         emulator.click((893, 660))
         if emulator.find_img('扫荡完成'):
             break
-
 
 @ emulator.dir_decorator
 def MANA冒险():
@@ -724,32 +723,37 @@ def 免费十连():
     for i in range(10):
         emulator.find_and_click(['普通','免费','OK','关闭'])
         time.sleep(1)   
-        
+
+@ emulator.dir_decorator
+def 刷新队伍():
+    RefreshTeam()
+
 if __name__ == "__main__":
     logger.setLevel(logging.DEBUG)
+    RefreshTeam()
+    # # a = [
+    # #     "领礼物任务",
+    # #     # "持续战斗",
+    # #     # "圣迹调查",
+	# # 	# "打双场",
+    # #     # "MANA冒险",
+    # #     # "经验值冒险",
+	# # 	# "地下城",
+    # #     # "点赞",
+    # #     # "商店购物",
+    # #     # "结束"
+    # #     ]
     # a = [
-    #     "领礼物任务",
-    #     # "持续战斗",
-    #     # "圣迹调查",
-	# 	# "打双场",
-    #     # "MANA冒险",
-    #     # "经验值冒险",
-	# 	# "地下城",
-    #     # "点赞",
-    #     # "商店购物",
+    #     "刷新队伍",
+	# 	# "一般商店",
+    #     # "免费十连",
+	# 	# "领礼物任务",
+	# 	# "领体力",
+	# 	# "圣迹调查",
+	# 	# "神殿调查",
+	# 	# "领礼物任务",
+	# 	# "限定商店",
     #     # "结束"
-    #     ]
-    a = [
-
-		# "一般商店",
-        # "免费十连",
-		# "领礼物任务",
-		# "领体力",
-		"圣迹调查",
-		"神殿调查",
-		"领礼物任务",
-		"限定商店",
-        "结束"
-    ]
-    pcr_run(a)
+    # ]
+    # pcr_run(a)
 
