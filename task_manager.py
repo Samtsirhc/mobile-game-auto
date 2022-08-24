@@ -38,6 +38,8 @@ class TaskManager():
         try:
             for i in self.threads:
                 stop_thread(i)
+            self.close_emu()
+            time.sleep(3)
             self.threads = []
             e = Emulator()
             e.connect()

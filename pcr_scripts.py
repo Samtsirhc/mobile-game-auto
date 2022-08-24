@@ -677,7 +677,6 @@ def 圣迹调查():
             break
     daily.finish('圣迹调查')
 
-
 @ emulator.dir_decorator
 def 领体力():
     去公会小屋()
