@@ -13,6 +13,8 @@ account: # 账号相关
   # 是否使用服务器下发的新地址进行重连
   # 注意, 此设置可能导致在海外服务器上连接情况更差
   use-sso-address: true
+  # 是否允许发送临时会话消息
+  allow-temp-session: false
 
 heartbeat:
   # 心跳频率, 单位秒
@@ -39,10 +41,18 @@ message:
   remove-reply-at: false
   # 为Reply附加更多信息
   extra-reply-data: false
+  # 跳过 Mime 扫描, 忽略错误数据
+  skip-mime-scan: false
 
 output:
   # 日志等级 trace,debug,info,warn,error
   log-level: warn
+  # 日志时效 单位天. 超过这个时间之前的日志将会被自动删除. 设置为 0 表示永久保留.
+  log-aging: 15
+  # 是否在每次启动时强制创建全新的文件储存日志. 为 false 的情况下将会在上次启动时创建的日志文件续写
+  log-force-new: true
+  # 是否启用日志颜色
+  log-colorful: true
   # 是否启用 DEBUG
   debug: false # 开启调试模式
 
@@ -69,6 +79,11 @@ database: # 数据库相关设置
     # 关闭将无法使用 撤回 回复 get_msg 等上下文相关功能
     enable: true
 
+  # 媒体文件缓存， 删除此项则使用缓存文件(旧版行为)
+  cache:
+    image: data/image.db
+    video: data/video.db
+
 # 连接服务列表
 servers:
   # 添加方式，同一连接方式可添加多个，具体配置说明请查看文档
@@ -76,29 +91,28 @@ servers:
   #- ws:   # 正向 Websocket
   #- ws-reverse: # 反向 Websocket
   #- pprof: #性能分析服务器
-  # HTTP 通信设置
-  - http:
-      # 服务端监听地址
-      host: 127.0.0.1
-      # 服务端监听端口
-      port: 5700
-      # 反向HTTP超时时间, 单位秒
-      # 最小值为5，小于5将会忽略本项设置
-      timeout: 5
+
+  - http: # HTTP 通信设置
+      address: 127.0.0.1:5700 # HTTP监听地址
+      timeout: 5      # 反向 HTTP 超时时间, 单位秒，<5 时将被忽略
+      long-polling:   # 长轮询拓展
+        enabled: false       # 是否开启
+        max-queue-size: 2000 # 消息队列大小，0 表示不限制队列大小，谨慎使用
       middlewares:
         <<: *default # 引用默认中间件
-      # 反向HTTP POST地址列表
-      post:
-      #- url: '' # 地址
-      #  secret: ''           # 密钥
-      #- url: 127.0.0.1:5701 # 地址
-      #  secret: ''          # 密钥
+      post:           # 反向HTTP POST地址列表
+      #- url: ''                # 地址
+      #  secret: ''             # 密钥
+      #  max-retries: 3         # 最大重试，0 时禁用
+      #  retries-interval: 1500 # 重试时间，单位毫秒，0 时立即
+      #- url: http://127.0.0.1:5701/ # 地址
+      #  secret: ''                  # 密钥
+      #  max-retries: 10             # 最大重试，0 时禁用
+      #  retries-interval: 1000      # 重试时间，单位毫秒，0 时立即
   # 正向WS设置
   - ws:
       # 正向WS服务器监听地址
-      host: 127.0.0.1
-      # 正向WS服务器监听端口
-      port: 6700
+      address: 127.0.0.1:6700
       middlewares:
         <<: *default # 引用默认中间件
   # 反向WS设置
@@ -114,11 +128,3 @@ servers:
       reconnect-interval: 3000
       middlewares:
         <<: *default # 引用默认中间件
-  # pprof 性能分析服务器, 一般情况下不需要启用.
-  # 如果遇到性能问题请上传报告给开发者处理
-  # 注意: pprof服务不支持中间件、不支持鉴权. 请不要开放到公网
-  - pprof:
-      # pprof服务器监听地址
-      host: 127.0.0.1
-      # pprof服务器监听端口
-      port: 7700

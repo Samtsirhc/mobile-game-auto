@@ -54,8 +54,10 @@ def handle_task(task):
         _json = load_json(ark_set_path)
         _json['当前任务'] = task.split(' ')[1]
         write_json(ark_set_path, _json)
+        _res = '收到'
     elif task in RESTART_PC_COMMAND:
         system("shutdown -r -t 100")
+        _res = '收到'
     else:
         _res = t.run_task(task)
     return _res
