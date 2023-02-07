@@ -1,5 +1,7 @@
 from modules.tools import *
+from config import get_logger
 import os
+l = get_logger()
 
 UNIT_DATA = load_json('pcr_data/unit_name/unit_data.json')
 
@@ -8,6 +10,7 @@ def nick_name2name(name):
         if name in UNIT_DATA[i]:
             return UNIT_DATA[i][0]
     else:
+        l.info('未知角色名称 ' + name)
         return name
 
 
@@ -16,6 +19,7 @@ def name2id(name):
         if name in UNIT_DATA[i]:
             return str(i)
     else:
+        l.info('未知角色名称 ' + name)
         return '000000'
 
 def id2name(id): 
@@ -23,6 +27,7 @@ def id2name(id):
     try:
         return UNIT_DATA[_id][0]
     except:
+        l.info('未知角色id ' + _id)
         return '未知'
 
 def nick_id2id(id):
