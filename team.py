@@ -38,24 +38,29 @@ class Team:
                 self.ids.append(name2id(i))
             else:
                 self.ids.append(str(i))
+
         self.ids.sort()
         self.names = [id2name(i) for i in self.ids]
         self.name = list2str(self.ids)
 
     def init_serch(self):
         self.search_url = r"https://server.whitemagic2014.com/pcrjjc/api/temp"
-        self.headers = {"authorization": '720828494',
-                        'User-Agent': 'PostmanRuntime/7.28.0', 'content-type': 'application/json'}
+        self.headers = {"authorization": '720828494', 'content-type': 'application/json'}
         self.payload = {"def": [], "region": 3}
 
     def get_solutions(self):
         _file_name = f'{solution_path}{self.name}.json'
         try:
             self.data = load_json(_file_name)
-            if get_time() - self.data['record_time'] > 30 * 24 * 3600 or len(self.data['solutions']) < 2:
+            if get_time() - self.data['record_time'] > 90 * 24 * 3600 or len(self.data['solutions']) < 2:
                 raise KeyError
         except:
-            _solutions = self.serch_in_net([int(i) for i in self.ids])
+            # 检查id是否有0
+            _ids = [int(i) for i in self.ids]
+            if  0 in _ids:
+                l.info('请求远端JJC解法中有违规参数0')
+                return []
+            _solutions = self.serch_in_net(_ids)
             self.data = {'record_time': 0, 'solutions': []}
             self.data['record_time'] = get_time()
             for i in _solutions:
@@ -72,9 +77,11 @@ class Team:
         try:
             _re = requests.post(self.search_url, data=json.dumps(
             self.payload), headers=self.headers)
+            print(_re)
             _re = json.loads(_re.text)
+            print(_re)
             _row_data = _re['data']['result']
-        except:
+        except :
             l.info('请求远端JJC解法失败')
             data = load_json(wait_to_get_solution_path)
             data["data"].append(self.ids)
@@ -202,10 +209,17 @@ class TeamManager:
                     _tmp_list += j['team']
                 if len(set(_tmp_list)) != count * 5:
                     continue
-                _tmp_dict = {'teams': [], 'rate': 0}
+                _tmp_dict = {'teams': [], 'rates': [], 'rate': 0}
                 for j in i:
                     _tmp_dict['teams'].append(j['team'])
-                    _tmp_dict['rate'] += j['rate']
+                    _tmp_dict['rates'].append(j['rate'])
+                _rates = _tmp_dict['rates']
+                if len(_rates) == 3:
+                    _tmp_dict['rate'] = _rates[0]*_rates[1] + _rates[1]*_rates[2] + _rates[0]*_rates[2] + _rates[0]*_rates[1]*_rates[2]*2
+                else:
+                    for i in _rates:
+                        _tmp_dict['rate'] += i
+                    _tmp_dict['rate'] /= len(_rates)
                 _free_teams.append(_tmp_dict)
             return _free_teams
 
@@ -241,8 +255,10 @@ if __name__ == "__main__":
     # a.serch([])
     # print(b)
     # a = Team(["酒鬼","水电","妹弓","松鼠","露娜"])
+
     b = [101801, 102801, 103401, 105201, 112201]
     a = Team(b)
     res = a.serch_in_net(a.ids)
     print(res)
+
 
