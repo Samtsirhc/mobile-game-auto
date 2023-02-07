@@ -75,8 +75,7 @@ class Team:
         self.payload['def'] = team
         l.info("查询远端解法：" + str(team))
         try:
-            _re = requests.post(self.search_url, data=json.dumps(
-            self.payload), headers=self.headers)
+            _re = requests.post(self.search_url, data=json.dumps(self.payload), headers=self.headers)
             print(_re)
             _re = json.loads(_re.text)
             print(_re)
@@ -215,7 +214,7 @@ class TeamManager:
                     _tmp_dict['rates'].append(j['rate'])
                 _rates = _tmp_dict['rates']
                 if len(_rates) == 3:
-                    _tmp_dict['rate'] = _rates[0]*_rates[1] + _rates[1]*_rates[2] + _rates[0]*_rates[2] + _rates[0]*_rates[1]*_rates[2]*2
+                    _tmp_dict['rate'] = _rates[0]*_rates[1] + _rates[1]*_rates[2] + _rates[0]*_rates[2] - _rates[0]*_rates[1]*_rates[2]*2
                 else:
                     for i in _rates:
                         _tmp_dict['rate'] += i
@@ -256,7 +255,7 @@ if __name__ == "__main__":
     # print(b)
     # a = Team(["酒鬼","水电","妹弓","松鼠","露娜"])
 
-    b = [101801, 102801, 103401, 105201, 112201]
+    b = [101801, 105201, 106601, 112701, 121101]
     a = Team(b)
     res = a.serch_in_net(a.ids)
     print(res)
