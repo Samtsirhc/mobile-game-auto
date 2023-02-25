@@ -728,6 +728,25 @@ def 免费十连():
 def 刷新队伍():
     RefreshTeam()
 
+@ emulator.dir_decorator
+def 一键日常():
+    去主页()
+    _step = 0
+    while _step == 0:
+        emulator.find_and_click(['行程表'])
+        if emulator.find_img('行程表已打开'):
+            _step += 1
+    for i in range(30):
+        emulator.find_and_click(["OK", "OK2", '全部一键执行'])
+        time.sleep(1)
+    for i in range(30):
+        emulator.find_and_click(["OK", "OK2", '关闭'])
+        time.sleep(0.5)
+        if emulator.find("完成任务"):
+            break
+    for i in range(3):
+        emulator.find_and_click(['关闭'])
+
 if __name__ == "__main__":
     logger.setLevel(logging.DEBUG)
     RefreshTeam()
@@ -756,7 +775,7 @@ if __name__ == "__main__":
     #     # "结束"
     # ]
     a = [
-        "打双场",
+        "一键日常",
     ]
     pcr_run(a)
 
