@@ -250,14 +250,13 @@ class TeamManager:
             return (_safe_team_group[0]['teams'], _safe_team_group[0]['rate'])
 
 if __name__ == "__main__":
-    # a = TeamManager()
-    # a.serch([])
-    # print(b)
-    # a = Team(["酒鬼","水电","妹弓","松鼠","露娜"])
+    a = TeamManager()
+    a = Team(["酒鬼","水电","妹弓","松鼠","妈"])
+    a.get_solutions()
 
-    b = [101801, 105201, 106601, 112701, 121101]
-    a = Team(b)
-    res = a.serch_in_net(a.ids)
-    print(res)
+    #b = [101801, 105201, 106601, 112701, 121101]
+    #a = Team(b)
+    #res = a.serch_in_net(a.ids)
+    #print(res)
 
 
