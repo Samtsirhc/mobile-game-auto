@@ -745,7 +745,7 @@ def 一键日常():
         if emulator.find("完成任务"):
             break
     for i in range(3):
-        emulator.find_and_click(['关闭'])
+        emulator.find_and_click(['关闭2'])
 
 if __name__ == "__main__":
     logger.setLevel(logging.DEBUG)
