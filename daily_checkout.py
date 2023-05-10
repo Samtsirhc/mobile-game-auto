@@ -17,6 +17,8 @@ logger = get_logger()
 
 @emulator.dir_decorator
 def 原神签到():
+    close_process('Nox.exe')
+    time.sleep(3)
     emulator.connect(0)
     emulator.kill_app(APP_NAME)
     emulator.run_app(APP_NAME)
@@ -51,10 +53,13 @@ def 原神签到():
             _yuanshen_check_out = True
         time.sleep(1)
     
+    close_process('Nox.exe')
 
 
 @emulator.dir_decorator
 def 崩铁签到():
+    close_process('Nox.exe')
+    time.sleep(3)
     emulator.connect(2)
     emulator.kill_app(APP_NAME)
     emulator.run_app(APP_NAME)
@@ -89,8 +94,9 @@ def 崩铁签到():
             _yuanshen_check_out = True
         time.sleep(1) 
 
+    close_process('Nox.exe')
 
 if __name__ == "__main__":
     logger.setLevel(logging.DEBUG)
     emulator.connect()
-    签到()
+    崩铁签到()

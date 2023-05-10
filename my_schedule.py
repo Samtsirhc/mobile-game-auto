@@ -9,8 +9,8 @@ PCR_COMMMAND_01 = 'pcr 早日常'
 PCR_COMMMAND_02 = 'pcr 打竞技场'
 PCR_COMMMAND_03 = 'pcr 晚日常刷材料2'
 PCR_COMMMAND_04 = 'pcr 晚日常不刷材料'
-DAILY_COMMAND_01 = '原神签到'
-DAILY_COMMAND_02 = '崩铁签到'
+DAILY_COMMAND_01 = '原神签到 签到'
+DAILY_COMMAND_02 = '崩铁签到 签到'
 url = "http://127.0.0.1:8888/"
 
 def send_command(command):
