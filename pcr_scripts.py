@@ -742,7 +742,7 @@ def 一键日常():
     for i in range(30):
         emulator.find_and_click(["OK", "OK2", '关闭'])
         time.sleep(0.5)
-        if emulator.find("完成任务"):
+        if emulator.find_img("完成任务"):
             break
     for i in range(3):
         emulator.find_and_click(['关闭2'])

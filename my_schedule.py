@@ -7,7 +7,7 @@ ArkSettings = load_json("./config/Arknights.json")
 ARK_COMMAND = '方舟 日常'
 PCR_COMMMAND_01 = 'pcr 早日常'
 PCR_COMMMAND_02 = 'pcr 打竞技场'
-PCR_COMMMAND_03 = 'pcr 晚日常刷材料'
+PCR_COMMMAND_03 = 'pcr 晚日常刷材料2'
 PCR_COMMMAND_04 = 'pcr 晚日常不刷材料'
 
 url = "http://127.0.0.1:8888/"
