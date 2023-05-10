@@ -69,6 +69,12 @@ class TaskManager():
                     os.system('%ARK_AUTO%')
                     pass
                 _thread = Thread(target=ark)
+            elif task_type == '原神签到':
+                from daily_checkout import 原神签到
+                _thread = Thread(target=原神签到)
+            elif task_type == '崩铁签到':
+                from daily_checkout import 崩铁签到
+                _thread = Thread(target=崩铁签到)
             else:
                 _task = self.pcr[task_name]
                 from pcr_scripts import pcr_run

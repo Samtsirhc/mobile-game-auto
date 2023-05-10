@@ -29,12 +29,16 @@ class Emulator:
         # self.orc = Orc()
         self.no_log = ['进入基建', '去战斗', '去冒险', '去首页', '去转蛋', '去公会小屋', '选择角色']
 
-    def connect(self):
+    def connect(self, e_type = 0):
         em_name =  'Nox' # 'Nox' 'dnplayer'
+        em_name2 =  'Nox崩铁签到' # 'Nox' 'dnplayer'
         if check_process(f"{em_name}.exe"):
             pass
         else:
-            run(f'%USERPROFILE%/Desktop/{em_name}.lnk')
+            if e_type == 0:
+                run(f'%USERPROFILE%/Desktop/{em_name}.lnk')
+            else:
+                run(f'%USERPROFILE%/Desktop/{em_name2}.lnk')
             logger.info('启动模拟器')
             time.sleep(30)
         self.emulator = u2.connect()  # python -m uiautomator2 init
